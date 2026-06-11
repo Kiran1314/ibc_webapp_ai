@@ -93,8 +93,9 @@ export default function Contact() {
       company_name: companyName,
       service_interest: service,
 
-      // CRITICAL: Pass the CAPTCHA token back to EmailJS for authorization
-      'g-recaptcha-response': captchaToken
+      // Pass token inside both variants to cover older and newer verification formats
+      'g-recaptcha-response': captchaToken,
+      'g_recaptcha_response': captchaToken
     };
 
     try {
@@ -113,8 +114,11 @@ export default function Contact() {
       setCaptchaToken(null);
       captchaRef.current?.reset();
     } catch (error) {
-      console.error('Error sending email via EmailJS:', error);
-      toast.error("Failed to route submission. Please verify your connection setup.");
+      console.error('Detailed EmailJS Error:', error);
+      
+      // Extract specific error details returned by the EmailJS server response
+      const errorMessage = error?.text || error?.message || "Check browser developer tools console log.";
+      toast.error(`EmailJS Error: ${errorMessage}`, { autoClose: 6000 });
     } finally {
       setIsSubmitting(false);
     }
@@ -141,25 +145,21 @@ export default function Contact() {
           className="pw" 
           style={{ 
             width: '100%',
-            // Drops horizontal paddings down to 0px on mobile screens instantly
             paddingLeft: isMobile ? '0px' : 'clamp(38px, 6vw, 80px)',
             paddingRight: isMobile ? '0px' : 'clamp(38px, 6vw, 80px)',
             paddingBottom: '80px'
           }}
         >
           
-          {/* RESPONSIVE AUTO-COLLAPSED GRID WRAPPER WITH FADE REVEAL ENTRY */}
           <div 
             className="cwrap reveal" 
             style={{ 
               display: 'grid',
-              // Forces absolute 1-column stack below 768px, spans to 2-columns on desktop grids
               gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
               gap: isMobile ? '36px' : '64px',
               alignItems: 'start',
               paddingTop: 'clamp(110px, 12vh, 150px)',
               width: '100%',
-              // Inner fallback padding block so texts don't hug edge lines if outer wrap is 0px
               paddingLeft: isMobile ? '20px' : '0px',
               paddingRight: isMobile ? '20px' : '0px'
             }}
@@ -184,7 +184,6 @@ export default function Contact() {
                 Whether you have a brief ready or just an idea, we'd love to hear from you. Our team will respond within 24 hours.
               </p>
               
-              {/* CORE CHANNELS CONTACT LIST */}
               <div className="cdet">
                 <div className="cion" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📍</div>
                 <div className="ctxt"><h4>Location</h4><p>Dubai, United Arab Emirates</p></div>
@@ -202,7 +201,6 @@ export default function Contact() {
                 <div className="ctxt"><h4>WhatsApp</h4><p>+971 55 995 8905</p></div>
               </div>
               
-              {/* TIMINGS ROW TABLES */}
               <div style={{ marginTop: '28px', width: '100%' }}>
                 <div style={{ fontFamily: "'Red Hat Display', sans-serif", fontSize: '12px', fontWeight: '700', letterSpacing: '.09em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: '14px' }}>
                   Working Hours
@@ -212,7 +210,6 @@ export default function Contact() {
                 <div className="trow"><span className="td">Sunday</span><span className="tcl">Closed</span></div>
               </div>
               
-              {/* SOCIAL MEDIA MATRIX LINKS */}
               <div style={{ marginTop: '28px' }}>
                 <div style={{ fontFamily: "'Red Hat Display', sans-serif", fontSize: '12px', fontWeight: '700', letterSpacing: '.09em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: '14px' }}>
                   Follow Us
@@ -234,7 +231,7 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* RIGHT SIDE: ENQUIRY FORM CARD - FLUSH WITH EDGES ON MOBILE */}
+            {/* RIGHT SIDE: ENQUIRY FORM CARD */}
             <div 
               className="cform" 
               style={{ 

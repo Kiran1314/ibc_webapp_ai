@@ -74,9 +74,9 @@ export default function Contact() {
 
     setIsSubmitting(true);
 
-    const serviceId = 'service_1ab1vfl';
-    const templateId = 'template_u4f1im2';
-    const publicKey = 'uo5jzZ8z_im3yAOGc';
+    const serviceId = 'service_pvgpofw';
+    const templateId = 'template_tfqukuq';
+    const publicKey = 'EflcYqa77XePEjHTc';
 
     const templateParams = {
       // Legacy template parameters (Old Form)

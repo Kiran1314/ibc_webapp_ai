@@ -78,9 +78,8 @@ export default function Contact() {
     const templateId = 'template_u4f1im2';
     const publicKey = 'uo5jzZ8z_im3yAOGc';
 
-    // Combining matching criteria values cleanly for your legacy variables mapping if needed, 
-    // while forwarding the rich extended properties explicitly.
     const templateParams = {
+      // Legacy template parameters (Old Form)
       from_name: `${firstName} ${lastName}`.trim(),
       from_email: email,
       to_name: 'IBC',
@@ -88,11 +87,14 @@ export default function Contact() {
       message: message,
       mobile: mobile,
       
-      // Extended explicit attributes mapping for updated field data metrics
+      // Modern layout specific parameters
       first_name: firstName,
       last_name: lastName,
       company_name: companyName,
-      service_interest: service
+      service_interest: service,
+
+      // CRITICAL: Pass the CAPTCHA token back to EmailJS for authorization
+      'g-recaptcha-response': captchaToken
     };
 
     try {

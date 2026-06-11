@@ -74,7 +74,7 @@ export default function Contact() {
 
     setIsSubmitting(true);
 
-    const serviceId = 'service_pvgpofw';
+    const serviceId = 'service_3ujc6rq';
     const templateId = 'template_tfqukuq';
     const publicKey = 'EflcYqa77XePEjHTc';
 
@@ -83,7 +83,7 @@ export default function Contact() {
       from_name: `${firstName} ${lastName}`.trim(),
       from_email: email,
       to_name: 'IBC',
-      subject: service ? `Enquiry for ${service}` : 'New Website General Enquiry',
+      subject: service ? `Enquiry for ${service}` : 'General Enquiry',
       message: message,
       mobile: mobile,
       

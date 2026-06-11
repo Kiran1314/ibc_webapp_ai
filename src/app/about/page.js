@@ -1,0 +1,201 @@
+'use client';
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+
+export default function About() {
+  const containerRef = useRef(null);
+
+  // Initialize scroll monitoring observer side-effects post structural page layout hydration
+  useEffect(() => {
+    const revealElements = containerRef.current?.querySelectorAll('.reveal');
+    if (!revealElements || revealElements.length === 0) return;
+
+    const observerOptions = {
+      root: null, // Binds tracking coordinates directly to browser viewport boundary line
+      rootMargin: '0px 0px -60px 0px', // Pre-triggers elements ahead of entering screen space
+      threshold: 0.12 // Fires when 12% of the targeted division container is in view
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        } else {
+          entry.target.classList.remove('in-view'); // Re-triggers animations when user scrolls back up
+        }
+      });
+    }, observerOptions);
+
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => {
+      revealElements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
+  return (
+    <>
+      {/* INJECT SEMANTIC SEO DIRECTLY INTO THE HEAD PANEL FOR SINGLE-FILE SETUP */}
+      <title>About Us | IBC Studio </title>
+      <meta name="description" content="Learn the story behind UAE’s premier full-service media production house. Founded by K. Banerjee, IBC Studio has delivered corporate films, multilingual audio production, and custom digital infrastructure across the GCC." />
+      <meta name="keywords" content="media production company UAE, video production company UAE, corporate video Dubai, audio production studio Dubai, post production studio Dubai, creative agency Dubai" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://www.ibcstudio.com/about" />
+      <meta property="og:title" content="About IBC Studio | 19+ Years of Creative Media Production in Dubai" />
+      <meta property="og:description" content="Serving the UAE and Middle East for over 15 years with premier video, audio, photography, and digital development services." />
+      <meta property="og:site_name" content="IBC Studio" />
+
+      <div className="page active" id="pg-about" ref={containerRef}>
+        <div className="pw" style={{ width: '100%' }}>
+      
+          {/* HERO STORY SECTION - BALANCED RESPONSIVE SIDE AND VERTICAL PADDING */}
+          <div 
+            className="ahwrap reveal" 
+            style={{ 
+              width: '100%', 
+              paddingTop: 'clamp(120px, 12vh, 160px)', // Safely clears the 70px absolute header component
+              paddingBottom: '60px',
+              paddingLeft: 'clamp(22px, 6vw, 80px)',   // Transitions seamlessly from 22px on mobile to 80px on desktop
+              paddingRight: 'clamp(22px, 6vw, 80px)'   // Transitions seamlessly from 22px on mobile to 80px on desktop
+            }}
+          >
+            <div>
+              <div className="lbl" >Our Story</div>
+              <h1 style={{ wordBreak: 'break-word', fontSize: 'clamp(36px, 4.8vw, 58px)', lineHeight: '1.1' }}>
+                More Than a Studio.<br />A Creative Force.
+              </h1>
+              <p style={{ marginTop: '18px', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                Founded in Dubai, IBC Studio began with a vision to combine creativity, technology, and storytelling under one roof. With over 19 years of industry experience, we have grown into a trusted media production company delivering high-quality audiovisual and digital solutions for brands and businesses across the region.
+              </p>
+              <div style={{ display: 'flex', gap: '14px', marginTop: '28px', flexWrap: 'wrap' }}>
+                <Link href="/contact" className="btn-p" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
+                  Work With Us →
+                </Link>
+                <Link href="/work" className="btn-o" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
+                  See Our Work
+                </Link>
+              </div>
+            </div>
+            <div className="avwrap" style={{ width: '100%' }}>
+              <div className="vidph">
+                <div className="play">
+                  <svg viewBox="0 0 24 24">
+                    <polygon points="5,3 19,12 5,21" />
+                  </svg>
+                </div>
+                <span className="vid-lbl" style={{ textAlign: 'center', padding: '0 10px', display: 'block', width: '100%' }}>
+                  The IBC Studio Story
+                </span>
+              </div>
+            </div>
+          </div>
+
+
+          <div className="divl"></div>
+
+          {/* STATS COUNTER BAR */}
+          <section className="sec reveal" style={{ width: '100%' }}>
+            <div className="stats-bar" style={{ width: '100%' }}>
+              <div className="sitem">
+                <span className="snum">19<span className="a">+</span></span>
+                <span className="slbl">Years Experience</span>
+              </div>
+              <div className="sitem">
+                <span className="snum">1K<span className="a">+</span></span>
+                <span className="slbl">Video & Photo Projects</span>
+              </div>
+              <div className="sitem">
+                <span className="snum">3K<span className="a">+</span></span>
+                <span className="slbl">Audio Projects</span>
+              </div>
+              <div className="sitem">
+                <span className="snum">3K<span className="a">+</span></span>
+                <span className="slbl">Satisfied Clients</span>
+              </div>
+            </div>
+          </section>
+
+          <div className="divl"></div>
+
+          {/* CORE CAPABILITIES SECTION */}
+          <section className="sec reveal" style={{ width: '100%' }}>
+            <div className="split-grid" style={{ width: '100%' }}>
+              <div>
+                <div className="lbl">What We Do</div>
+                <h2 className="title" style={{ wordBreak: 'break-word' }}>End-to-End Media Production</h2>
+                <p style={{ fontSize: '16.5px', color: 'var(--mid)', lineHeight: '1.75', marginBottom: '14px', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                  IBC Studio provides end-to-end media production and digital solutions including audio recording, dubbing, video production, photography, IVR systems, event coverage, AI-generated content, and digital development.
+                </p>
+                <p style={{ fontSize: '16.5px', color: 'var(--mid)', lineHeight: '1.75', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                  From corporate productions and commercials to social media and branded content, we create professional media experiences designed to communicate ideas clearly and effectively.
+                </p>
+              </div>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+                <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+                  <div style={{ fontSize: '20px', flexShrink: 0 }}>🎙️</div>
+                  <div>
+                    <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>Audio Production</h4>
+                    <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>IVR, OHM, voice-overs, jingles, dubbing, and multilingual localization.</p>
+                  </div>
+                </div>
+                
+                <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+                  <div style={{ fontSize: '20px', flexShrink: 0 }}>🎬</div>
+                  <div>
+                    <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>Video & Photography</h4>
+                    <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>Corporate films, commercials, events, drone, color grading, and photography.</p>
+                  </div>
+                </div>
+                
+                <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+                  <div style={{ fontSize: '20px', flexShrink: 0 }}>🤖</div>
+                  <div>
+                    <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>AI & Digital</h4>
+                    <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>AI content, synthetic media, web development, e-learning, and custom tools.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="divl"></div>
+
+          {/* FOUNDER & LEADERSHIP MESSAGE */}
+          <section className="sec reveal" style={{ background: 'var(--bg2)', width: '100%' }}>
+            <div className="lbl">Leadership</div>
+            <h2 className="title" style={{ wordBreak: 'break-word' }}>From the Founder's Desk</h2>
+            <div className="fwrap" style={{ width: '100%' }}>
+              <div className="fcard">
+                <div className="fav">IBC</div>
+                <div className="finfo">
+                  <h3>Founder & Director</h3>
+                  <span>IBC Studio, Dubai UAE</span>
+                </div>
+              </div>
+              <div className="fquote">
+                <blockquote style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                  "We didn’t build IBC Studio to simply create content. We built it to help brands tell stories with impact, deliver quality without compromise, and create work that people genuinely remember."
+                </blockquote>
+                <p>Dear Valued Clients,</p>
+                <p style={{ marginTop: '14px', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                  I am K. Banerjee, Founder of IBC Studio, and I sincerely thank you for the trust you continue to place in our work. My journey in the media industry began over 30 years ago in Mumbai, India, where I worked across films, television serials, and commercial productions.
+                </p>
+                <p style={{ marginTop: '14px', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                  With a vision to build a globally recognized production company, IBC Studio has proudly served clients across the UAE and the Middle East for over 15 years, deeply valuing every client relationship while combining creativity, technology, and storytelling to create impactful media experiences.
+                </p>
+                <div style={{ marginTop: '28px', display: 'flex', gap: '18px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <div style={{ width: '44px', height: '1px', background: 'var(--sage)' }}></div>
+                  <div>
+                    <div style={{ fontFamily: "'Red Hat Display', sans-serif", fontWeight: 700, fontSize: '15px' }}>Founder & Director</div>
+                    <div style={{ fontSize: '12px', color: 'var(--sage)' }}>IBC Studio — Dubai, UAE</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </>
+  );
+}

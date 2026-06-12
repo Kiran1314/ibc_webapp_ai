@@ -105,16 +105,95 @@ export default function Home() {
             <div className="chdr" style={{ padding: '0 20px', wordBreak: 'break-word' }}>
               <strong>3,000+ Satisfied Clients</strong> trust IBC Studio
             </div>
-            <div style={{ overflow: 'hidden', width: '100%' }}>
-              <div className="ctrack">
-                {['Emirates', 'Etihad', 'Du Telecom', 'Majid Al Futtaim', 'DEWA', 'RTA Dubai', 'Aldar', 'Emaar', 'ADNOC', 'Mashreq', 'FAB Bank', 'Damac'].map((company, idx) => (
-                  <div key={idx} className="clog">{company}</div>
-                ))}
-                {['Emirates', 'Etihad', 'Du Telecom', 'Majid Al Futtaim', 'DEWA', 'RTA Dubai', 'Aldar', 'Emaar', 'ADNOC', 'Mashreq', 'FAB Bank', 'Damac'].map((company, idx) => (
-                  <div key={`dup-${idx}`} className="clog">{company}</div>
-                ))}
-              </div>
-            </div>
+           <div style={{ overflow: 'hidden', width: '100%' }}>
+  <div 
+    className="ctrack"
+    style={{
+      // Overrides stylesheet configurations directly to ease the horizontal travel speed safely
+      animationDuration: '180s', 
+      animationTimingFunction: 'linear',
+      animationIterationCount: 'infinite'
+    }}
+  >
+    {[
+      'AECB', 'Agnice', 'Ahmed Saddiqi', 'Ahmed Tea', 'Air Arabia', 'Al Ain Holdings', 
+      'Al Fahim', 'Al Jazeera Investment', 'Al Khaleej Steel', 'Al Madallah', 'Al Masraf', 
+      'Al Reyami Advocates', 'American Gulf School – Sharjah', 'ARADA', 'Arab Link', 'ARENCO', 
+      'Asma Hotel', 'Bank Muscat', 'Barraquer Eye Hospital', 'BITS Pilani Dubai', 'Canadian Hospital', 
+      'Carlton Hotel', 'Citi Bank', 'Commercial Bank of Dubai', 'CTS Roadside Assistance', 'CTS-KHADA', 
+      'Damac Properties', 'Dana Beach Resort', 'Dana Bay', 'Data Direct', 'Desert Gate', 'DIFC', 
+      'Dubai Airports', 'Dubai Investment Park', 'Dubai Investment Real Estate', 'Dubai Land Department', 
+      'Dubai Tourism', 'Du Telecom', 'Earnest Insurance', 'Easy Lease', 'Emaar', 'Emirates Driving Company', 
+      'Emitech', 'Enova International', 'ENOC', 'Etihad Airways', 'Etisalat Afghanistan', 'Etisalat / e&', 
+      'Excellence Driving Institute', 'FAB Bank', 'Finance House', 'Flydubai', 'Fujairah Customs', 
+      'Fujairah National Group', 'G42', 'Galadari', 'Geco Mechanical & Electrical', 'Gems Metropole', 
+      'Gems Millennium School', 'Gems World Academy', 'Gewan Hotels & Resorts', 'GFS Ship Management', 
+      'Green Motor', 'Hily Holding', 'Hilton Business Bay', 'Hilton Hotel', 'IKEA', 'Injazat', 
+      'Infosat', 'Infosys', 'Insurance House', 'International Community Schools', 'International Gas Services (Sergas)', 
+      'Kalba Health Center (EHS)', 'Lexus', 'Liberty Computer', 'Liwa Insurance', 'Majid Al Futtaim', 
+      'Marks & Spencer', 'Mashreq Bank', 'Masdar City', 'Medcare', 'Meraas', 'Mercure Hotel', 
+      'Ministry of Community Development', 'Ministry of Human Resources and Emiratisation', 'Mubadala', 
+      'Nakheel', 'National Finance', 'Next Care (Enaya)', 'Noor Takaful', 'Occidental Hotels and Resorts', 
+      'Omantel', 'Omnisat', 'Omtrack', 'Pan Home', 'Prime Medical Center', 'Progress Group', 
+      'Reem Hospital', 'Reem Neuroscience Centre', 'RTA Dubai', 'SAIF Zone', 'Sautt Technology', 
+      'Scientechnic (Fujairah Port)', 'Scitra', 'Sharjah Islamic Bank', 'Sharjah Women\'s Club', 
+      'Siemcom Hassantuk', 'Skoda', 'SPC Free Zone', 'Swissôtel Al Ghurair', 'TAQA Energy', 
+      'TCT', 'TDRA', 'Tecom Group', 'Telematics', 'Teleperformance', 
+      'The Executive Office of Her Highness Sheikha Jawaher, Sharjah', 'The Westminster School, Dubai', 
+      'Tokio Marine Insurance', 'Toyota', 'Unitech', 'Vision Tech', 'VocalCom', 'WASL Properties', 
+      'Xiaomi', 'Zajel'
+    ].map((company, idx) => (
+      <div 
+    key={`orig-${idx}`} 
+    className="clog"
+    style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      padding: '0 28px',         // Smooth horizontal padding around the words
+      whiteSpace: 'nowrap',       // Forces names to stay on one line
+      width: 'auto',              // Auto-adjusts bounding box width per word size
+      boxSizing: 'border-box'
+    }}
+  >
+    {company}
+  </div>
+    ))}
+    
+    {/* SEAMLESS TAIL REPEAT ARRAY LOOP - PREVENTS GAPS ON SLOW Crawls */}
+    {[
+      'AECB', 'Agnice', 'Ahmed Saddiqi', 'Ahmed Tea', 'Air Arabia', 'Al Ain Holdings', 
+      'Al Fahim', 'Al Jazeera Investment', 'Al Khaleej Steel', 'Al Madallah', 'Al Masraf', 
+      'Al Reyami Advocates', 'American Gulf School – Sharjah', 'ARADA', 'Arab Link', 'ARENCO', 
+      'Asma Hotel', 'Bank Muscat', 'Barraquer Eye Hospital', 'BITS Pilani Dubai', 'Canadian Hospital', 
+      'Carlton Hotel', 'Citi Bank', 'Commercial Bank of Dubai', 'CTS Roadside Assistance', 'CTS-KHADA', 
+      'Damac Properties', 'Dana Beach Resort', 'Dana Bay', 'Data Direct', 'Desert Gate', 'DIFC', 
+      'Dubai Airports', 'Dubai Investment Park', 'Dubai Investment Real Estate', 'Dubai Land Department', 
+      'Dubai Tourism', 'Du Telecom', 'Earnest Insurance', 'Easy Lease', 'Emaar', 'Emirates Driving Company', 
+      'Emitech', 'Enova International', 'ENOC', 'Etihad Airways', 'Etisalat Afghanistan', 'Etisalat / e&', 
+      'Excellence Driving Institute', 'FAB Bank', 'Finance House', 'Flydubai', 'Fujairah Customs', 
+      'Fujairah National Group', 'G42', 'Galadari', 'Geco Mechanical & Electrical', 'Gems Metropole', 
+      'Gems Millennium School', 'Gems World Academy', 'Gewan Hotels & Resorts', 'GFS Ship Management', 
+      'Green Motor', 'Hily Holding', 'Hilton Business Bay', 'Hilton Hotel', 'IKEA', 'Injazat', 
+      'Infosat', 'Infosys', 'Insurance House', 'International Community Schools', 'International Gas Services (Sergas)', 
+      'Kalba Health Center (EHS)', 'Lexus', 'Liberty Computer', 'Liwa Insurance', 'Majid Al Futtaim', 
+      'Marks & Spencer', 'Mashreq Bank', 'Masdar City', 'Medcare', 'Meraas', 'Mercure Hotel', 
+      'Ministry of Community Development', 'Ministry of Human Resources and Emiratisation', 'Mubadala', 
+      'Nakheel', 'National Finance', 'Next Care (Enaya)', 'Noor Takaful', 'Occidental Hotels and Resorts', 
+      'Omantel', 'Omnisat', 'Omtrack', 'Pan Home', 'Prime Medical Center', 'Progress Group', 
+      'Reem Hospital', 'Reem Neuroscience Centre', 'RTA Dubai', 'SAIF Zone', 'Sautt Technology', 
+      'Scientechnic (Fujairah Port)', 'Scitra', 'Sharjah Islamic Bank', 'Sharjah Women\'s Club', 
+      'Siemcom Hassantuk', 'Skoda', 'SPC Free Zone', 'Swissôtel Al Ghurair', 'TAQA Energy', 
+      'TCT', 'TDRA', 'Tecom Group', 'Telematics', 'Teleperformance', 
+      'The Executive Office of Her Highness Sheikha Jawaher, Sharjah', 'The Westminster School, Dubai', 
+      'Tokio Marine Insurance', 'Toyota', 'Unitech', 'Vision Tech', 'VocalCom', 'WASL Properties', 
+      'Xiaomi', 'Zajel'
+    ].map((company, idx) => (
+      <div key={`dup-${idx}`} className="clog">{company}</div>
+    ))}
+  </div>
+</div>
           </div>
 
           {/* TESTIMONIALS */}

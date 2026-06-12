@@ -5,12 +5,32 @@ export default function Clients() {
   const containerRef = useRef(null);
 
   const corporateClients = [
-    "Emirates Group", "Etihad Airways", "Du Telecom", "Majid Al Futtaim", "DEWA",
-    "RTA Dubai", "Aldar Properties", "Emaar", "Damac Properties", "ADNOC",
-    "Mashreq Bank", "FAB Bank", "Dubai Tourism", "DIFC", "Abu Dhabi Health",
-    "Flydubai", "Al Futtaim", "Nakheel", "DP World", "ENOC",
-    "Sharjah Tourism", "RAK Government", "Mubadala", "G42", "Etisalat / e&",
-    "Dubai Airports", "Meraas", "Dubai Land Dept", "Abu Dhabi Ports", "Taqa Energy"
+   'AECB', 'Agnice', 'Ahmed Saddiqi', 'Ahmed Tea', 'Air Arabia', 'Al Ain Holdings', 
+      'Al Fahim', 'Al Jazeera Investment', 'Al Khaleej Steel', 'Al Madallah', 'Al Masraf', 
+      'Al Reyami Advocates', 'American Gulf School – Sharjah', 'ARADA', 'Arab Link', 'ARENCO', 
+      'Asma Hotel', 'Bank Muscat', 'Barraquer Eye Hospital', 'BITS Pilani Dubai', 'Canadian Hospital', 
+      'Carlton Hotel', 'Citi Bank', 'Commercial Bank of Dubai', 'CTS Roadside Assistance', 'CTS-KHADA', 
+      'Damac Properties', 'Dana Beach Resort', 'Dana Bay', 'Data Direct', 'Desert Gate', 'DIFC', 
+      'Dubai Airports', 'Dubai Investment Park', 'Dubai Investment Real Estate', 'Dubai Land Department', 
+      'Dubai Tourism', 'Du Telecom', 'Earnest Insurance', 'Easy Lease', 'Emaar', 'Emirates Driving Company', 
+      'Emitech', 'Enova International', 'ENOC', 'Etihad Airways', 'Etisalat Afghanistan', 'Etisalat / e&', 
+      'Excellence Driving Institute', 'FAB Bank', 'Finance House', 'Flydubai', 'Fujairah Customs', 
+      'Fujairah National Group', 'G42', 'Galadari', 'Geco Mechanical & Electrical', 'Gems Metropole', 
+      'Gems Millennium School', 'Gems World Academy', 'Gewan Hotels & Resorts', 'GFS Ship Management', 
+      'Green Motor', 'Hily Holding', 'Hilton Business Bay', 'Hilton Hotel', 'IKEA', 'Injazat', 
+      'Infosat', 'Infosys', 'Insurance House', 'International Community Schools', 'International Gas Services (Sergas)', 
+      'Kalba Health Center (EHS)', 'Lexus', 'Liberty Computer', 'Liwa Insurance', 'Majid Al Futtaim', 
+      'Marks & Spencer', 'Mashreq Bank', 'Masdar City', 'Medcare', 'Meraas', 'Mercure Hotel', 
+      'Ministry of Community Development', 'Ministry of Human Resources and Emiratisation', 'Mubadala', 
+      'Nakheel', 'National Finance', 'Next Care (Enaya)', 'Noor Takaful', 'Occidental Hotels and Resorts', 
+      'Omantel', 'Omnisat', 'Omtrack', 'Pan Home', 'Prime Medical Center', 'Progress Group', 
+      'Reem Hospital', 'Reem Neuroscience Centre', 'RTA Dubai', 'SAIF Zone', 'Sautt Technology', 
+      'Scientechnic (Fujairah Port)', 'Scitra', 'Sharjah Islamic Bank', 'Sharjah Women\'s Club', 
+      'Siemcom Hassantuk', 'Skoda', 'SPC Free Zone', 'Swissôtel Al Ghurair', 'TAQA Energy', 
+      'TCT', 'TDRA', 'Tecom Group', 'Telematics', 'Teleperformance', 
+      'The Executive Office of Her Highness Sheikha Jawaher, Sharjah', 'The Westminster School, Dubai', 
+      'Tokio Marine Insurance', 'Toyota', 'Unitech', 'Vision Tech', 'VocalCom', 'WASL Properties', 
+      'Xiaomi', 'Zajel'
   ];
 
   // Initialize fade-in intersection animations across structural sections

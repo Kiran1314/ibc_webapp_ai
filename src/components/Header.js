@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+ 
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ export default function Header() {
           src="/assets/images/logo/main-logo.png" 
           alt="IBC Studio Logo" 
           style={{ 
-            height: '150px', 
+            height: '135px', 
             width: 'auto', 
             objectFit: 'contain',
             display: 'block'
@@ -61,5 +62,6 @@ export default function Header() {
       </nav>
       <div className="nav-overlay" onClick={closeMenu}></div>
     </header>
+    
   );
 }

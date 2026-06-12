@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import ChatWidget from './ChatWidget';
 
 export default function Footer() {
   return (
@@ -61,6 +62,9 @@ export default function Footer() {
         </div>
       </div>
       <div className="ft-bottom"><p>© 2026 IBC Studio. All rights reserved. Dubai, UAE.</p><p>Privacy Policy · Terms of Service</p></div>
+
+      {/* INTEGRATED GLOBAL ASSISSANT MODULE */}
+      <ChatWidget />
     </footer>
   );
 }

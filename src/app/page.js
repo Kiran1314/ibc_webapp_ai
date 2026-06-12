@@ -124,16 +124,67 @@ export default function Home() {
             <p className="desc" style={{ width: '100%', wordBreak: 'break-word' }}>
               Real results, real relationships. Hear directly from the brands who've partnered with us.
             </p>
-            <div className="tvid-grid" style={{ width: '100%' }}>
-              <div className="vidph"><div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span className="vid-lbl">Emirates Group — Testimonial</span></div>
-              <div className="vidph"><div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span className="vid-lbl">DEWA</span></div>
-              <div className="vidph"><div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div><span className="vid-lbl">Aldar</span></div>
+             
+           <section style={{ width: '100%', paddingTop:'20px' }}>
+      {/* Video Grid Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" style={{ width: '100%'}}>
+        <div className="vidph">
+          <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span className="vid-lbl">Emirates Group — Testimonial</span>
+        </div>
+        <div className="vidph">
+          <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span className="vid-lbl">DEWA</span>
+        </div>
+        <div className="vidph">
+          <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span className="vid-lbl">Aldar</span>
+        </div>
+      </div>
+
+      {/* Testimonials Grid Section */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8" style={{ width: '100%' ,  paddingTop:'30px'  }}>
+        <div className="tcard">
+          <p className="tquote" style={{ wordBreak: 'break-word' }}>
+            "IBC Studio transformed our brand communications. Their audio and video production quality is unmatched in the region — every project has exceeded our expectations."
+          </p>
+          <div className="tauthor">
+            <div className="tav">AK</div>
+            <div>
+              <div className="tan">Ahmed Al Kamali</div>
+              <div className="tat">Marketing Director, Dubai Corp</div>
             </div>
-            <div className="tgrid" style={{ width: '100%' }}>
-              <div className="tcard"><p className="tquote" style={{ wordBreak: 'break-word' }}>"IBC Studio transformed our brand communications. Their audio and video production quality is unmatched in the region — every project has exceeded our expectations."</p><div className="tauthor"><div className="tav">AK</div><div><div className="tan">Ahmed Al Kamali</div><div className="tat">Marketing Director, Dubai Corp</div></div></div></div>
-              <div className="tcard"><p className="tquote" style={{ wordBreak: 'break-word' }}>"From concept to delivery, IBC Studio is a true creative partner. Their multilingual voice-over capabilities alone saved us months of coordination work."</p><div className="tauthor"><div className="tav">SR</div><div><div className="tan">Sara Rashid</div><div className="tat">Head of Brand, Emaar Properties</div></div></div></div>
-              <div className="tcard"><p className="tquote" style={{ wordBreak: 'break-word' }}>"We've worked with many agencies — none come close to IBC's level of professionalism, creativity, and on-time delivery. Simply the best in the UAE."</p><div className="tauthor"><div className="tav">MH</div><div><div className="tan">Mohammed Hassan</div><div className="tat">CEO, Regional Brands Group</div></div></div></div>
+          </div>
+        </div>
+
+        <div className="tcard">
+          <p className="tquote" style={{ wordBreak: 'break-word' }}>
+            "From concept to delivery, IBC Studio is a true creative partner. Their multilingual voice-over capabilities alone saved us months of coordination work."
+          </p>
+          <div className="tauthor">
+            <div className="tav">SR</div>
+            <div>
+              <div className="tan">Sara Rashid</div>
+              <div className="tat">Head of Brand, Emaar Properties</div>
             </div>
+          </div>
+        </div>
+
+        <div className="tcard">
+          <p className="tquote" style={{ wordBreak: 'break-word' }}>
+            "We've worked with many agencies — none come close to IBC's level of professionalism, creativity, and on-time delivery. Simply the best in the UAE."
+          </p>
+          <div className="tauthor">
+            <div className="tav">MH</div>
+            <div>
+              <div className="tan">Mohammed Hassan</div>
+              <div className="tat">CEO, Regional Brands Group</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+            
           </section>
 
           <div className="divl"></div>
@@ -251,35 +302,37 @@ export default function Home() {
               </div>
               <Link href="/blogs" className="btn-o">View All Articles →</Link>
             </div>
-            <div className="bgrid" style={{ width: '100%' }}>
-              <Link href="/blogs/ai-video-storytelling-2025" className="bcard" style={{ textDecoration: 'none', display: 'block' }}>
-                <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
-                <div className="bc">
-                  <span className="btag">AI Production</span>
-                  <h3 style={{ wordBreak: 'break-word' }}>How AI Video is Redefining Brand Storytelling in 2025</h3>
-                  <p style={{ wordBreak: 'break-word' }}>How UAE brands are leveraging AI-generated video to scale content without sacrificing quality.</p>
-                  <div className="bmeta"><span className="bdate">May 2025</span><span className="brm">Read More →</span></div>
-                </div>
-              </Link>
-              <Link href="/blogs/power-of-cinematic-corporate-films" className="bcard" style={{ textDecoration: 'none', display: 'block' }}>
-                <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
-                <div className="bc">
-                  <span className="btag">Video Production</span>
-                  <h3 style={{ wordBreak: 'break-word' }}>The Power of Cinematic Corporate Films: Why They Work</h3>
-                  <p style={{ wordBreak: 'break-word' }}>How a well-crafted corporate film builds credibility, trust and emotional connection.</p>
-                  <div className="bmeta"><span className="bdate">Apr 2025</span><span className="brm">Read More →</span></div>
-                </div>
-              </Link>
-              <Link href="/blogs/why-your-ivr-voice-matters" className="bcard" style={{ textDecoration: 'none', display: 'block' }}>
-                <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
-                <div className="bc">
-                  <span className="btag">Audio</span>
-                  <h3 style={{ wordBreak: 'break-word' }}>Why Your IVR Voice Matters More Than You Think</h3>
-                  <p style={{ wordBreak: 'break-word' }}>The first voice a customer hears shapes their entire experience with your brand.</p>
-                  <div className="bmeta"><span className="bdate">Mar 2025</span><span className="brm">Read More →</span></div>
-                </div>
-              </Link>
-            </div>
+           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" style={{ width: '100%', paddingTop:'30px' }}>
+                <Link href="/blogs/ai-video-storytelling-2025" className="bcard" style={{ textDecoration: 'none', display: 'block' }}>
+                  <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
+                  <div className="bc">
+                    <span className="btag">AI Production</span>
+                    <h3 style={{ wordBreak: 'break-word' }}>How AI Video is Redefining Brand Storytelling in 2025</h3>
+                    <p style={{ wordBreak: 'break-word' }}>How UAE brands are leveraging AI-generated video to scale content without sacrificing quality.</p>
+                    <div className="bmeta"><span className="bdate">May 2025</span><span className="brm">Read More →</span></div>
+                  </div>
+                </Link>
+
+                <Link href="/blogs/power-of-cinematic-corporate-films" className="bcard" style={{ textDecoration: 'none', display: 'block' }}>
+                  <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
+                  <div className="bc">
+                    <span className="btag">Video Production</span>
+                    <h3 style={{ wordBreak: 'break-word' }}>The Power of Cinematic Corporate Films: Why They Work</h3>
+                    <p style={{ wordBreak: 'break-word' }}>How a well-crafted corporate film builds credibility, trust and emotional connection.</p>
+                    <div className="bmeta"><span className="bdate">Apr 2025</span><span className="brm">Read More →</span></div>
+                  </div>
+                </Link>
+
+                <Link href="/blogs/why-your-ivr-voice-matters" className="bcard" style={{ textDecoration: 'none', display: 'block' }}>
+                  <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
+                  <div className="bc">
+                    <span className="btag">Audio</span>
+                    <h3 style={{ wordBreak: 'break-word' }}>Why Your IVR Voice Matters More Than You Think</h3>
+                    <p style={{ wordBreak: 'break-word' }}>The first voice a customer hears shapes their entire experience with your brand.</p>
+                    <div className="bmeta"><span className="bdate">Mar 2025</span><span className="brm">Read More →</span></div>
+                  </div>
+                </Link>
+              </div>
           </section>
 
           {/* FREQUENTLY ASKED QUESTIONS */}

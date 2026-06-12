@@ -6,8 +6,8 @@ h1,h2,h3,h4,h5{font-family:'Red Hat Display',sans-serif;font-weight:700;line-hei
 .page{display:none;min-height:100vh}
 .page.active{display:block}
 /* HEADER */
+
 header{position:fixed;top:0;left:0;right:0;z-index:1000;height:70px;background:#111214;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(147,196,179,.2);box-shadow:0 10px 30px rgba(0,0,0,.18);display:flex;align-items:center;padding:0 40px;justify-content:space-between;transition:background .3s,border-color .3s,box-shadow .3s}
-body.home-hero-top header{background:rgba(255,255,255,.055);border-bottom:1px solid rgba(255,255,255,.18);box-shadow:0 18px 46px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.1);backdrop-filter:blur(22px) saturate(1.35);-webkit-backdrop-filter:blur(22px) saturate(1.35)}
 .logo{display:flex;align-items:center;gap:11px;cursor:pointer;text-decoration:none;flex-shrink:0}
 .logo-txt{font-family:'Red Hat Display',sans-serif;font-weight:900;font-size:19px;letter-spacing:.08em;color:#fff;text-transform:uppercase;line-height:1;white-space:nowrap;flex-shrink:0}
 .logo-txt::after{content:'';display:block;width:38px;height:2px;background:linear-gradient(90deg,var(--sage),transparent);margin-top:6px;border-radius:2px}

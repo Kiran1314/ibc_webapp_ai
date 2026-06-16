@@ -107,7 +107,7 @@ export default function IBCIntelligence() {
                  <div className="intel-mark reveal">
                  <div className="logo" style={{ cursor: 'default'  }}>
                       <img 
-                        src="/assets/images/logo/intelligence.png" 
+                        src="/assets/images/logo/intel-icon.png" 
                         alt="IBC Studio Logo" 
                         style={{ 
                           height: '180px', 

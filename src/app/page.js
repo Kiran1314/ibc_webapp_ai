@@ -357,10 +357,18 @@ export default function Home() {
               </Link>
               <Link href="/ibc-intelligence#pg-intel" className="srv-card reveal" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="srv-ic intel-service-ic">
-                  <svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
-                    <path d="M6.5 6.5l3.7 3.7M17.5 6.5l-3.7 3.7M6.5 17.5l3.7-3.7M17.5 17.5l-3.7-3.7"/>
-                  </svg>
+                 <div className="logo" style={{ cursor: 'default'  }}>
+                      <img 
+                        src="/assets/images/logo/intel-icon.png" 
+                        alt="IBC Studio Logo" 
+                        style={{ 
+                          height: '50px', 
+                          width: 'auto', 
+                          objectFit: 'contain',
+                          display: 'block'
+                        }} 
+                      />
+                    </div>
                 </div>
                 <h3>IBC Intelligence</h3><p style={{ wordBreak: 'break-word' }}>Operator-led AI advisory helping teams find and build practical workflow systems that improve productivity, speed, and decision support.</p>
                 <div className="srv-arr">Explore Service →</div>

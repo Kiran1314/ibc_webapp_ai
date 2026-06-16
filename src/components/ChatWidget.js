@@ -52,9 +52,9 @@ export default function ChatWidget() {
         <div className="chat-body" style={{ position: 'relative', zIndex: 2 }}>
           <div className="chat-msg"><p>Hello. How can we help with your project today?</p></div>
           <div className="chat-actions" style={{ position: 'relative', zIndex: 3 }}>
-            <Link href="/services" className="chat-chip" onClick={() => setIsActive(false)}>I need production services</Link>
-            <Link href="/ibc-intelligence" className="chat-chip" onClick={() => setIsActive(false)}>I want AI consultancy</Link>
-            <Link href="/contact" className="chat-chip" onClick={() => setIsActive(false)}>I want to request a quote</Link>
+            <Link href="/services#pg-services" className="chat-chip" onClick={() => setIsActive(false)}>I need production services</Link>
+            <Link href="/ibc-intelligence#pg-intel" className="chat-chip" onClick={() => setIsActive(false)}>I want AI consultancy</Link>
+            <Link href="/contact#pg-contact" className="chat-chip" onClick={() => setIsActive(false)}>I want to request a quote</Link>
           </div>
           <a className="btn-p chat-wa" href="https://wa.me/971559958905" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', position: 'relative', zIndex: 3 }}>
             Continue on WhatsApp →

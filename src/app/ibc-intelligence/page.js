@@ -104,10 +104,21 @@ export default function IBCIntelligence() {
             
             <div className="ibdg" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
               <div className="ibdi">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="2.5"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
-                  <path d="M6.5 6.5l3.7 3.7M17.5 6.5l-3.7 3.7M6.5 17.5l3.7-3.7M17.5 17.5l-3.7-3.7"/>
-                </svg>
+                 <div className="intel-mark reveal">
+                 <div className="logo" style={{ cursor: 'default'  }}>
+                      <img 
+                        src="/assets/images/logo/intelligence.png" 
+                        alt="IBC Studio Logo" 
+                        style={{ 
+                          height: '180px', 
+                          width: 'auto', 
+                          objectFit: 'contain',
+                          display: 'block'
+                        }} 
+                      />
+                    </div>
+              </div>
+                 
               </div>
               <div className="ibdn">IBC <em>Intelligence</em></div>
               <span className="ibdp">AI Advisory</span>

@@ -19,13 +19,13 @@ export default function ChatWidget() {
             width: '100vw',
             height: '100vh',
             background: 'transparent',
-            zIndex: 99998, // Sits exactly 1 tier below the active chat dialog panel
-            cursor: 'default'
+            zIndex: 99998, // Strictly underneath the chat panel box layers
+            pointerEvents: 'auto' // Activates click intercept mapping
           }}
         />
       )}
 
-      {/* CHAT INTERACTION PANEL - TRANSLATES VIA CLASS TOGGLE */}
+      {/* CHAT INTERACTION PANEL */}
       <div 
         className={`chat-panel ${isActive ? 'active' : ''}`} 
         aria-label="IBC Studio chat panel" 
@@ -33,13 +33,13 @@ export default function ChatWidget() {
           position: 'fixed',
           bottom: '90px',
           right: 'clamp(16px, 4vw, 28px)',
-          zIndex: 99999, // Safely anchors above footer layout dimensions on all devices
-          maxWidth: 'min(calc(100vw - 32px), 360px)', // Prevents clipping on narrow phone displays
-          // Overrides stylesheet defaults dynamically to force visual state paint safely
+          zIndex: 99999, // HIGHER THAN OVERLAY: This breaks the pointer block so fields are interactive!
+          maxWidth: 'min(calc(100vw - 32px), 360px)',
           visibility: isActive ? 'visible' : 'hidden',
           opacity: isActive ? '1' : '0',
           transform: isActive ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'all 0.28s cubic-bezier(0.16, 1, 0.3, 1)'
+          transition: 'all 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
+          pointerEvents: 'auto' // Guarantees children receive standard bubble events
         }}
       >
         <div className="chat-head">
@@ -49,14 +49,14 @@ export default function ChatWidget() {
             <p>Tell us what you need and we will guide you to the right team.</p>
           </div>
         </div>
-        <div className="chat-body">
+        <div className="chat-body" style={{ position: 'relative', zIndex: 2 }}>
           <div className="chat-msg"><p>Hello. How can we help with your project today?</p></div>
-          <div className="chat-actions">
+          <div className="chat-actions" style={{ position: 'relative', zIndex: 3 }}>
             <Link href="/services" className="chat-chip" onClick={() => setIsActive(false)}>I need production services</Link>
             <Link href="/ibc-intelligence" className="chat-chip" onClick={() => setIsActive(false)}>I want AI consultancy</Link>
             <Link href="/contact" className="chat-chip" onClick={() => setIsActive(false)}>I want to request a quote</Link>
           </div>
-          <a className="btn-p chat-wa" href="https://wa.me/971559958905" target="_blank" rel="noopener noreferrer">
+          <a className="btn-p chat-wa" href="https://wa.me/971559958905" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', position: 'relative', zIndex: 3 }}>
             Continue on WhatsApp →
           </a>
           <p className="chat-note">WhatsApp: +971 55 995 8905</p>
@@ -72,12 +72,12 @@ export default function ChatWidget() {
           position: 'fixed',
           bottom: '24px',
           right: 'clamp(16px, 4vw, 28px)',
-          zIndex: 99999,
+          zIndex: 99999, // Matches standard action triggers layer stack
           cursor: 'pointer'
         }}
       >
-        <svg viewBox="0 0 24 24" style={{ width: '65%', height: '100%' }}>
-          <path fill="currentColor" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+        <svg viewBox="0 0 24 24" style={{ width: '50%', height: '50%' }}>
+          <path   d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
         </svg>
       </div>
     </>

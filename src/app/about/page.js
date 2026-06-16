@@ -1,19 +1,48 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 export default function About() {
+  const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef(null);
 
-  // Initialize scroll monitoring observer side-effects post structural page layout hydration
+  // Trigger page layout entry animation immediately on mount hydration
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Synchronize dynamic header top transparency style metrics with body attributes
+  useEffect(() => {
+    if (window.scrollY <= 10) {
+      document.body.classList.add('home-hero-top');
+    } else {
+      document.body.classList.remove('home-hero-top');
+    }
+
+    const handleScrollMetrics = () => {
+      if (window.scrollY > 10) {
+        document.body.classList.remove('home-hero-top');
+      } else {
+        document.body.classList.add('home-hero-top');
+      }
+    };
+    window.addEventListener('scroll', handleScrollMetrics);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollMetrics);
+      document.body.classList.remove('home-hero-top');
+    };
+  }, []);
+
+  // High-Performance Intersection Observer Engine for Scroll Fades across nested layout grids
   useEffect(() => {
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
-      root: null, // Binds tracking coordinates directly to browser viewport boundary line
-      rootMargin: '0px 0px -60px 0px', // Pre-triggers elements ahead of entering screen space
-      threshold: 0.12 // Fires when 12% of the targeted division container is in view
+      root: null, // Viewport defaults directly to the browser screen window
+      rootMargin: '0px 0px -100px 0px', // Triggers 100px before the element fully enters screen bounds
+      threshold: 0.05 // Fires immediately when 5% of the element is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -46,11 +75,20 @@ export default function About() {
       <meta property="og:site_name" content="IBC Studio" />
 
       <div className="page active" id="pg-about" ref={containerRef}>
-        <div className="pw" style={{ width: '100%' }}>
+        {/* INNER PAGE WRAPPER WITH LINK-TRANSITION FADE STATE ENGINE */}
+        <div 
+          className="pw" 
+          style={{ 
+            width: '100%',
+            opacity: isMounted ? 1 : 0,
+            transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
       
           {/* HERO STORY SECTION - BALANCED RESPONSIVE SIDE AND VERTICAL PADDING */}
           <div 
-            className="ahwrap reveal" 
+            className="ahwrap reveal in-view" 
             style={{ 
               width: '100%', 
               paddingTop: 'clamp(120px, 12vh, 160px)', // Safely clears the 70px absolute header component
@@ -60,7 +98,7 @@ export default function About() {
             }}
           >
             <div>
-              <div className="lbl" >Our Story</div>
+              <div className="lbl">Our Story</div>
               <h1 style={{ wordBreak: 'break-word', fontSize: 'clamp(36px, 4.8vw, 58px)', lineHeight: '1.1' }}>
                 More Than a Studio.<br />A Creative Force.
               </h1>
@@ -93,22 +131,22 @@ export default function About() {
 
           <div className="divl"></div>
 
-          {/* STATS COUNTER BAR */}
+          {/* STATS COUNTER BAR - NESTED CHILD DATA ITEMS FADE SEPARATELY */}
           <section className="sec reveal" style={{ width: '100%' }}>
             <div className="stats-bar" style={{ width: '100%' }}>
-              <div className="sitem">
+              <div className="sitem reveal">
                 <span className="snum">19<span className="a">+</span></span>
                 <span className="slbl">Years Experience</span>
               </div>
-              <div className="sitem">
+              <div className="sitem reveal">
                 <span className="snum">1K<span className="a">+</span></span>
                 <span className="slbl">Video & Photo Projects</span>
               </div>
-              <div className="sitem">
+              <div className="sitem reveal">
                 <span className="snum">3K<span className="a">+</span></span>
                 <span className="slbl">Audio Projects</span>
               </div>
-              <div className="sitem">
+              <div className="sitem reveal">
                 <span className="snum">3K<span className="a">+</span></span>
                 <span className="slbl">Satisfied Clients</span>
               </div>
@@ -117,10 +155,10 @@ export default function About() {
 
           <div className="divl"></div>
 
-          {/* CORE CAPABILITIES SECTION */}
+          {/* CORE CAPABILITIES SECTION - NESTED GRID BLOCK FADES */}
           <section className="sec reveal" style={{ width: '100%' }}>
             <div className="split-grid" style={{ width: '100%' }}>
-              <div>
+              <div className="reveal">
                 <div className="lbl">What We Do</div>
                 <h2 className="title" style={{ wordBreak: 'break-word' }}>End-to-End Media Production</h2>
                 <p style={{ fontSize: '16.5px', color: 'var(--mid)', lineHeight: '1.75', marginBottom: '14px', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
@@ -132,15 +170,15 @@ export default function About() {
               </div>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
-                <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+                <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
                   <div style={{ fontSize: '20px', flexShrink: 0 }}>🎙️</div>
                   <div>
                     <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>Audio Production</h4>
-                    <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>IVR, OHM, voice-overs, jingles, dubbing, and multilingual localization.</p>
+                    <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>IVR, on-hold messaging, multilingual voice-overs, jingles, dubbing, and multilingual localization.</p>
                   </div>
                 </div>
                 
-                <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+                <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
                   <div style={{ fontSize: '20px', flexShrink: 0 }}>🎬</div>
                   <div>
                     <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>Video & Photography</h4>
@@ -148,7 +186,7 @@ export default function About() {
                   </div>
                 </div>
                 
-                <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+                <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
                   <div style={{ fontSize: '20px', flexShrink: 0 }}>🤖</div>
                   <div>
                     <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>AI & Digital</h4>
@@ -161,19 +199,19 @@ export default function About() {
 
           <div className="divl"></div>
 
-          {/* FOUNDER & LEADERSHIP MESSAGE */}
+          {/* FOUNDER & LEADERSHIP MESSAGE - CARDS INTEGRATED INTO OBSERVER QUEUE */}
           <section className="sec reveal" style={{ background: 'var(--bg2)', width: '100%' }}>
             <div className="lbl">Leadership</div>
             <h2 className="title" style={{ wordBreak: 'break-word' }}>From the Founder's Desk</h2>
             <div className="fwrap" style={{ width: '100%' }}>
-              <div className="fcard">
+              <div className="fcard reveal">
                 <div className="fav">IBC</div>
                 <div className="finfo">
                   <h3>Founder & Director</h3>
                   <span>IBC Studio, Dubai UAE</span>
                 </div>
               </div>
-              <div className="fquote">
+              <div className="fquote reveal">
                 <blockquote style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                   "We didn’t build IBC Studio to simply create content. We built it to help brands tell stories with impact, deliver quality without compromise, and create work that people genuinely remember."
                 </blockquote>

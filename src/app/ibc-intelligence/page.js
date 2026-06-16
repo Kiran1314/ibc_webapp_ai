@@ -5,7 +5,13 @@ import Link from 'next/link';
 
 export default function IBCIntelligence() {
   const [windowWidth, setWindowWidth] = useState(1200);
+  const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef(null);
+
+  // Trigger page load fade-in on structural container mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     // Set initial viewport layout baseline post-hydration safely
@@ -16,32 +22,30 @@ export default function IBCIntelligence() {
     
     // Initialize Scroll Reveal Intersection Observer Engine
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
-    if (revealElements && revealElements.length > 0) {
-      const observerOptions = {
-        root: null,
-        rootMargin: '0px 0px -60px 0px',
-        threshold: 0.12
-      };
+    if (!revealElements || revealElements.length === 0) return;
 
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-          } else {
-            entry.target.classList.remove('in-view');
-          }
-        });
-      }, observerOptions);
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -100px 0px', // Triggers 100px before the element fully enters view bounds
+      threshold: 0.05 // Fires immediately when 5% of the element is visible
+    };
 
-      revealElements.forEach((el) => observer.observe(el));
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        } else {
+          entry.target.classList.remove('in-view'); // Re-triggers animations seamlessly when scrolling up/down
+        }
+      });
+    }, observerOptions);
 
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        revealElements.forEach((el) => observer.unobserve(el));
-      };
-    }
+    revealElements.forEach((el) => observer.observe(el));
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      revealElements.forEach((el) => observer.unobserve(el));
+    };
   }, []);
 
   // Helper resolver providing custom inline grid column overrides for mobile and tablet tiers
@@ -72,11 +76,20 @@ export default function IBCIntelligence() {
       <meta property="og:site_name" content="IBC Studio" />
 
       <div className="page active" id="pg-intel" ref={containerRef}>
-        <div className="pw" style={{ width: '100%' }}>
+        {/* INNER PAGE WRAPPER WITH LINK-TRANSITION FADE STATE ENGINE */}
+        <div 
+          className="pw" 
+          style={{ 
+            width: '100%',
+            opacity: isMounted ? 1 : 0,
+            transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
           
-          {/* HERO HEADER AREA - INHERITS FADE IN EFFECT NATIVELY */}
+          {/* HERO HEADER AREA - IMMEDIATELY VISIBLE ON MOUNT */}
           <div 
-            className="ih reveal" 
+            className="ih reveal in-view" 
             style={{ 
               width: '100%', 
               paddingTop: 'clamp(120px, 12vh, 170px)', 
@@ -108,7 +121,7 @@ export default function IBCIntelligence() {
                     overflowWrap: 'break-word',
                     fontSize: 'clamp(32px, 5vw, 50px)', 
                     lineHeight: '1.1', 
-                  	marginBottom: '18px' 
+                    marginBottom: '18px' 
                   }}
                 >
                   AI Advisory for<br />Real Business Workflows.
@@ -168,10 +181,10 @@ export default function IBCIntelligence() {
               Visible AI use cases are not always the ones that improve productivity, margin, turnaround time, or decision quality. The real challenge is knowing where AI creates leverage and where human context still matters.
             </p>
             <div className="ics" style={getGridTemplateColumns() ? dynamicGridStyle : { width: '100%' }}>
-              <div className="ic"><div className="icn">01</div><h3>AI without operational context</h3><p style={{ wordBreak: 'break-word' }}>Teams adopt tools before understanding where workflow inefficiencies actually exist.</p></div>
-              <div className="ic"><div className="icn">02</div><h3>Automation replacing visibility</h3><p style={{ wordBreak: 'break-word' }}>Processes become fragmented when automation is added without improving operational clarity.</p></div>
-              <div className="ic"><div className="icn">03</div><h3>High-impact workflows stay manual</h3><p style={{ wordBreak: 'break-word' }}>Important bottlenecks often remain slow, repetitive, and resource-intensive.</p></div>
-              <div className="ic"><div className="icn">04</div><h3>Decision quality suffers</h3><p style={{ wordBreak: 'break-word' }}>AI outputs without business context can reduce clarity instead of improving it.</p></div>
+              <div className="ic reveal"><div className="icn">01</div><h3>AI without operational context</h3><p style={{ wordBreak: 'break-word' }}>Teams adopt tools before understanding where workflow inefficiencies actually exist.</p></div>
+              <div className="ic reveal"><div className="icn">02</div><h3>Automation replacing visibility</h3><p style={{ wordBreak: 'break-word' }}>Processes become fragmented when automation is added without improving operational clarity.</p></div>
+              <div className="ic reveal"><div className="icn">03</div><h3>High-impact workflows stay manual</h3><p style={{ wordBreak: 'break-word' }}>Important bottlenecks often remain slow, repetitive, and resource-intensive.</p></div>
+              <div className="ic reveal"><div className="icn">04</div><h3>Decision quality suffers</h3><p style={{ wordBreak: 'break-word' }}>AI outputs without business context can reduce clarity instead of improving it.</p></div>
             </div>
           </div>
 
@@ -185,10 +198,10 @@ export default function IBCIntelligence() {
               We study how teams actually operate, identify high-leverage bottlenecks, and design practical AI systems that fit the real process instead of forcing disruption.
             </p>
             <div className="ics" style={getGridTemplateColumns() ? dynamicGridStyle : { width: '100%' }}>
-              <div className="ic"><div className="icn">01</div><h3>Understand the Workflow</h3><p style={{ wordBreak: 'break-word' }}>We analyze how teams collaborate, retrieve information, execute tasks, and make decisions.</p></div>
-              <div className="ic"><div className="icn">02</div><h3>Identify Bottlenecks</h3><p style={{ wordBreak: 'break-word' }}>We focus on workflows affecting productivity, reporting, turnaround time, efficiency, and decision support.</p></div>
-              <div className="ic"><div className="icn">03</div><h3>Design Practical AI Systems</h3><p style={{ wordBreak: 'break-word' }}>We build AI solutions around the business process, not around hype or unnecessary complexity.</p></div>
-              <div className="ic"><div className="icn">04</div><h3>Improve Execution</h3><p style={{ wordBreak: 'break-word' }}>The outcome is faster workflows, reduced manual overhead, stronger visibility, and better information access.</p></div>
+              <div className="ic reveal"><div className="icn">01</div><h3>Understand the Workflow</h3><p style={{ wordBreak: 'break-word' }}>We analyze how teams collaborate, retrieve information, execute tasks, and make decisions.</p></div>
+              <div className="ic reveal"><div className="icn">02</div><h3>Identify Bottlenecks</h3><p style={{ wordBreak: 'break-word' }}>We focus on workflows affecting productivity, reporting, turnaround time, efficiency, and decision support.</p></div>
+              <div className="ic reveal"><div className="icn">03</div><h3>Design Practical AI Systems</h3><p style={{ wordBreak: 'break-word' }}>We build AI solutions around the business process, not around hype or unnecessary complexity.</p></div>
+              <div className="ic reveal"><div className="icn">04</div><h3>Improve Execution</h3><p style={{ wordBreak: 'break-word' }}>The outcome is faster workflows, reduced manual overhead, stronger visibility, and better information access.</p></div>
             </div>
           </div>
 
@@ -202,21 +215,21 @@ export default function IBCIntelligence() {
               For a blockchain funding platform evaluating a large number of projects, analysts needed to manually retrieve, compare, and evaluate similar projects and market performance data.
             </p>
             <div className="iwk" style={getGridTemplateColumns() ? dynamicGridStyle : { width: '100%' }}>
-              <div className="ipj">
+              <div className="ipj reveal">
                 <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg,#46b7b7,#244f7d)', borderRadius: '2px', marginBottom: '14px' }}></div>
                 <span className="ipt">Solution</span>
                 <h3>Telegram-integrated AI assistant</h3>
                 <p style={{ wordBreak: 'break-word' }}>We built an AI-powered comparative analysis assistant using semantic retrieval to identify and compare relevant projects and token intelligence beyond rigid tag-based filtering.</p>
                 <div className="ipf"><span>Existing workflow</span><i>AI-assisted</i></div>
               </div>
-              <div className="ipj">
+              <div className="ipj reveal">
                 <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg,#46b7b7,#244f7d)', borderRadius: '2px', marginBottom: '14px' }}></div>
                 <span className="ipt">Impact</span>
                 <h3>50% faster due diligence</h3>
                 <p style={{ wordBreak: 'break-word' }}>Comparative analysis workflows were completed substantially faster while keeping analyst-driven decision quality intact.</p>
                 <div className="ipf"><span>Speed gain</span><i>50%</i></div>
               </div>
-              <div className="ipj">
+              <div className="ipj reveal">
                 <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg,#46b7b7,#244f7d)', borderRadius: '2px', marginBottom: '14px' }}></div>
                 <span className="ipt">Efficiency</span>
                 <h3>~8 hours saved per analyst / week</h3>
@@ -236,19 +249,19 @@ export default function IBCIntelligence() {
               IBC Intelligence combines strategic thinking with in-house execution capability across media, systems, content, and digital infrastructure.
             </p>
             <div className="itm" style={getGridTemplateColumns() ? dynamicGridStyle : { width: '100%' }}>
-              <div className="imc">
+              <div className="imc reveal">
                 <div className="ima">AB</div>
                 <h3>Abhishek Banerjee</h3>
                 <span className="imr">CEO</span>
                 <p style={{ wordBreak: 'break-word' }}>Leads company strategy, business growth, and cross-functional execution across media, digital, and operational initiatives.</p>
               </div>
-              <div className="imc">
+              <div className="imc reveal">
                 <div className="ima">AA</div>
                 <h3>Atif Amjad</h3>
                 <span className="imr">COO / AI Consultancy Lead</span>
                 <p style={{ wordBreak: 'break-word' }}>Built the internal comparative analysis system and leads workflow-focused AI advisory and implementation.</p>
               </div>
-              <div className="imc">
+              <div className="imc reveal">
                 <div className="ima">KS</div>
                 <h3>Kabir Saigal</h3>
                 <span className="imr">CPO</span>
@@ -265,11 +278,11 @@ export default function IBCIntelligence() {
             <h2 className="it" style={{ wordBreak: 'break-word' }}>Common areas where we support clients.</h2>
             <p className="id" style={{ width: '100%', maxWidth: '780px', wordBreak: 'break-word', marginBottom: '32px' }}>We focus on operational improvement and workflow outcomes, not AI hype.</p>
             <div className="ics" style={getGridTemplateColumns() ? dynamicGridStyle : { width: '100%' }}>
-              <div className="ic"><div className="icn">01</div><h3>Internal Knowledge & Retrieval</h3><p style={{ wordBreak: 'break-word' }}>Helping teams access, compare, and retrieve operational information faster.</p></div>
-              <div className="ic"><div className="icn">02</div><h3>Workflow & Process Optimization</h3><p style={{ wordBreak: 'break-word' }}>Reducing repetitive manual work and improving operational speed.</p></div>
-              <div className="ic"><div className="icn">03</div><h3>Content & Production Workflows</h3><p style={{ wordBreak: 'break-word' }}>Improving creative and production efficiency using AI-assisted systems.</p></div>
-              <div className="ic"><div className="icn">04</div><h3>Reporting & Decision Support</h3><p style={{ wordBreak: 'break-word' }}>Enhancing visibility, analysis, and operational decision-making.</p></div>
-              <div className="ic"><div className="icn">05</div><h3>Lead & Sales Workflow Support</h3><p style={{ wordBreak: 'break-word' }}>Supporting qualification, routing, and communication workflows.</p></div>
+              <div className="ic reveal"><div className="icn">01</div><h3>Internal Knowledge & Retrieval</h3><p style={{ wordBreak: 'break-word' }}>Helping teams access, compare, and retrieve operational information faster.</p></div>
+              <div className="ic reveal"><div className="icn">02</div><h3>Workflow & Process Optimization</h3><p style={{ wordBreak: 'break-word' }}>Reducing repetitive manual work and improving operational speed.</p></div>
+              <div className="ic reveal"><div className="icn">03</div><h3>Content & Production Workflows</h3><p style={{ wordBreak: 'break-word' }}>Improving creative and production efficiency using AI-assisted systems.</p></div>
+              <div className="ic reveal"><div className="icn">04</div><h3>Reporting & Decision Support</h3><p style={{ wordBreak: 'break-word' }}>Enhancing visibility, analysis, and operational decision-making.</p></div>
+              <div className="ic reveal"><div className="icn">05</div><h3>Lead & Sales Workflow Support</h3><p style={{ wordBreak: 'break-word' }}>Supporting qualification, routing, and communication workflows.</p></div>
             </div>
           </div>
 
@@ -283,21 +296,21 @@ export default function IBCIntelligence() {
               We will review your current workflows, identify where AI may create operational leverage, and discuss practical opportunities aligned with how your business actually operates.
             </p>
             <div className="iwk" style={getGridTemplateColumns() ? dynamicGridStyle : { width: '100%' }}>
-              <div className="ipj">
+              <div className="ipj reveal">
                 <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg,#46b7b7,#244f7d)', borderRadius: '2px', marginBottom: '14px' }}></div>
                 <span className="ipt">Step 1</span>
                 <h3>Workflow Review</h3>
                 <p style={{ wordBreak: 'break-word' }}>Understanding operational bottlenecks, inefficiencies, team handoffs, and information access issues.</p>
                 <div className="ipf"><span>Focus</span><em>Operations</em></div>
               </div>
-              <div className="ipj">
+              <div className="ipj reveal">
                 <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg,#46b7b7,#244f7d)', borderRadius: '2px', marginBottom: '14px' }}></div>
                 <span className="ipt">Step 2</span>
                 <h3>AI Opportunity Identification</h3>
                 <p style={{ wordBreak: 'break-word' }}>Identifying where AI can improve productivity, speed, reporting, retrieval, or decision support.</p>
                 <div className="ipf"><span>Focus</span><i>Leverage</i></div>
               </div>
-              <div className="ipj">
+              <div className="ipj reveal">
                 <div style={{ width: '32px', height: '2px', background: 'linear-gradient(90deg,#46b7b7,#244f7d)', borderRadius: '2px', marginBottom: '14px' }}></div>
                 <span className="ipt">Step 3</span>
                 <h3>Practical Recommendations</h3>

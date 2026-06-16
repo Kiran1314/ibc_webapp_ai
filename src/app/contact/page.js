@@ -9,8 +9,8 @@ export default function Contact() {
   const containerRef = useRef(null);
   const captchaRef = useRef(null);
   
-  // Local state watcher to dynamically capture actual browser screen layout metrics
   const [windowWidth, setWindowWidth] = useState(1200);
+  const [isMounted, setIsMounted] = useState(false);
 
   // --- Form State Management ---
   const [firstName, setFirstName] = useState('');
@@ -23,21 +23,40 @@ export default function Contact() {
   const [captchaToken, setCaptchaToken] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Initialize view mount state tracking
   useEffect(() => {
-    // Set baseline view metric safely on layout mount
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
     setWindowWidth(window.innerWidth);
-    
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
     
-    // Initialize fade-in scroll listener across structural layout markers
+    // Synchronize dynamic header transparency triggers
+    if (window.scrollY <= 10) {
+      document.body.classList.add('home-hero-top');
+    } else {
+      document.body.classList.remove('home-hero-top');
+    }
+
+    const handleScrollMetrics = () => {
+      if (window.scrollY > 10) {
+        document.body.classList.remove('home-hero-top');
+      } else {
+        document.body.classList.add('home-hero-top');
+      }
+    };
+    window.addEventListener('scroll', handleScrollMetrics);
+    
+    // High-Performance Intersection Observer for nested grid blocks
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
       root: null,
-      rootMargin: '0px 0px -60px 0px',
-      threshold: 0.12
+      rootMargin: '0px 0px -100px 0px',
+      threshold: 0.05
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -54,16 +73,16 @@ export default function Contact() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScrollMetrics);
+      document.body.classList.remove('home-hero-top');
       revealElements.forEach((el) => observer.unobserve(el));
     };
   }, []);
 
-  // Handle reCAPTCHA execution change
   const onCaptchaChange = (token) => {
     setCaptchaToken(token);
   };
 
-  // --- EmailJS Form Submission Handling ---
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -79,31 +98,24 @@ export default function Contact() {
     const publicKey = 'EflcYqa77XePEjHTc';
 
     const templateParams = {
-      // Legacy template parameters (Old Form)
       from_name: `${firstName} ${lastName}`.trim(),
       from_email: email,
       to_name: 'IBC',
       subject: service ? `Enquiry for ${service}` : 'General Enquiry',
       message: message,
       mobile: mobile,
-      
-      // Modern layout specific parameters
       first_name: firstName,
       last_name: lastName,
       company_name: companyName,
       service_interest: service,
-
-      // Pass token inside both variants to cover older and newer verification formats
       'g-recaptcha-response': captchaToken,
       'g_recaptcha_response': captchaToken
     };
 
     try {
       await emailjs.send(serviceId, templateId, templateParams, publicKey);
-      
       toast.success("Email sent successfully!");
       
-      // Reset State Fields on completion
       setFirstName('');
       setLastName('');
       setEmail('');
@@ -115,16 +127,13 @@ export default function Contact() {
       captchaRef.current?.reset();
     } catch (error) {
       console.error('Detailed EmailJS Error:', error);
-      
-      // Extract specific error details returned by the EmailJS server response
-      const errorMessage = error?.text || error?.message || "Check browser developer tools console log.";
+      const errorMessage = error?.text || error?.message || "Check console for logs.";
       toast.error(`EmailJS Error: ${errorMessage}`, { autoClose: 6000 });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Determine structural padding boundaries based on current breakpoint width
   const isMobile = windowWidth < 768;
 
   return (
@@ -141,18 +150,22 @@ export default function Contact() {
       <meta property="og:locale" content="en_US" />
 
       <div className="page active" id="pg-contact" ref={containerRef}>
+        {/* INNER CONTENT OVERLAY HANDLING GLOBAL ROUTE FADES */}
         <div 
           className="pw" 
           style={{ 
             width: '100%',
             paddingLeft: isMobile ? '0px' : 'clamp(38px, 6vw, 80px)',
             paddingRight: isMobile ? '0px' : 'clamp(38px, 6vw, 80px)',
-            paddingBottom: '80px'
+            paddingBottom: '80px',
+            opacity: isMounted ? 1 : 0,
+            transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
           
           <div 
-            className="cwrap reveal" 
+            className="cwrap" 
             style={{ 
               display: 'grid',
               gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 420px), 1fr))',
@@ -166,7 +179,7 @@ export default function Contact() {
           >
             
             {/* LEFT SIDE: CORPORATE INFO COLUMN */}
-            <div className="cinfo" style={{ width: '100%' }}>
+            <div className="cinfo reveal in-view" style={{ width: '100%' }}>
               <div className="lbl">Get In Touch</div>
               <h1 
                 style={{ 
@@ -184,24 +197,24 @@ export default function Contact() {
                 Whether you have a brief ready or just an idea, we'd love to hear from you. Our team will respond within 24 hours.
               </p>
               
-              <div className="cdet">
+              <div className="cdet reveal">
                 <div className="cion" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📍</div>
                 <div className="ctxt"><h4>Location</h4><p>Dubai, United Arab Emirates</p></div>
               </div>
-              <div className="cdet">
+              <div className="cdet reveal">
                 <div className="cion" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>📞</div>
                 <div className="ctxt"><h4>Phone</h4><p>+971 55 291 2810</p></div>
               </div>
-              <div className="cdet">
+              <div className="cdet reveal">
                 <div className="cion" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✉️</div>
                 <div className="ctxt"><h4>Email</h4><p>info@ibcstudio.com</p></div>
               </div>
-              <div className="cdet">
+              <div className="cdet reveal">
                 <div className="cion" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>💬</div>
                 <div className="ctxt"><h4>WhatsApp</h4><p>+971 55 995 8905</p></div>
               </div>
               
-              <div style={{ marginTop: '28px', width: '100%' }}>
+              <div className="reveal" style={{ marginTop: '28px', width: '100%' }}>
                 <div style={{ fontFamily: "'Red Hat Display', sans-serif", fontSize: '12px', fontWeight: '700', letterSpacing: '.09em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: '14px' }}>
                   Working Hours
                 </div>
@@ -210,7 +223,7 @@ export default function Contact() {
                 <div className="trow"><span className="td">Sunday</span><span className="tcl">Closed</span></div>
               </div>
               
-              <div style={{ marginTop: '28px' }}>
+              <div className="reveal" style={{ marginTop: '28px' }}>
                 <div style={{ fontFamily: "'Red Hat Display', sans-serif", fontSize: '12px', fontWeight: '700', letterSpacing: '.09em', textTransform: 'uppercase', color: 'var(--sage)', marginBottom: '14px' }}>
                   Follow Us
                 </div>
@@ -233,7 +246,7 @@ export default function Contact() {
 
             {/* RIGHT SIDE: ENQUIRY FORM CARD */}
             <div 
-              className="cform" 
+              className="cform reveal" 
               style={{ 
                 borderRadius: isMobile ? '0px' : '14px',
                 borderLeft: isMobile ? 'none' : '1px solid var(--border)',
@@ -248,18 +261,27 @@ export default function Contact() {
               <p style={{ fontSize: '13.5px', color: 'var(--dim)', marginBottom: '28px' }}>Fill in the form and we'll be in touch within 24 hours.</p>
               
               <form onSubmit={handleSubmit}>
-                <div className="frow" style={{ width: '100%', display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? '0px' : '14px' }}>
-                  <div className="fg" style={{ width: '100%' }}>
+                {/* REFACTORED INLINE FLEX LAYOUT ENFORCING FIRST/LAST NAME PAIRING */}
+                <div 
+                  className="frow" 
+                  style={{ 
+                    width: '100%', 
+                    display: 'flex', 
+                    flexDirection: isMobile ? 'column' : 'row', 
+                    gap: isMobile ? '0px' : '14px' 
+                  }}
+                >
+                  <div className="fg" style={{ flex: 1, minWidth: 0, marginBottom: isMobile ? '18px' : '0px' }}>
                     <label>First Name</label>
                     <input type="text" placeholder="Your first name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
                   </div>
-                  <div className="fg" style={{ width: '100%' }}>
+                  <div className="fg" style={{ flex: 1, minWidth: 0 }}>
                     <label>Last Name</label>
                     <input type="text" placeholder="Your last name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
                   </div>
                 </div>
                 
-                <div className="fg">
+                <div className="fg" style={{ marginTop: isMobile ? '18px' : '0px' }}>
                   <label>Email Address</label>
                   <input type="email" placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>

@@ -1,8 +1,10 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 
 export default function Work() {
   const [filter, setFilter] = useState('all');
+  const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef(null);
 
   const filterButtons = [
@@ -26,15 +28,43 @@ export default function Work() {
     { category: 'photo', badge: 'Photography', title: 'Financial Institution — Executive Portraits', desc: 'C-suite portrait photography for annual report.' }
   ];
 
-  // Initialize scroll monitoring reveal observer
+  // Trigger page load fade-in on structural container mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Synchronize dynamic header top transparency style metrics with body attributes
+  useEffect(() => {
+    if (window.scrollY <= 10) {
+      document.body.classList.add('home-hero-top');
+    } else {
+      document.body.classList.remove('home-hero-top');
+    }
+
+    const handleScrollMetrics = () => {
+      if (window.scrollY > 10) {
+        document.body.classList.remove('home-hero-top');
+      } else {
+        document.body.classList.add('home-hero-top');
+      }
+    };
+    window.addEventListener('scroll', handleScrollMetrics);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollMetrics);
+      document.body.classList.remove('home-hero-top');
+    };
+  }, []);
+
+  // High-Performance Intersection Observer Engine for Scroll Fades across nested layout grids
   useEffect(() => {
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -60px 0px',
-      threshold: 0.12
+      root: null, // Viewport defaults directly to the browser screen window
+      rootMargin: '0px 0px -100px 0px', // Triggers 100px before the element fully enters screen bounds
+      threshold: 0.05 // Fires immediately when 5% of the portfolio item is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -42,7 +72,7 @@ export default function Work() {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
         } else {
-          entry.target.classList.remove('in-view');
+          entry.target.classList.remove('in-view'); // Re-triggers animations seamlessly when scrolling up/down
         }
       });
     }, observerOptions);
@@ -52,7 +82,7 @@ export default function Work() {
     return () => {
       revealElements.forEach((el) => observer.unobserve(el));
     };
-  }, [filter]); // Re-run observer tracking safely when filtered items re-render
+  }, [filter]); // Safely cleans up and re-observes fresh grid blocks whenever sorting state shifts
 
   const filteredItems = filter === 'all' 
     ? portfolioItems 
@@ -71,11 +101,20 @@ export default function Work() {
       <meta property="og:site_name" content="IBC Studio" />
 
       <div className="page active" id="pg-work" ref={containerRef}>
-        <div className="pw" style={{ width: '100%' }}>
+        {/* INNER PAGE WRAPPER WITH LINK-TRANSITION FADE STATE ENGINE */}
+        <div 
+          className="pw" 
+          style={{ 
+            width: '100%',
+            opacity: isMounted ? 1 : 0,
+            transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
           
-          {/* TOP TITLE JUMBOTRON - INTEGRATED RESPONSIVE THEME CODES */}
+          {/* TOP TITLE JUMBOTRON */}
           <div 
-            className="sec reveal" 
+            className="sec reveal in-view" 
             style={{ 
               paddingTop: 'clamp(120px, 12vh, 160px)', 
               paddingBottom: '36px', 
@@ -104,17 +143,20 @@ export default function Work() {
 
           {/* RESPONSIVE HORIZONTAL FILTER BUTTONS ROW */}
           <div 
-            className="wfilter reveal" 
+            className="wfilter reveal in-view" 
             style={{ 
               width: '100%', 
               display: 'flex', 
               gap: '9px', 
               overflowX: 'auto', 
               WebkitOverflowScrolling: 'touch',
+              paddingTop: '4px', 
               paddingBottom: '20px',
               marginBottom: '20px',
               paddingLeft: 'clamp(22px, 6vw, 80px)',
-              paddingRight: 'clamp(22px, 6vw, 80px)'
+              paddingRight: 'clamp(22px, 6vw, 80px)',
+              position: 'relative',
+              zIndex: 5 
             }}
           >
             {filterButtons.map((btn) => (
@@ -129,9 +171,9 @@ export default function Work() {
             ))}
           </div>
 
-          {/* PORTFOLIO GRID - INHERITS THEME MEDIA QUERY RULES NATIVELY */}
+          {/* PORTFOLIO GRID - SCROLL-FADES IN REAL-TIME */}
           <div 
-            className="wgrid reveal" 
+            className="wgrid" 
             style={{ 
               width: '100%', 
               paddingBottom: '80px',
@@ -141,8 +183,8 @@ export default function Work() {
           >
             {filteredItems.map((item, index) => (
               <div 
-                key={index} 
-                className="witem"
+                key={`${filter}-${index}`} 
+                className="witem reveal"
                 style={{ display: 'block', width: '100%' }}
               >
                 <div className="wthumb" style={{ background: 'linear-gradient(135deg, #0d1117, #1a2035)', position: 'relative' }}>

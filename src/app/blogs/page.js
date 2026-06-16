@@ -1,20 +1,49 @@
-'use client'; // Kept at the absolute top for client hook compliance
+'use client';
 
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 export default function Blogs() {
+  const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef(null);
 
-  // Initialize unified fade-in scroll transitions across structural layouts
+  // Trigger full structural page load fade-in on initial layout mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Synchronize dynamic header top transparency style metrics with body attributes
+  useEffect(() => {
+    if (window.scrollY <= 10) {
+      document.body.classList.add('home-hero-top');
+    } else {
+      document.body.classList.remove('home-hero-top');
+    }
+
+    const handleScrollMetrics = () => {
+      if (window.scrollY > 10) {
+        document.body.classList.remove('home-hero-top');
+      } else {
+        document.body.classList.add('home-hero-top');
+      }
+    };
+    window.addEventListener('scroll', handleScrollMetrics);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollMetrics);
+      document.body.classList.remove('home-hero-top');
+    };
+  }, []);
+
+  // High-Performance Intersection Observer Engine for nested feed scroll-fades
   useEffect(() => {
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -60px 0px',
-      threshold: 0.12
+      root: null, // Viewport defaults directly to the browser screen window
+      rootMargin: '0px 0px -100px 0px', // Triggers 100px before the element fully enters screen bounds
+      threshold: 0.05 // Fires immediately when 5% of the item box is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -22,7 +51,7 @@ export default function Blogs() {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
         } else {
-          entry.target.classList.remove('in-view');
+          entry.target.classList.remove('in-view'); // Re-triggers animations seamlessly when scrolling up/down
         }
       });
     }, observerOptions);
@@ -56,11 +85,20 @@ export default function Blogs() {
       <meta property="og:site_name" content="IBC Studio" />
 
       <div className="page active" id="pg-blogs" ref={containerRef}>
-        <div className="pw" style={{ width: '100%' }}>
+        {/* LINK-TRANSITION SCREEN MOUNT TRANSITION FX */}
+        <div 
+          className="pw" 
+          style={{ 
+            width: '100%',
+            opacity: isMounted ? 1 : 0,
+            transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
+            transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
+          }}
+        >
           
           {/* TOP HEADER SECTION - FLUID RESPONSIVE THEME PADDING */}
           <div 
-            className="sec reveal" 
+            className="sec reveal in-view" 
             style={{ 
               paddingTop: 'clamp(120px, 12vh, 160px)', 
               paddingBottom: '36px', 
@@ -80,7 +118,7 @@ export default function Blogs() {
 
           {/* FEATURED ARTICLES SECTION */}
           <div 
-            className="bfeat reveal" 
+            className="bfeat" 
             style={{ 
               width: '100%', 
               paddingLeft: 'clamp(22px, 6vw, 80px)',
@@ -88,8 +126,8 @@ export default function Blogs() {
               paddingBottom: '44px'
             }}
           >
-            {/* Main Hero Card */}
-            <Link href="/blogs/ai-video-storytelling-2025" className="bfcard" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
+            {/* Main Hero Card - Animates via Scroll Observer */}
+            <Link href="/blogs/ai-video-storytelling-2025" className="bfcard reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
               <div className="bfthumb" style={{ background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)' }}></div>
               <div className="bfbody">
                 <span className="btag">Featured · AI Production</span>
@@ -102,9 +140,9 @@ export default function Blogs() {
               </div>
             </Link>
 
-            {/* Right Sidebar Secondary Cards Stack */}
+            {/* Right Sidebar Secondary Cards Stack - Individual elements track scroll space */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', width: '100%' }}>
-              <Link href="/blogs/power-of-cinematic-corporate-films" className="bfcard secondary-feat" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
+              <Link href="/blogs/power-of-cinematic-corporate-films" className="bfcard secondary-feat reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
                 <div className="bthumb secondary-thumb" style={{ background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)' }}></div>
                 <div className="bc" style={{ padding: '20px' }}>
                   <span className="btag">Video Production</span>
@@ -116,7 +154,7 @@ export default function Blogs() {
                 </div>
               </Link>
 
-              <Link href="/blogs/why-your-ivr-voice-matters" className="bfcard secondary-feat" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
+              <Link href="/blogs/why-your-ivr-voice-matters" className="bfcard secondary-feat reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
                 <div className="bthumb secondary-thumb" style={{ background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)' }}></div>
                 <div className="bc" style={{ padding: '20px' }}>
                   <span className="btag">Audio</span>
@@ -131,7 +169,7 @@ export default function Blogs() {
           </div>
 
           {/* LIST SPLITTER SEGMENT LABEL */}
-          <div style={{ padding: '0 20px', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)', marginBottom: '18px' }}>
+          <div className="reveal" style={{ padding: '0 20px', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)', marginBottom: '18px' }}>
             <div style={{ fontSize: '11.5px', fontWeight: '600', letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--dim)', borderBottom: '1px solid var(--border)', paddingBottom: '14px' }}>
               All Articles
             </div>
@@ -139,7 +177,7 @@ export default function Blogs() {
 
           {/* GENERAL ARCHIVE TILES GRID */}
           <div 
-            className="bgrid reveal" 
+            className="bgrid" 
             style={{ 
               paddingBottom: '80px',
               paddingLeft: 'clamp(22px, 6vw, 80px)',
@@ -148,7 +186,7 @@ export default function Blogs() {
             }}
           >
             {archiveBlogs.map((post, idx) => (
-              <Link href={`/blogs/${post.slug}`} key={idx} className="bcard" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
+              <Link href={`/blogs/${post.slug}`} key={idx} className="bcard reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
                 <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
                 <div className="bc">
                   <span className="btag">{post.tag}</span>

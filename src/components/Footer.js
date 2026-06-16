@@ -6,7 +6,7 @@ export default function Footer() {
     <footer>
       <div className="ft-grid">
         <div className="ft-brand">
-          <div className="logo" style={{ cursor: 'default',marginTop:'-90px' }}>
+          <div className="logo" style={{ cursor: 'default',marginTop:'-100px' }}>
             <img 
               src="/assets/images/logo/main-logo.png" 
               alt="IBC Studio Logo" 
@@ -18,7 +18,7 @@ export default function Footer() {
               }} 
             />
           </div>
-          <p style={{ cursor: 'default',marginTop:'-40px' }}>Dubai-based media production house delivering audio, video, photography, AI-powered content, and digital media solutions with over 19 years of experience.</p>
+          <p style={{ cursor: 'default',marginTop:'-60px' }}>Dubai-based media production house delivering audio, video, photography, AI-powered content, and digital media solutions with over 19 years of experience.</p>
           <div className="ft-social">
             <a href="https://www.facebook.com/profile.php?id=61575559854140" title="Facebook"><svg className="social-ico fb" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8.6V6.9c0-.8.2-1.3 1.4-1.3H17V2.3c-.8-.1-1.7-.2-2.5-.2-2.6 0-4.4 1.6-4.4 4.5v2H7.2V12h2.9v9.9H14V12h2.8l.4-3.4H14z"/></svg></a>
             <a href="https://www.instagram.com/ibcstudio_uae/" title="Instagram"><svg className="social-ico ig" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="igFooter" x1="3" y1="21" x2="21" y2="3"><stop stopColor="#f58529"/><stop offset=".35" stopColor="#dd2a7b"/><stop offset=".7" stopColor="#8134af"/><stop offset="1" stopColor="#515bd4"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5" fill="url(#igFooter)"/><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" strokeWidth="2"/><circle cx="17.4" cy="6.6" r="1.35" fill="#fff"/></svg></a>

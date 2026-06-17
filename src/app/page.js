@@ -8,11 +8,33 @@ export default function Home() {
   const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef(null);
 
+  // Mobile Auto-Scroll Slider States
+  const [activeVid, setActiveVid] = useState(0);
+  const [activeCard, setActiveCard] = useState(0);
+  
+  const vidTotal = 3; 
+  const cardTotal = 3; 
+
   const toggleFaq = (index) => {
     setOpenFaq(openFaq === index ? null : index);
   };
 
-  // Trigger global container initial page-load transition mount
+  // Auto-scroll Timer for Videos (3 seconds)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveVid((prev) => (prev + 1) % vidTotal);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Auto-scroll Timer for Text Cards (4 seconds)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveCard((prev) => (prev + 1) % cardTotal);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -40,15 +62,15 @@ export default function Home() {
     };
   }, []);
 
-  // High-Performance Intersection Observer Engine for Scroll Fades across nested layout grids
+  // High-Performance Intersection Observer Engine for Scroll Fades
   useEffect(() => {
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
-      root: null, // Viewport defaults directly to the browser screen window
-      rootMargin: '0px 0px -100px 0px', // Triggers 100px before the element fully enters screen bounds
-      threshold: 0.05 // Fires immediately when 5% of the card item is visible
+      root: null,
+      rootMargin: '0px 0px -100px 0px',
+      threshold: 0.05
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -56,7 +78,7 @@ export default function Home() {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
         } else {
-          entry.target.classList.remove('in-view'); // Re-triggers animations seamlessly when scrolling up/down
+          entry.target.classList.remove('in-view');
         }
       });
     }, observerOptions);
@@ -91,7 +113,6 @@ export default function Home() {
 
       {/* CORE HOME LAYOUT ARCHITECTURE */}
       <div className="page active" id="pg-home" ref={containerRef}>
-        {/* INNER CONTAINER SUPPORTING ROUTE FADE TRANSITIONS */}
         <div 
           className="pw" 
           style={{ 
@@ -102,7 +123,7 @@ export default function Home() {
           }}
         >
           
-          {/* HERO SECTION - Always loaded softly on transition finish */}
+          {/* HERO SECTION */}
           <section className="hero reveal in-view">
             <div className="hero-gradient-scene" aria-hidden="true"></div>
             <div className="hero-wave-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
@@ -180,24 +201,8 @@ export default function Home() {
                   'Tokio Marine Insurance', 'Toyota', 'Unitech', 'Vision Tech', 'VocalCom', 'WASL Properties', 
                   'Xiaomi', 'Zajel'
                 ].map((company, idx) => (
-                  <div 
-                    key={`orig-${idx}`} 
-                    className="clog"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      textAlign: 'center',
-                      padding: '0 28px',
-                      whiteSpace: 'nowrap',
-                      width: 'auto',
-                      boxSizing: 'border-box'
-                    }}
-                  >
-                    {company}
-                  </div>
+                  <div key={`orig-${idx}`} className="clog" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 28px', whiteSpace: 'nowrap', width: 'auto', boxSizing: 'border-box' }}>{company}</div>
                 ))}
-                
                 {[
                   'AECB', 'Agnice', 'Ahmed Saddiqi', 'Ahmed Tea', 'Air Arabia', 'Al Ain Holdings', 
                   'Al Fahim', 'Al Jazeera Investment', 'Al Khaleej Steel', 'Al Madallah', 'Al Masraf', 
@@ -233,73 +238,83 @@ export default function Home() {
           </div>
 
           {/* TESTIMONIALS */}
-          <section className="sec reveal" style={{ width: '100%' }}>
-            <div className="lbl">Client Testimonials</div>
-            <h2 className="title" style={{ wordBreak: 'break-word' }}>Voices of Trust</h2>
-            <p className="desc" style={{ width: '100%', wordBreak: 'break-word' }}>
-              Real results, real relationships. Hear directly from the brands who've partnered with us.
-            </p>
-             
-            <div style={{ width: '100%', paddingTop: '20px' }}>
-              {/* Video Grid Section */}
-              <div className="tvid-grid" style={{ width: '100%' }}>
-                <div className="vidph reveal">
-                  <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-                  <span className="vid-lbl">Emirates Group — Testimonial</span>
-                </div>
-                <div className="vidph reveal">
-                  <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-                  <span className="vid-lbl">DEWA</span>
-                </div>
-                <div className="vidph reveal">
-                  <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-                  <span className="vid-lbl">Aldar</span>
-                </div>
-              </div>
+         <section className="sec reveal" style={{ width: '100%' }}>
+  <div className="lbl">Client Testimonials</div>
+  <h2 className="title" style={{ wordBreak: 'break-word' }}>Voices of Trust</h2>
+  <p className="desc" style={{ width: '100%', wordBreak: 'break-word' }}>
+    Real results, real relationships. Hear directly from the brands who've partnered with us.
+  </p>
+   
+  <div style={{ width: '100%', paddingTop: '20px' }}>
+    
+    {/* Video Section Container Wrapper */}
+    <div className="slider-wrapper">
+      <div className="tvid-grid">
+        <div className="vidph reveal">
+          <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span className="vid-lbl">Emirates Group — Testimonial</span>
+        </div>
+        <div className="vidph reveal">
+          <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span className="vid-lbl">DEWA</span>
+        </div>
+        <div className="vidph reveal">
+          <div className="play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <span className="vid-lbl">Aldar</span>
+        </div>
+      </div>
+    </div>
 
-              {/* Testimonials Card Grid Section */}
-              <div className="tgrid" style={{ width: '100%' }}>
-                <div className="tcard reveal" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-                  <p className="tquote" style={{ wordBreak: 'break-word' }}>
-                    "IBC Studio transformed our brand communications. Their audio and video production quality is unmatched in the region — every project has exceeded our expectations."
-                  </p>
-                  <div className="tauthor">
-                    <div className="tav">AK</div>
-                    <div>
-                      <div className="tan">Ahmed Al Kamali</div>
-                      <div className="tat">Marketing Director, Dubai Corp</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="tcard reveal" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-                  <p className="tquote" style={{ wordBreak: 'break-word' }}>
-                    "From concept to delivery, IBC Studio is a true creative partner. Their multilingual voice-over capabilities alone saved us months of coordination work."
-                  </p>
-                  <div className="tauthor">
-                    <div className="tav">SR</div>
-                    <div>
-                      <div className="tan">Sara Rashid</div>
-                      <div className="tat">Head of Brand, Emaar Properties</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="tcard reveal" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%' }}>
-                  <p className="tquote" style={{ wordBreak: 'break-word' }}>
-                    "We've worked with many agencies — none come close to IBC's level of professionalism, creativity, and on-time delivery. Simply the best in the UAE."
-                  </p>
-                  <div className="tauthor">
-                    <div className="tav">MH</div>
-                    <div>
-                      <div className="tan">Mohammed Hassan</div>
-                      <div className="tat">CEO, Regional Brands Group</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    {/* Testimonials Card Section Container Wrapper */}
+    <div className="slider-wrapper" style={{ marginTop: '20px' }}>
+      <div className="tgrid">
+        
+        {/* Card item 1 */}
+        <div className="tcard reveal">
+          <p className="tquote">
+            "IBC Studio transformed our brand communications. Their audio and video production quality is unmatched in the region — every project has exceeded our expectations."
+          </p>
+          <div className="tauthor">
+            <div className="tav">AK</div>
+            <div>
+              <div className="tan">Ahmed Al Kamali</div>
+              <div className="tat">Marketing Director, Dubai Corp</div>
             </div>
-          </section>
+          </div>
+        </div>
+
+        {/* Card item 2 */}
+        <div className="tcard reveal">
+          <p className="tquote">
+            "From concept to delivery, IBC Studio is a true creative partner. Their multilingual voice-over capabilities alone saved us months of coordination work."
+          </p>
+          <div className="tauthor">
+            <div className="tav">SR</div>
+            <div>
+              <div className="tan">Sara Rashid</div>
+              <div className="tat">Head of Brand, Emaar Properties</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card item 3 */}
+        <div className="tcard reveal">
+          <p className="tquote">
+            "We've worked with many agencies — none come close to IBC's level of professionalism, creativity, and on-time delivery. Simply the best in the UAE."
+          </p>
+          <div className="tauthor">
+            <div className="tav">MH</div>
+            <div>
+              <div className="tan">Mohammed Hassan</div>
+              <div className="tat">CEO, Regional Brands Group</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
 
           <div className="divl"></div>
 
@@ -357,26 +372,24 @@ export default function Home() {
               </Link>
               <Link href="/ibc-intelligence#pg-intel" className="srv-card reveal" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="srv-ic intel-service-ic">
-                 <div className="logo" style={{ cursor: 'default'  }}>
-                      <img 
-                        src="/assets/images/logo/intel-icon.png" 
-                        alt="IBC Studio Logo" 
-                        style={{ 
-                          height: '50px', 
-                          width: 'auto', 
-                          objectFit: 'contain',
-                          display: 'block'
-                        }} 
-                      />
-                    </div>
+                  <div className="logo" style={{ cursor: 'default' }}>
+                    <img 
+                      src="/assets/images/logo/intel-icon.png" 
+                      alt="IBC Studio Logo" 
+                      style={{ 
+                        height: '50px', 
+                        width: 'auto', 
+                        objectFit: 'contain',
+                        display: 'block'
+                      }} 
+                    />
+                  </div>
                 </div>
                 <h3>IBC Intelligence</h3><p style={{ wordBreak: 'break-word' }}>Operator-led AI advisory helping teams find and build practical workflow systems that improve productivity, speed, and decision support.</p>
                 <div className="srv-arr">Explore Service →</div>
               </Link>
             </div>
           </section>
-
-          <div className="divl"></div>
 
           {/* INTEL STRIP BANNER */}
           <section className="sec-sm reveal" style={{ width: '100%' }}>
@@ -388,18 +401,24 @@ export default function Home() {
                 <div style={{ marginTop: '22px' }}><Link href="/ibc-intelligence#pg-intel" className="btn-p">Book a Consultancy →</Link></div>
               </div>
               <div className="intel-mark reveal">
-                 <div className="logo" style={{ cursor: 'default'  }}>
-                      <img 
-                        src="/assets/images/logo/intelligence.png" 
-                        alt="IBC Studio Logo" 
-                        style={{ 
-                          height: '130px', 
-                          width: 'auto', 
-                          objectFit: 'contain',
-                          display: 'block'
-                        }} 
-                      />
-                    </div>
+                <div className="logo" style={{ cursor: 'default' }}>
+                  <img 
+                    src="/assets/images/logo/intelligence.png" 
+                    alt="IBC Studio Logo" 
+                    style={{ 
+                      height: 'var(--logo-size, 130px)', 
+                      width: 'var(--logo-size, 130px)', 
+                      objectFit: 'contain',
+                      display: 'block'
+                    }} 
+                    ref={(el) => {
+                      if (!el) return;
+                      const style = document.createElement('style');
+                      style.innerText = `@media(max-width: 767px) { :root { --logo-size: 110px; } }`;
+                      document.head.appendChild(style);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </section>
@@ -407,12 +426,9 @@ export default function Home() {
           <div className="divl"></div>
 
           {/* PROCESS TIMELINE */}
-         <section className="sec reveal" style={{ background: 'var(--bg2)', width: '100%' }}>
-            {/* Fixed textAlign on the parent wrapper container */}
+          <section className="sec reveal" style={{ background: 'var(--bg2)', width: '100%' }}>
             <div style={{ textAlign: 'center', width: '100%' }}>
               <div className="lbl lbl-c" style={{ justifyContent: 'center' }}>How We Work</div>
-              
-              {/* Fixed textAlign and added auto margins to perfectly center the heading element */}
               <h2 
                 className="title" 
                 style={{ 
@@ -423,7 +439,6 @@ export default function Home() {
               >
                 Our 4-Step Process
               </h2>
-              
               <p className="desc desc-c" style={{ width: '100%', wordBreak: 'break-word' }}>
                 From your first idea to final delivery, a streamlined and collaborative approach focused on clarity and results.
               </p>

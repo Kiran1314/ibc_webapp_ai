@@ -361,6 +361,78 @@ footer {
   color: var(--dim);
 }
 
+/* --- Desktop Default Configuration Setup --- */
+.tvid-grid, .tgrid {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+
+.slider-wrapper {
+  width: 100%;
+}
+
+/* Hide navigation dots completely across all screen resolutions */
+.slider-dots {
+  display: none !important;
+}
+
+/* --- COMPACT VERTICAL MOBILE ENGINE (< 768px) --- */
+@media (max-width: 767px) {
+  .tvid-grid, .tgrid {
+    display: flex !important;
+    flex-direction: column !important; /* Stack cards vertically one below the other */
+    flex-wrap: nowrap !important;     /* FIXED: nowrap ensures direct, single-column vertical tracking */
+    gap: 16px !important;            /* Clean vertical structural breathing room */
+    width: 100% !important;
+    transform: none !important;      /* Kill slider translation engine matrices */
+  }
+
+  /* Compact Card Layout Core Constraints */
+  .tcard {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;         /* Let the card size perfectly to content */
+    min-height: unset !important;
+    padding: 16px !important;        /* Compressed crisp padding layout */
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  /* Clean Text Auto-Wrapping Constraints */
+  .tquote {
+    height: auto !important;         /* No internal layout scrolling allowed */
+    overflow: hidden !important; 
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    font-size: 14.5px !important;    /* Slightly tighter typography for absolute compact fit */
+    line-height: 1.5 !important;
+    margin-bottom: 12px !important;
+  }
+
+  .tauthor {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  /* Video Placeholders Alignment Stack */
+  .vidph {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 180px !important;        /* Strict container height constraint for sharp mobile display */
+    box-sizing: border-box !important;
+    display: flex !important;         /* Ensures inner text/icon centers correctly while stacked */
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+}
+
+
 .chat-fab {
   position: fixed;
   bottom: 28px;

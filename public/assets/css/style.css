@@ -432,6 +432,59 @@ footer {
   }
 }
 
+/* Homepage header fader */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0; /* Ensures it's hidden before animation starts */
+}
+/* Homepage header fader */
+
+/*  Inteligence hompg  */
+/* Container: Stacked on mobile, side-by-side on desktop */
+.intel-strip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Mobile: Ensure Link is full width */
+.btn-p {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* Desktop: Change layout to row and push logo to right */
+@media (min-width: 768px) {
+  .intel-strip {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .btn-p {
+    width: auto; /* Reverts to content width */
+    display: inline-block;
+  }
+  
+  .logo-container {
+    margin-left: auto; /* Pushes the logo to the far right */
+  }
+}
+/*  Inteligence hompg  */
+
 
 .chat-fab {
   position: fixed;

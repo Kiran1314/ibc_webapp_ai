@@ -56,9 +56,22 @@ export default function ChatWidget() {
             <Link href="/ibc-intelligence#pg-intel" className="chat-chip" onClick={() => setIsActive(false)}>I want AI consultancy</Link>
             <Link href="/contact#pg-contact" className="chat-chip" onClick={() => setIsActive(false)}>I want to request a quote</Link>
           </div>
-          <a className="btn-p chat-wa" href="https://wa.me/971559958905" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textAlign: 'center', position: 'relative', zIndex: 3 }}>
-            Continue on WhatsApp →
-          </a>
+          <a 
+              className="btn-p chat-wa" 
+              href="https://wa.me/971559958905" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              style={{ 
+                display: 'block', 
+                textAlign: 'center', 
+                width: '100%',      // Ensures the tag spans the full width
+                boxSizing: 'border-box', // Ensures padding doesn't break the layout
+                position: 'relative', 
+                zIndex: 3 
+              }}
+            >
+              Continue on WhatsApp →
+            </a>
           <p className="chat-note">WhatsApp: +971 55 995 8905</p>
         </div>
       </div>

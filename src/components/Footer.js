@@ -39,15 +39,15 @@ export default function Footer() {
           <Link href="/contact#pg-contact">Contact Us</Link>
         </div>
         
-        <div className="ft-col">
+       <div className="ft-col">
           <h4>Services</h4>
-          <Link href="/services#all-serv">Audio Production</Link>
-          <Link href="/services#all-serv">Video Production</Link>
-          <Link href="/services#all-serv">Photography</Link>
-          <Link href="/services#all-serv">AI Production</Link>
-          <Link href="/services#all-serv">Digital & Dev</Link>
-          <Link href="/services#all-serv">Motion & VR/AR</Link>
-          <Link href="/ibc-intelligence#pg-intel">IBC Intelligence</Link>
+          <Link href="/services#audio" scroll={false}>Audio Production</Link>
+          <Link href="/services#video" scroll={false}>Video Production</Link>
+          <Link href="/services#photo" scroll={false}>Photography</Link>
+          <Link href="/services#ai" scroll={false}>AI Production</Link>
+          <Link href="/services#digital" scroll={false}>Digital & Dev</Link>
+          <Link href="/services#motion" scroll={false}>Motion & VR/AR</Link>
+          <Link href="/ibc-intelligence#pg-intel" scroll={false}>IBC Intelligence</Link>
         </div>
         
         <div className="ft-col">

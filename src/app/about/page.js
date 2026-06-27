@@ -170,30 +170,57 @@ export default function About() {
               </div>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
-                <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
-                  <div style={{ fontSize: '20px', flexShrink: 0 }}>🎙️</div>
-                  <div>
-                    <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>Audio Production</h4>
-                    <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>IVR, on-hold messaging, multilingual voice-overs, jingles, dubbing, and multilingual localization.</p>
-                  </div>
-                </div>
-                
-                <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
-                  <div style={{ fontSize: '20px', flexShrink: 0 }}>🎬</div>
-                  <div>
-                    <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>Video & Photography</h4>
-                    <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>Corporate films, commercials, events, drone, color grading, and photography.</p>
-                  </div>
-                </div>
-                
-                <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
-                  <div style={{ fontSize: '20px', flexShrink: 0 }}>🤖</div>
-                  <div>
-                    <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>AI & Digital</h4>
-                    <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>AI content, synthetic media, web development, e-learning, and custom tools.</p>
-                  </div>
-                </div>
+  
+            {/* Audio Production */}
+            <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+              <div style={{ width: '20px', height: '20px', flexShrink: 0, color: 'var(--accent, currentColor)' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 18V5l12-2v13"/>
+                  <circle cx="6" cy="18" r="3"/>
+                  <circle cx="18" cy="16" r="3"/>
+                </svg>
               </div>
+              <div>
+                <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>Audio Production</h4>
+                <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                  IVR, on-hold messaging, multilingual voice-overs, jingles, dubbing, and multilingual localization.
+                </p>
+              </div>
+            </div>
+            
+                    {/* Video & Photography */}
+                    <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+                      <div style={{ width: '20px', height: '20px', flexShrink: 0, color: 'var(--accent, currentColor)' }}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="2" y="6" width="14" height="12" rx="2"/>
+                          <path d="M16 10l5-3v10l-5-3"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>Video & Photography</h4>
+                        <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                          Corporate films, commercials, events, drone, color grading, and photography.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* AI & Digital */}
+                    <div className="reveal" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '9px', padding: '20px', display: 'flex', gap: '13px', alignItems: 'flex-start' }}>
+                      <div style={{ width: '20px', height: '20px', flexShrink: 0, color: 'var(--accent, currentColor)' }}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="3"/>
+                          <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 style={{ fontSize: '14.5px', fontWeight: 700, marginBottom: '5px' }}>AI & Digital</h4>
+                        <p style={{ fontSize: '13.5px', color: 'var(--dim)', lineHeight: '1.58', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                          AI content, synthetic media, web development, e-learning, and custom tools.
+                        </p>
+                      </div>
+                    </div>
+
+        </div>
             </div>
           </section>
 

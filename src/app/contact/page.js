@@ -301,7 +301,7 @@ export default function Contact() {
                     <option value="Audio Production" style={{ background: 'var(--bg3)' }}>Audio Production</option>
                     <option value="Video Production" style={{ background: 'var(--bg3)' }}>Video Production</option>
                     <option value="Photography" style={{ background: 'var(--bg3)' }}>Photography</option>
-                    <option value="AI Production" style={{ background: 'var(--bg3)' }}>AI Production</option>
+                    <option value="AI Media Production" style={{ background: 'var(--bg3)' }}>AI Media Production</option>
                     <option value="Digital & Development" style={{ background: 'var(--bg3)' }}>Digital & Development</option>
                     <option value="Motion Graphics / VR / AR" style={{ background: 'var(--bg3)' }}>Motion Graphics / VR / AR</option>
                     <option value="IBC Intelligence" style={{ background: 'var(--bg3)' }}>IBC Intelligence</option>

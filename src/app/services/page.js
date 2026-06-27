@@ -3,36 +3,49 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 export default function Services() {
-  const [activeTab, setActiveTab] = useState('audio');
+  // FIX: Initialize state directly from the URL hash
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash.replace('#', '');
+      const validTabs = ['audio', 'video', 'photo', 'ai', 'digital', 'motion'];
+      return validTabs.includes(hash) ? hash : 'audio';
+    }
+    return 'audio';
+  });
+  
   const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef(null);
 
-  // Trigger page load fade-in transition context on mount
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Synchronize dynamic header top transparency style metrics with body attributes
   useEffect(() => {
-    if (window.scrollY <= 10) {
-      document.body.classList.add('home-hero-top');
-    } else {
-      document.body.classList.remove('home-hero-top');
-    }
+    const handleURLAnchorSync = () => {
+      const rawHash = window.location.hash;
+      if (!rawHash) return;
 
-    const handleScrollMetrics = () => {
-      if (window.scrollY > 10) {
-        document.body.classList.remove('home-hero-top');
-      } else {
-        document.body.classList.add('home-hero-top');
+      const hashParts = rawHash.split('#').filter(Boolean);
+      const targetTab = hashParts[hashParts.length - 1];
+      const validTabsList = ['audio', 'video', 'photo', 'ai', 'digital', 'motion'];
+      
+      if (validTabsList.includes(targetTab)) {
+        setActiveTab(targetTab);
+        
+        // Clean the URL to prevent stacking
+        window.history.replaceState(null, '', window.location.pathname + '#' + targetTab);
+
+        // Delay scroll to ensure the panel has rendered
+        setTimeout(() => {
+          const track = document.getElementById('horizontal-tab-track');
+          track?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 150);
       }
     };
-    window.addEventListener('scroll', handleScrollMetrics);
 
-    return () => {
-      window.removeEventListener('scroll', handleScrollMetrics);
-      document.body.classList.remove('home-hero-top');
-    };
+    handleURLAnchorSync();
+    window.addEventListener('hashchange', handleURLAnchorSync);
+    return () => window.removeEventListener('hashchange', handleURLAnchorSync);
   }, []);
 
   // High-Performance Intersection Observer Engine for Scroll Fades across nested layout grids
@@ -41,9 +54,9 @@ export default function Services() {
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
-      root: null, // Viewport defaults directly to the browser screen window
-      rootMargin: '0px 0px -100px 0px', // Triggers 100px before the element fully enters screen bounds
-      threshold: 0.05 // Fires immediately when 5% of the card item is visible
+      root: null,
+      rootMargin: '0px 0px -100px 0px',
+      threshold: 0.05
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -51,7 +64,7 @@ export default function Services() {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
         } else {
-          entry.target.classList.remove('in-view'); // Re-triggers animations seamlessly when scrolling up/down
+          entry.target.classList.remove('in-view');
         }
       });
     }, observerOptions);
@@ -61,9 +74,9 @@ export default function Services() {
     return () => {
       revealElements.forEach((el) => observer.unobserve(el));
     };
-  }, [activeTab]); // Safely cleans up and re-observes fresh grid blocks whenever tabs change
+  }, [activeTab]);
 
-  const tabs = [
+ const tabs = [
     { id: 'audio', label: 'Audio Production', icon: <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg> },
     { id: 'video', label: 'Video Production', icon: <svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg> },
     { id: 'photo', label: 'Photography', icon: <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg> },
@@ -74,18 +87,11 @@ export default function Services() {
 
   return (
     <>
-      {/* INJECT COMPACT INLINE SEO METADATA FOR COMPILER SAFETY */}
       <title>Our Services | IBC Studio</title>
-      <meta name="description" content="Explore full-service corporate communications media solutions by IBC Studio. Specializing in native multilingual IVR, high-end corporate films, aerial drone cinematography, commercial photography, and practical AI workflow automation systems." />
-      <meta name="keywords" content="multilingual voice overs dubai, drone photography dubai, corporate photography dubai, commercial photographer dubai, industrial photography dubai, AI video generation dubai, web design and development dubai" />
-      <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://www.ibcstudio.com/services" />
-      <meta property="og:title" content="Our Services | Audio, Video, Photography & AI Production Dubai" />
-      <meta property="og:description" content="Complete media solutions designed to help businesses create professional, impactful, and meaningful content across every platform." />
-      <meta property="og:site_name" content="IBC Studio" />
+      <meta name="description" content="Explore full-service corporate communications media solutions by IBC Studio." />
+      <meta name="keywords" content="multilingual voice overs dubai, drone photography dubai" />
 
       <div className="page active" id="pg-services" ref={containerRef}>
-        {/* INNER PAGE WRAPPER WITH LINK-TRANSITION NATIVE ENTRANCE FADE STATE ENGINE */}
         <div 
           className="pw" 
           style={{ 
@@ -95,8 +101,7 @@ export default function Services() {
             transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
           }}
         >
-          
-          {/* TOP TITLE JUMBOTRON - INITIAL ENTRANCE COMPONENT MOUNT */}
+          {/* TOP TITLE JUMBOTRON */}
           <div 
             className="sec reveal in-view" 
             style={{ 
@@ -108,68 +113,60 @@ export default function Services() {
             }}
           >
             <div className="lbl" id="all-serv">Our Services</div>
-            <h1 
-              className="title" 
-              style={{ 
-                marginBottom: '28px', 
-                wordBreak: 'break-word', 
-                overflowWrap: 'break-word',
-                fontSize: 'clamp(32px, 5vw, 50px)', 
-                lineHeight: '1.1' 
-              }}
-            >
+            <h1 className="title" style={{ marginBottom: '28px', fontSize: 'clamp(32px, 5vw, 50px)', lineHeight: '1.1' }}>
               What We Create
             </h1>
-            <p 
-              className="desc" 
-              style={{ 
-                width: '100%', 
-                maxWidth: '800px', 
-                marginBottom: 0, 
-                wordBreak: 'break-word',
-                overflowWrap: 'break-word'
-              }}
-            >
-              We provide professional audio production, video production, and post-production services for corporate films, commercials, YouTube content, exhibition videos, and a wide range of digital media projects tailored for modern businesses.<br /><br />
-              Our services also include commercial photography, AI production, website and software development, e-product catalogues, and professional coverage for events, exhibitions, and corporate gatherings.
+            <p className="desc" style={{ width: '100%', maxWidth: '800px', marginBottom: 0 }}>
+              We provide professional audio production, video production, and post-production services for corporate projects.
             </p>
           </div>
 
-          {/* HORIZONTAL TAB CONTROL TRACK BAR - SHIELDED FROM MASK LAYERS */}
-          <div 
-            className="stabs reveal in-view" 
-            style={{ 
-              width: '100%', 
-              display: 'flex', 
-              overflowX: 'auto', 
-              WebkitOverflowScrolling: 'touch',
-              paddingTop: '4px',
-              paddingBottom: '4px',
-              paddingLeft: 'clamp(22px, 6vw, 80px)',
-              paddingRight: 'clamp(22px, 6vw, 80px)',
-              position: 'relative',
-              zIndex: 5
-            }}
-          >
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                className={`stab ${activeTab === tab.id ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab.id)}
-                style={{ background: 'none', borderTop: 'none', borderLeft: 'none', borderRight: 'none' }}
-              >
-                {tab.icon}
-                {tab.label}
-              </button>
-            ))}
-          </div>
+          {/* HORIZONTAL TAB CONTROL TRACK BAR */}
+<div 
+  id="horizontal-tab-track"
+  className="stabs reveal in-view" 
+  style={{ 
+    width: '100%', 
+    display: 'flex', 
+    overflowX: 'auto', 
+    WebkitOverflowScrolling: 'touch',
+    paddingTop: '4px',
+    paddingBottom: '4px',
+    paddingLeft: 'clamp(22px, 6vw, 80px)',
+    paddingRight: 'clamp(22px, 6vw, 80px)',
+    position: 'relative',
+    zIndex: 5,
+    scrollMarginTop: '90px' 
+  }}
+>
+  {tabs.map((tab) => (
+    <button
+      key={tab.id}
+      className={`stab ${activeTab === tab.id ? 'active' : ''}`}
+      onClick={() => {
+        setActiveTab(tab.id);
+        
+        // BULLETPROOF FIX: Use the native URL object to completely clean the path
+        const freshUrl = new URL(window.location.href);
+        freshUrl.hash = tab.id; // Explicitly overwrites whatever hash was there
+        
+        // Push only the clean pathname + single hash (e.g., /services#ai)
+        window.history.pushState(null, '', freshUrl.pathname + freshUrl.hash);
+      }}
+      style={{ background: 'none', borderTop: 'none', borderLeft: 'none', borderRight: 'none' }}
+    >
+      {tab.icon}
+      {tab.label}
+    </button>
+  ))}
+</div>
 
           {/* ── AUDIO PRODUCTION PANEL ── */}
           <div className={`spanel ${activeTab === 'audio' ? 'active' : ''}`} style={{ display: activeTab === 'audio' ? 'block' : 'none', width: '100%', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)' }}>
             <div className="sphdr reveal" style={{ width: '100%' }}>
               <div>
                 <h2>Audio Production</h2>
-                <p style={{ wordBreak: 'break-word' }}>Sound shapes perception. Our audio team creates professional voiceovers, sound design, IVR systems, dubbing, and music productions that define how your brand sounds across every platform, audience, and language.</p>
+                <p>Sound shapes perception. Our audio team creates professional voiceovers, sound design, and IVR systems.</p>
                 <Link href="/contact" className="btn-p">Request a Quote →</Link>
               </div>
               <div className="vidph">
@@ -187,13 +184,8 @@ export default function Services() {
                 { t: "Sound Design", d: "Bespoke audio environments and music for video productions.", icon: <><path d="M4 14v-4M8 17V7M12 20V4M16 17V7M20 14v-4"/></> }
               ].map((feat, i) => (
                 <div key={i} className="sfeat reveal">
-                  <div className="sfi">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      {feat.icon}
-                    </svg>
-                  </div>
-                  <h4>{feat.t}</h4>
-                  <p style={{ wordBreak: 'break-word' }}>{feat.d}</p>
+                  <div className="sfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{feat.icon}</svg></div>
+                  <h4>{feat.t}</h4><p>{feat.d}</p>
                 </div>
               ))}
             </div>
@@ -204,7 +196,7 @@ export default function Services() {
             <div className="sphdr reveal" style={{ width: '100%' }}>
               <div>
                 <h2>Video Production</h2>
-                <p style={{ wordBreak: 'break-word' }}>From pre-production to post-production, our full-service team captures your brand’s story with cinematic precision, from commercial advertisements and corporate films to documentaries, digital campaigns, and branded content.</p>
+                <p>From pre-production to post-production, our full-service team captures your brand’s story with cinematic precision.</p>
                 <Link href="/contact" className="btn-p">Request a Quote →</Link>
               </div>
               <div className="vidph">
@@ -223,7 +215,7 @@ export default function Services() {
               ].map((feat, i) => (
                 <div key={i} className="sfeat reveal">
                   <div className="sfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{feat.icon}</svg></div>
-                  <h4>{feat.t}</h4><p style={{ wordBreak: 'break-word' }}>{feat.d}</p>
+                  <h4>{feat.t}</h4><p>{feat.d}</p>
                 </div>
               ))}
             </div>
@@ -234,7 +226,7 @@ export default function Services() {
             <div className="sphdr reveal" style={{ width: '100%' }}>
               <div>
                 <h2>Photography</h2>
-                <p style={{ wordBreak: 'break-word' }}>A single powerful image can define a brand. Our photography team combines technical expertise with creative vision to deliver impactful visuals for brands, campaigns, events, products, and digital platforms across every medium.</p>
+                <p>A single powerful image can define a brand. Our photography team delivers impactful visuals across every medium.</p>
                 <Link href="/contact" className="btn-p">Request a Quote →</Link>
               </div>
               <div className="vidph">
@@ -253,7 +245,7 @@ export default function Services() {
               ].map((feat, i) => (
                 <div key={i} className="sfeat reveal">
                   <div className="sfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{feat.icon}</svg></div>
-                  <h4>{feat.t}</h4><p style={{ wordBreak: 'break-word' }}>{feat.d}</p>
+                  <h4>{feat.t}</h4><p>{feat.d}</p>
                 </div>
               ))}
             </div>
@@ -264,7 +256,7 @@ export default function Services() {
             <div className="sphdr reveal" style={{ width: '100%' }}>
               <div>
                 <h2>AI Production</h2>
-                <p style={{ wordBreak: 'break-word' }}>We combine creative direction, AI media tools, and workflow thinking to create high-quality visual production systems for brands, campaigns, and operational teams without losing creative control or business context.</p>
+                <p>We combine creative direction, AI media tools, and workflow thinking to create high-quality production systems.</p>
                 <Link href="/contact" className="btn-p">Request a Quote →</Link>
               </div>
               <div className="vidph">
@@ -278,12 +270,12 @@ export default function Services() {
                 { t: "AI Photography", d: "High-resolution AI imagery for product, lifestyle, and conceptual campaigns.", icon: <><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><path d="M12 9v8M8 13h8"/></> },
                 { t: "Synthetic Media", d: "AI avatars, digital presenters, and synthetic voice and video at scale.", icon: <><rect x="6" y="5" width="12" height="14" rx="4"/><path d="M9 10h.01M15 10h.01M10 15h4"/></> },
                 { t: "AI Creative Direction", d: "Creative guidance, prompt systems, and brand controls that keep AI output visually consistent.", icon: <><path d="M12 2l2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5z"/></> },
-                { t: "AI Based Automation", d: "Workflow automation for repetitive operational tasks, routing, retrieval, reporting, and production handoffs.", icon: <><path d="M4 12a8 8 0 0113-6"/><path d="M17 2v4h-4M20 12a8 8 0 01-13 6"/><path d="M7 22v-4h4"/></> },
-                { t: "AI Strategy Consulting", d: "IBC Intelligence helps teams identify where AI creates measurable leverage across productivity, speed, decision support, and execution.", icon: <><path d="M4 19V5h16v14z"/><path d="M8 15l3-3 2 2 4-5"/></> }
+                { t: "AI Based Automation", d: "Workflow automation for repetitive operational tasks.", icon: <><path d="M4 12a8 8 0 0113-6"/><path d="M17 2v4h-4M20 12a8 8 0 01-13 6"/><path d="M7 22v-4h4"/></> },
+                { t: "AI Strategy Consulting", d: "IBC Intelligence helps teams identify where AI creates measurable leverage.", icon: <><path d="M4 19V5h16v14z"/><path d="M8 15l3-3 2 2 4-5"/></> }
               ].map((feat, i) => (
                 <div key={i} className="sfeat reveal">
                   <div className="sfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{feat.icon}</svg></div>
-                  <h4>{feat.t}</h4><p style={{ wordBreak: 'break-word' }}>{feat.d}</p>
+                  <h4>{feat.t}</h4><p>{feat.d}</p>
                 </div>
               ))}
             </div>
@@ -294,7 +286,7 @@ export default function Services() {
             <div className="sphdr reveal" style={{ width: '100%' }}>
               <div>
                 <h2>Digital & Development</h2>
-                <p style={{ wordBreak: 'break-word' }}>Beyond production, we create the digital platforms your brand needs, including modern websites, interactive e-learning experiences, custom software, and tailored digital solutions designed for today’s businesses.</p>
+                <p>Beyond production, we create modern websites, interactive e-learning experiences, and custom software tools.</p>
                 <Link href="/contact" className="btn-p">Request a Quote →</Link>
               </div>
               <div className="vidph">
@@ -313,18 +305,18 @@ export default function Services() {
               ].map((feat, i) => (
                 <div key={i} className="sfeat reveal">
                   <div className="sfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{feat.icon}</svg></div>
-                  <h4>{feat.t}</h4><p style={{ wordBreak: 'break-word' }}>{feat.d}</p>
+                  <h4>{feat.t}</h4><p>{feat.d}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* ── MOTION GRAPHICS & VR/AR PANEL ── */}
-          <div className={`spanel ${activeTab === 'motion' ? 'active' : ''}`} style={{ display: activeTab === 'motion' ? 'none' : 'none', width: '100%', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)' }}>
+          <div className={`spanel ${activeTab === 'motion' ? 'active' : ''}`} style={{ display: activeTab === 'motion' ? 'block' : 'none', width: '100%', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)' }}>
             <div className="sphdr reveal" style={{ width: '100%' }}>
               <div>
                 <h2>Motion Graphics & VR/AR</h2>
-                <p style={{ wordBreak: 'break-word' }}>Captivating motion graphics and immersive visual experiences designed to help brands communicate creatively, engage audiences effectively, and stand out across digital platforms.</p>
+                <p>Captivating motion graphics and immersive visual experiences designed to help brands stand out.</p>
                 <Link href="/contact" className="btn-p">Request a Quote →</Link>
               </div>
               <div className="vidph">
@@ -343,7 +335,7 @@ export default function Services() {
               ].map((feat, i) => (
                 <div key={i} className="sfeat reveal">
                   <div className="sfi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{feat.icon}</svg></div>
-                  <h4>{feat.t}</h4><p style={{ wordBreak: 'break-word' }}>{feat.d}</p>
+                  <h4>{feat.t}</h4><p>{feat.d}</p>
                 </div>
               ))}
             </div>

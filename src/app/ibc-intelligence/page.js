@@ -65,18 +65,18 @@ export default function IBCIntelligence() {
 
   return (
     <>
-      {/* INJECT INLINE SEO META BLOCK TAGS COMPLIANT WITH SINGLE FILE LAYOUT ARCHITECTURE */}
-      <title>IBC Intelligence | IBC Studio</title>
-      <meta name="description" content="Discover how AI video generation and professional photography services in Dubai are helping businesses scale faster, build credibility, and modernize marketing, training, and corporate communications." />
-      <meta name="keywords" content="AI video generation in dubai,AI video generation in UAE,AI promotional videos in dubai,AI promotional videos in uae,AI powered video creation in dubai,AI powered video creation in abu dabi,AI Corporate video production in abudhabi,AI Corporate video production in dubai,AI Corporate video production in uae,AI for corporate presentations in dubai,AI video for marketing in dubai,AI generated training videos in dubai,AI for employee onboarding videos in dubai,AI video for internal communications in dubai,AI explainer videos in dubai, professional photography Dubai, industrial photography Dubai, corporate photography Dubai, commercial photographer Dubai, AI corporate video Dubai, post production studio Dubai, video production company UAE, 360 video production UAE, AR video production Dubai" />
+      {/* INJECT INLINE SEO META BLOCK TAGS UPDATED FOR B2B AI CONSULTANCY POSITIONING */}
+      <title>AI Consultancy & Strategy Dubai | IBC Intelligence</title>
+      <meta name="description" content="IBC Intelligence helps businesses implement practical AI solutions to improve productivity, workflow optimization, and decision-making. Operator-led AI advisory and integration in Dubai, UAE." />
+      <meta name="keywords" content="AI Consultancy Dubai, AI Consulting UAE, Business AI Consulting Dubai, AI Advisory Services UAE, Workflow Optimization, Process Automation, Business AI Solutions, AI Advisory Services, Custom AI Solutions, Knowledge Management Systems, Business Intelligence, Operational Efficiency, AI Strategy, AI Implementation, AI Integration, AI Transformation, Business Process Optimization, Knowledge Retrieval Systems, Semantic Search, Enterprise Search, Intelligent Document Retrieval" />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://www.ibcstudio.com/ibc-intelligence" />
-      <meta property="og:title" content="How AI Video Generation and Professional Photography Are Transforming Dubai Businesses" />
-      <meta property="og:description" content="Dubai businesses are combining AI-powered video creation with professional photography to stay competitive in marketing, training, and corporate communication." />
+      <meta property="og:title" content="IBC Intelligence | Business-First AI Advisory & Workflow Optimization Dubai" />
+      <meta property="og:description" content="We work closely with teams to understand their workflows and implement custom AI solutions that solve real business challenges and deliver measurable results." />
       <meta property="og:site_name" content="IBC Studio" />
 
       <div className="page active" id="pg-intel" ref={containerRef}>
-        {/* INNER PAGE WRAPPER WITH LINK-TRANSITION FADE STATE ENGINE */}
+        
         <div 
           className="pw" 
           style={{ 
@@ -103,24 +103,24 @@ export default function IBCIntelligence() {
             <div className="igl2" aria-hidden="true"></div>
             
             <div className="ibdg" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-              <div className="ibdi">
-                 <div className="intel-mark reveal">
+            
+                    
                  <div className="logo" style={{ cursor: 'default'  }}>
                       <img 
-                        src="/assets/images/logo/intel-icon.png" 
+                        src="/assets/images/logo/intel4.png" 
                         alt="IBC Studio Logo" 
                         style={{ 
-                          height: '180px', 
+                          height: '100px', 
                           width: 'auto', 
                           objectFit: 'contain',
                           display: 'block'
                         }} 
                       />
-                    </div>
-              </div>
+                    </div> 
+             
                  
-              </div>
-              <div className="ibdn">IBC <em>Intelligence</em></div>
+            
+              <div className="ibdn" style={{ fontSize: '28px'}} >IBC <em>Intelligence</em></div>
               <span className="ibdp">AI Advisory</span>
             </div>
 
@@ -150,7 +150,7 @@ export default function IBCIntelligence() {
                       padding: '12px 20px', 
                       background: 'transparent', 
                       border: '1px solid rgba(158,182,207,.22)', 
-                      color: 'rgba(158,182,207,.65)', 
+                      color: '#ffffff',
                       fontFamily: "'Work Sans', sans-serif", 
                       fontSize: '13px', 
                       borderRadius: '4px', 
@@ -158,7 +158,7 @@ export default function IBCIntelligence() {
                       textAlign: 'left'
                     }}
                   >
-                    Boutique Operator-Led Advisory
+                    Business-Led Advisory
                   </button>
                 </div>
                 
@@ -167,7 +167,7 @@ export default function IBCIntelligence() {
                   <span className="itg">Advisory + Execution</span>
                   <span className="itg">Workflow Optimization</span>
                   <span className="itg">Decision Support</span>
-                  <span className="itg">In-House Teams</span>
+                   
                 </div>
               </div>
 
@@ -269,13 +269,13 @@ export default function IBCIntelligence() {
               <div className="imc reveal">
                 <div className="ima">AA</div>
                 <h3>Atif Amjad</h3>
-                <span className="imr">COO / AI Consultancy Lead</span>
+                <span className="imr">CHIEF INTELLIGENCE OFFICER</span>
                 <p style={{ wordBreak: 'break-word' }}>Built the internal comparative analysis system and leads workflow-focused AI advisory and implementation.</p>
               </div>
               <div className="imc reveal">
                 <div className="ima">KS</div>
                 <h3>Kabir Saigal</h3>
-                <span className="imr">CPO</span>
+                <span className="imr">CHIEF PROJECT OFFICER</span>
                 <p style={{ wordBreak: 'break-word' }}>Oversees product direction, workflow systems, digital infrastructure, and implementation strategy.</p>
               </div>
             </div>
@@ -294,6 +294,8 @@ export default function IBCIntelligence() {
               <div className="ic reveal"><div className="icn">03</div><h3>Content & Production Workflows</h3><p style={{ wordBreak: 'break-word' }}>Improving creative and production efficiency using AI-assisted systems.</p></div>
               <div className="ic reveal"><div className="icn">04</div><h3>Reporting & Decision Support</h3><p style={{ wordBreak: 'break-word' }}>Enhancing visibility, analysis, and operational decision-making.</p></div>
               <div className="ic reveal"><div className="icn">05</div><h3>Lead & Sales Workflow Support</h3><p style={{ wordBreak: 'break-word' }}>Supporting qualification, routing, and communication workflows.</p></div>
+              <div className="ic reveal"><div className="icn">06</div><h3>AI Assistants & Customer Support</h3><p style={{ wordBreak: 'break-word' }}>Deploying intelligent assistants to support customer interactions, answer queries, and streamline service workflows.</p></div>
+           
             </div>
           </div>
 
@@ -338,7 +340,7 @@ export default function IBCIntelligence() {
 
           {/* SUB DIVISION EXCLUSIVE FOOTER SLATE */}
           <div className="ift" style={{ width: '100%', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)' }}>
-            <p>&#169; 2026 IBC Intelligence &mdash; Boutique Operator-Led AI Advisory by IBC Studio. Dubai, UAE.</p>
+            <p>&#169; 2026 IBC Intelligence &mdash; Business-Led Advisory by IBC Studio. Dubai, UAE.</p>
           </div>
 
         </div>

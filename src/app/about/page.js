@@ -274,8 +274,8 @@ export default function About() {
       zIndex: 2 // Ensures the text sits on top of the absolute image
     }}
   >
-    <h3 style={{ margin: '0 0 8px 0' }}>Founder & Director</h3>
-    <span>IBC Studio, Dubai UAE</span>
+    <h3 style={{ margin: '0 0 8px 0' }}> </h3>
+    <span> </span>
   </div>
 </div>
               <div className="fquote reveal">

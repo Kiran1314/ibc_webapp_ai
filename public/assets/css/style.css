@@ -48,6 +48,21 @@ h1, h2, h3, h4, h5 {
   display: block;
 }
 
+/* about us section The keyframe animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Applying the animation to the image */
+.fade-in-image {
+  animation: fadeIn 3s ease-in-out forwards;
+}
+
 /* ── HEADER EXTRACT MATCHED DIRECTLY TO PROTOTYPE ── */
 header {
   position: fixed;

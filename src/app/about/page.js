@@ -231,13 +231,53 @@ export default function About() {
             <div className="lbl">Leadership</div>
             <h2 className="title" style={{ wordBreak: 'break-word' }}>From the Founder's Desk</h2>
             <div className="fwrap" style={{ width: '100%' }}>
-              <div className="fcard reveal">
-                <div className="fav">IBC</div>
-                <div className="finfo">
-                  <h3>Founder & Director</h3>
-                  <span>IBC Studio, Dubai UAE</span>
-                </div>
-              </div>
+  <div 
+  className="fcard reveal" 
+  style={{ 
+    position: 'relative', 
+    overflow: 'hidden', 
+    borderRadius: '20px', 
+    width: '100%',
+    aspectRatio: '3/4', // Controls the shape of the card (taller than it is wide)
+    maxWidth: '600px'
+  }}
+>
+  <img 
+    className="fade-in-image"
+    src="/assets/images/about-us.webp" 
+    alt="IBC Studio Logo" 
+    loading="lazy" 
+    decoding="async"
+    style={{ 
+      position: 'absolute', // Pins the image to the card's edges
+      top: 0,
+      left: 0,
+      width: '100%', 
+      height: '100%', 
+      objectFit: 'cover', // Ensures the image fills the space without distortion
+      display: 'block',
+      zIndex: 1 // Places the image behind the text
+    }} 
+  />
+
+  <div 
+    className="finfo" 
+    style={{ 
+      position: 'absolute', 
+      bottom: 0, 
+      left: 0, 
+      width: '100%', 
+      padding: '24px', 
+      background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent)', 
+      color: '#ffffff',
+      boxSizing: 'border-box',
+      zIndex: 2 // Ensures the text sits on top of the absolute image
+    }}
+  >
+    <h3 style={{ margin: '0 0 8px 0' }}>Founder & Director</h3>
+    <span>IBC Studio, Dubai UAE</span>
+  </div>
+</div>
               <div className="fquote reveal">
                 <blockquote style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                   "We didn’t build IBC Studio to simply create content. We built it to help brands tell stories with impact, deliver quality without compromise, and create work that people genuinely remember."

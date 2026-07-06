@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="ft-brand">
           <div className="logo" style={{ cursor: 'default',marginTop:'-100px' }}>
             <img 
-              src="/assets/images/logo/main-logo.png" 
+              src="/assets/images/logo/main-logo.webp" 
               alt="IBC Studio Logo" 
               style={{ 
                 height: '300px', 

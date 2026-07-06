@@ -322,6 +322,53 @@ export default function Home() {
           </div>
         </div>
 
+         {/* Card item 4 */}
+        <div className="tcard reveal">
+          <p className="tquote">
+            "Overall great, smooth, professional & interesting experience.
+             I enjoyed the whole process. It&apos;s a pleasure to work with IBC Studio. I am looking forward to
+             working with you on your upcoming projects. Thank you IBC Studio."
+          </p>
+          <div className="tauthor">
+            <div className="tav">DS</div>
+            <div>
+              <div className="tan">Dina Samy</div>
+              <div className="tat"> </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card item 5 */}
+        <div className="tcard reveal">
+          <p className="tquote">
+            "Worked with them in 2 projects so far and I really appreciate their professionalism and honesty.
+             Looking forward to the new projects we will work on together!" 
+          </p><br/>
+          <div className="tauthor">
+            <div className="tav">LA</div>
+            <div>
+              <div className="tan">Lilly Ally</div>
+              <div className="tat"> </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Card item 6 */}
+        <div className="tcard reveal">
+          <p className="tquote">
+            "I recently had the pleasure of working 
+            with IBC Studio on a timelapse video project, and I couldn't be more impressed! 
+            The team demonstrated exceptional professionalism and creativity from start to finish."
+          </p>
+          <div className="tauthor">
+            <div className="tav">KK</div>
+            <div>
+              <div className="tan">Kishan Krishnan</div>
+              <div className="tat"> </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -384,7 +431,7 @@ export default function Home() {
     <Link href="/ibc-intelligence#pg-intel" className="srv-card reveal" style={{ textDecoration: 'none', display: 'block' }}>
       <div> <div className="srv-ic">
         <div className="logo" style={{ cursor: 'default' }} >
-          <img src="/assets/images/logo/intel2.png" alt="IBC Studio Logo" style={{ height: '50px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+          <img src="/assets/images/logo/intel2.webp" alt="IBC Studio Logo" style={{ height: '50px', width: 'auto', objectFit: 'contain', display: 'block' }} />
         </div></div>
       </div>
       <h3>IBC Intelligence</h3><p style={{ wordBreak: 'break-word' }}>Operator-led AI advisory helping teams find and build practical workflow systems that improve productivity, speed, and decision support.</p>
@@ -414,7 +461,7 @@ export default function Home() {
     <div className="reveal logo-container">
       <div className="logo" style={{ cursor: 'default' }}>
         <img 
-          src="/assets/images/logo/intel3.png" 
+          src="/assets/images/logo/intel3.webp" 
           alt="IBC Studio Logo" 
           style={{ 
             // Scales smoothly between 110px (mobile) and 200px (desktop)

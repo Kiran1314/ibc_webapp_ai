@@ -63,13 +63,15 @@ export default function Header() {
       {/* HIGH-RES LOGO LINK PANEL */}
       <Link href="/" className="logo" onClick={closeMenu}>
         <img 
-          src="/assets/images/logo/main-logo.png" 
+          src="/assets/images/logo/main-logo.webp" 
           alt="IBC Studio Logo" 
+         
           style={{ 
             height: '135px', 
             width: 'auto', 
             objectFit: 'contain',
-            display: 'block'
+            display: 'block',
+            
           }} 
         />
       </Link>

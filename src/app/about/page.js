@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image'; // Added Next.js Image import
 
 export default function About() {
   const [isMounted, setIsMounted] = useState(false);
@@ -242,18 +243,12 @@ export default function About() {
     maxWidth: '600px'
   }}
 >
-  <img 
+  <Image 
     className="fade-in-image"
     src="/assets/images/about-us.webp" 
     alt="IBC Studio Logo" 
-    loading="lazy" 
-    decoding="async"
+    fill
     style={{ 
-      position: 'absolute', // Pins the image to the card's edges
-      top: 0,
-      left: 0,
-      width: '100%', 
-      height: '100%', 
       objectFit: 'cover', // Ensures the image fills the space without distortion
       display: 'block',
       zIndex: 1 // Places the image behind the text

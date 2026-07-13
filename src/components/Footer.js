@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import ChatWidget from './ChatWidget';
 
 export default function Footer() {
@@ -6,19 +7,23 @@ export default function Footer() {
     <footer>
       <div className="ft-grid">
         <div className="ft-brand">
-          <div className="logo" style={{ cursor: 'default',marginTop:'-100px' }}>
-            <img 
-              src="/assets/images/logo/main-logo.webp" 
+          <div className="logo" style={{ cursor: 'default', marginTop: '-100px' }}>
+            <Image 
+              src="/assets/images/logo/main-logo.png" 
               alt="IBC Studio Logo" 
-              style={{ 
-                height: '300px', 
-                width: 'auto', 
-                objectFit: 'contain',
+              width={900}          // 3x base resolution for Retina displays
+              height={300}         // Proportional height
+              unoptimized          // Bypasses compression to ensure maximum sharpness
+              style={{
+                width: '300px',    // Enforces your exact 300px display width
+                height: 'auto',    // Maintains aspect ratio automatically
                 display: 'block'
-              }} 
+              }}
             />
           </div>
-          <p style={{ cursor: 'default',marginTop:'-60px' }}>Dubai-based media production house delivering audio, video, photography, AI-powered content, and digital media solutions with over 19 years of experience.</p>
+          <p style={{ cursor: 'default', marginTop: '-60px' }}>
+            Dubai-based media production house delivering audio, video, photography, AI-powered content, and digital media solutions with over 19 years of experience.
+          </p>
           <div className="ft-social">
             <a href="https://www.facebook.com/profile.php?id=61575559854140" title="Facebook"><svg className="social-ico fb" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M14 8.6V6.9c0-.8.2-1.3 1.4-1.3H17V2.3c-.8-.1-1.7-.2-2.5-.2-2.6 0-4.4 1.6-4.4 4.5v2H7.2V12h2.9v9.9H14V12h2.8l.4-3.4H14z"/></svg></a>
             <a href="https://www.instagram.com/ibcstudio_uae/" title="Instagram"><svg className="social-ico ig" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="igFooter" x1="3" y1="21" x2="21" y2="3"><stop stopColor="#f58529"/><stop offset=".35" stopColor="#dd2a7b"/><stop offset=".7" stopColor="#8134af"/><stop offset="1" stopColor="#515bd4"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5" fill="url(#igFooter)"/><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" strokeWidth="2"/><circle cx="17.4" cy="6.6" r="1.35" fill="#fff"/></svg></a>
@@ -61,10 +66,10 @@ export default function Footer() {
               href="/contact#pg-contact" 
               className="btn-p" 
               style={{ 
-                fontSize: '11px',          // Slightly lowered font height for a tighter aesthetic
-                padding: '8px 14px',       // Tight, proportional padding boundaries
-                width: 'max-content',      // Locks the element strictly to text dimensions
-                display: 'inline-flex'     // Erases block-level expansion loops
+                fontSize: '11px', 
+                padding: '8px 14px',
+                width: 'max-content',
+                display: 'inline-flex'
               }}
             >
               Get In Touch →
@@ -72,9 +77,12 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="ft-bottom"><p>© 2026 IBC Studio. All rights reserved. Dubai, UAE.</p><p>Privacy Policy · Terms of Service</p></div>
+      <div className="ft-bottom">
+        <p>© 2026 IBC Studio. All rights reserved. Dubai, UAE.</p>
+        <p>Privacy Policy · Terms of Service</p>
+      </div>
 
-      {/* INTEGRATED GLOBAL ASSISSANT MODULE */}
+      {/* INTEGRATED GLOBAL ASSISTANT MODULE */}
       <ChatWidget />
     </footer>
   );

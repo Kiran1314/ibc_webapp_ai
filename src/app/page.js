@@ -5,7 +5,6 @@ import Link from 'next/link';
 
 export default function Home() {
   const [openFaq, setOpenFaq] = useState(null);
-  const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef(null);
 
   // Mobile Auto-Scroll Slider States
@@ -44,11 +43,6 @@ export default function Home() {
         window.location.pathname + window.location.search
       );
     }
-  }, []);
-
-
-  useEffect(() => {
-    setIsMounted(true);
   }, []);
 
   // Synchronize dynamic header top transparency style metrics with body attributes
@@ -123,21 +117,32 @@ export default function Home() {
       <meta property="og:site_name" content="IBC Studio" />
       <meta property="og:locale" content="en_US" />
 
+      {/* GPU-ACCELERATED HARDWARE KEYFRAMES FOR SMOOTH INITIAL LOAD */}
+      <style>{`
+        @keyframes pageSmoothLoad {
+          0% { 
+            opacity: 0; 
+            transform: translate3d(0, 15px, 0); 
+          }
+          100% { 
+            opacity: 1; 
+            transform: translate3d(0, 0, 0); 
+          }
+        }
+        .optimized-hero-load {
+          width: 100%;
+          opacity: 0; /* Prevents visual flash before animation starts */
+          animation: pageSmoothLoad 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          will-change: opacity, transform; /* Forces browser to render on GPU */
+        }
+      `}</style>
+
       {/* CORE HOME LAYOUT ARCHITECTURE */}
       <div className="page active" id="pg-home" ref={containerRef}>
-        <div 
-          className="pw" 
-          style={{ 
-            width: '100%',
-            opacity: isMounted ? 1 : 0,
-            transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
-            transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
-          }}
-        >
+        <div className="pw optimized-hero-load">
           
           {/* HERO SECTION */}
           <section className="hero reveal in-view">
-              {/* Background elements remain unchanged */}
               <div className="hero-gradient-scene" aria-hidden="true"></div>
               <div className="hero-wave-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
               <div className="hero-grain" aria-hidden="true"></div>
@@ -280,7 +285,7 @@ export default function Home() {
     <div className="slider-wrapper" style={{ marginTop: '20px' }}>
       <div className="tgrid">
         
-        {/* Card item 1 */}
+       {/*  
         <div className="tcard reveal">
           <p className="tquote">
             "IBC Studio transformed our brand communications. Their audio and video production quality is unmatched in the region — every project has exceeded our expectations."
@@ -294,7 +299,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Card item 2 */}
+       
         <div className="tcard reveal">
           <p className="tquote">
             "From concept to delivery, IBC Studio is a true creative partner. Their multilingual voice-over capabilities alone saved us months of coordination work."
@@ -308,7 +313,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Card item 3 */}
+       
         <div className="tcard reveal">
           <p className="tquote">
             "We've worked with many agencies — none come close to IBC's level of professionalism, creativity, and on-time delivery. Simply the best in the UAE."
@@ -320,7 +325,7 @@ export default function Home() {
               <div className="tat">CEO, Regional Brands Group</div>
             </div>
           </div>
-        </div>
+        </div> */}
 
          {/* Card item 4 */}
         <div className="tcard reveal">

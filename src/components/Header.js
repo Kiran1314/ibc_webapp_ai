@@ -2,6 +2,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image'; 
+import Lenis from 'lenis'; 
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,23 +13,39 @@ export default function Header() {
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
-  // Synchronize layout scroll metrics to trigger transparent vs dark solid states
+  // --- Initialize Global Lenis Smooth Scrolling ---
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+      smoothWheel: true,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
-      // If user scrolls past 10px down the screen viewport canvas
       if (window.scrollY > 10) {
         setIsScrolled(true);
         document.body.classList.remove('home-hero-top');
       } else {
         setIsScrolled(false);
-        // Only enforce transparent background rule states on the main landing root path
         if (pathname === '/') {
           document.body.classList.add('home-hero-top');
         }
       }
     };
 
-    // Initialize layout status check on load execution mount
     if (pathname === '/' && window.scrollY <= 10) {
       document.body.classList.add('home-hero-top');
     } else {
@@ -41,7 +59,6 @@ export default function Header() {
     };
   }, [pathname]);
 
-  // Synchronize React state with legacy document body selectors for mobile drawer menu
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('menu-open');
@@ -51,7 +68,6 @@ export default function Header() {
     return () => document.body.classList.remove('menu-open');
   }, [isOpen]);
 
-  // Clean navigation drawer closure when path shifts
   useEffect(() => {
     closeMenu();
   }, [pathname]);
@@ -62,17 +78,20 @@ export default function Header() {
     <header id="hdr" className={`${isOpen ? 'menu-open' : ''} ${isScrolled ? 'scrolled' : ''}`}>
       {/* HIGH-RES LOGO LINK PANEL */}
       <Link href="/" className="logo" onClick={closeMenu}>
-        <img 
-          src="/assets/images/logo/main-logo.webp" 
+        <Image 
+          src="/assets/images/logo/main-logo.png" 
           alt="IBC Studio Logo" 
-         
-          style={{ 
-            height: '135px', 
-            width: 'auto', 
-            objectFit: 'contain',
-            display: 'block',
-            
-          }} 
+          width={145}          
+          height={100}         
+          priority={true}      // Fixes the LCP warning by preloading the image
+          loading="eager"      // Explicitly silences the browser console warning
+          unoptimized          // Bypasses Next.js compression for maximum sharpness
+          style={{
+            width: '145px',    
+            height: 'auto',    // Fixes the aspect ratio warning
+            maxWidth: '100%',  // Prevents overflow on tiny screens
+            display: 'block'
+          }}
         />
       </Link>
       

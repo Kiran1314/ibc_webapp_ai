@@ -244,16 +244,18 @@ export default function About() {
   }}
 >
   <Image 
-    className="fade-in-image"
-    src="/assets/images/about-us.webp" 
-    alt="IBC Studio Logo" 
-    fill
-    style={{ 
-      objectFit: 'cover', // Ensures the image fills the space without distortion
-      display: 'block',
-      zIndex: 1 // Places the image behind the text
-    }} 
-  />
+  className="fade-in-image"
+  src="/assets/images/about-us.webp" 
+  alt="IBC Studio Logo" 
+  fill
+  // Add the sizes prop below:
+  sizes="(max-width: 768px) 100vw, 600px" 
+  style={{ 
+    objectFit: 'cover', 
+    display: 'block',
+    zIndex: 1 
+  }} 
+/>
 
   <div 
     className="finfo" 

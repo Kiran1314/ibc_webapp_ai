@@ -3,24 +3,91 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --dim: #666666;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html { -webkit-font-smoothing: antialiased; }
+
+/* --- Photography Modal Styles --- */
+.modal-overlay { 
+  position: fixed; inset: 0; z-index: 9999; 
+  background: rgba(5, 8, 16, 0.95); backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center; padding: 40px;
+}
+.modal-container { 
+  display: flex; width: 100%; max-width: 1400px; height: 80vh; gap: 20px; position: relative; 
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Main Image Area: Anchors the navigation buttons */
+.main-view { 
+  position: relative; flex: 1; height: 100%; display: flex; align-items: center; justify-content: center; 
+}
+
+/* Navigation Buttons: Now anchored inside .main-view */
+.nav-btn { 
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 100;
+  background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%; width: 54px; height: 54px; color: #ffffff; cursor: pointer;
+}
+.nav-btn.prev { left: 20px; }
+.nav-btn.next { right: 20px; }
+.close-btn { 
+  position: absolute; top: -50px; right: 0; color: white; font-size: 40px; 
+  border: none; background: none; cursor: pointer; z-index: 101;
+}
+
+/* Thumbnail Sidebar: Sidebar on desktop, row on mobile */
+.thumb-sidebar { 
+  width: 140px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; 
+}
+.thumb-item { 
+  position: relative; width: 120px; height: 120px; cursor: pointer; 
+  border: 2px solid transparent; border-radius: 8px; overflow: hidden;
+}
+.thumb-item.active { border-color: #0070f3; }
+
+/* --- Grid Responsive Logic --- */
+.wgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 1024px) {
+  .wgrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .wgrid { grid-template-columns: repeat(1, 1fr); }
+  .modal-container { flex-direction: column; height: auto; }
+  .thumb-sidebar { width: 100%; flex-direction: row; height: 120px; overflow-x: auto; }
+  .thumb-item { width: 120px; height: 120px; flex-shrink: 0; }
+  /* On mobile, keep nav buttons visible inside the image stage */
+}
+
+/* --- Interaction Fixes --- */
+.witem {
+  position: relative;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.wthumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #1a2035;
+  pointer-events: none;
+}
+
+.wbadge, .wthumb svg {
+  pointer-events: auto;
+  z-index: 20;
 }

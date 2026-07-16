@@ -1,17 +1,18 @@
-import "./globals.css"; // Keep basic Next structural resets if any
+"use client"; // Required for React context and hooks
+
+import "./globals.css";
+import { ReactLenis } from "@studio-freight/react-lenis";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ChatWidget from "@/components/ChatWidget";
 
- // Import Google Fonts directly through Next.js
 import { Red_Hat_Display, Work_Sans } from 'next/font/google';
 
-// Configure the fonts (this self-hosts them at build time)
 const redHat = Red_Hat_Display({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   display: 'swap',
-  variable: '--font-red-hat', // Creates a CSS variable you can use in your stylesheets
+  variable: '--font-red-hat',
 });
 
 const workSans = Work_Sans({
@@ -23,16 +24,18 @@ const workSans = Work_Sans({
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${redHat.variable} ${workSans.variable}`}>
+    <html lang="en" className={`${redHat.variable} ${workSans.variable}`}>
       <head>
-         
         <link rel="stylesheet" href="/assets/css/style.css" />
       </head>
       <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <ChatWidget />
+        {/* Lenis Provider wraps the content for global smooth scroll */}
+        <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+          <ChatWidget />
+        </ReactLenis>
       </body>
     </html>
   );

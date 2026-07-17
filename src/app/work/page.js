@@ -327,15 +327,13 @@ const handlePhotoClick = (item) => {
           </div>
 
         <div 
-  className="wgrid" 
+  className="wgrid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20 px-[clamp(22px,6vw,80px)]" 
   style={{ 
     width: '100%', 
     paddingBottom: '80px',
     paddingLeft: 'clamp(22px, 6vw, 80px)',
     paddingRight: 'clamp(22px, 6vw, 80px)',
-    display: 'grid',
-    /* Forces exactly 3 columns. 'fr' ensures they share equal width */
-    gridTemplateColumns: 'repeat(3, 1fr)', 
+    display: 'grid', 
     gap: '30px'
   }}
 >
@@ -543,7 +541,7 @@ const handlePhotoClick = (item) => {
                   textShadow: '0 2px 4px rgba(0,0,0,0.5)'
                 }}
               >
-                {filteredItems[activeVideoIndex].title}
+                 {filteredItems[activeVideoIndex].badge} - {filteredItems[activeVideoIndex].title} 
               </h2>
             </div>
 
@@ -583,44 +581,41 @@ const handlePhotoClick = (item) => {
   <div className="modal-overlay" onClick={() => setActiveGallery(null)}>
     <div className="modal-container" onClick={e => e.stopPropagation()}>
       
-      {/* Close Button */}
       <button className="close-btn" onClick={() => setActiveGallery(null)}>&times;</button>
       
       {/* Main Image Stage */}
       <div className="main-view">
-          <Image 
-            src={photographyData[activeGallery.catIdx].images[activeGallery.imgIdx]} 
-            alt="Large View" 
-            fill 
-            sizes="(max-width: 1200px) 90vw, 1100px"
-            style={{ objectFit: 'contain' }} 
-          />
+        <Image 
+          src={photographyData[activeGallery.catIdx].images[activeGallery.imgIdx]} 
+          alt="Large View" 
+          fill 
+          sizes="(max-width: 1200px) 90vw, 1100px"
+          style={{ objectFit: 'contain' }} 
+        />
         
-        {/* Same Navigation Buttons as Video Modal */}
-        <button className="nav-btn prev" onClick={() => setActiveGallery({...activeGallery, imgIdx: Math.max(0, activeGallery.imgIdx - 1)})}>&#10094;</button>
-  <button className="nav-btn next" onClick={() => setActiveGallery({...activeGallery, imgIdx: Math.min(photographyData[activeGallery.catIdx].images.length - 1, activeGallery.imgIdx + 1)})}>&#10095;</button>
-</div>
+        {/* Floating Nav Buttons */}
+        <button 
+          className="nav-btn prev" 
+          onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: Math.max(0, activeGallery.imgIdx - 1)})}}
+        >&#10094;</button>
+        <button 
+          className="nav-btn next" 
+          onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: Math.min(photographyData[activeGallery.catIdx].images.length - 1, activeGallery.imgIdx + 1)})}}
+        >&#10095;</button>
+      </div>
 
-      {/* Thumbnails Scroller */}
+      {/* Thumbnails: Visible on all devices, stacks at bottom on mobile */}
       <div className="thumb-sidebar">
-  {photographyData[activeGallery.catIdx].images.map((img, i) => (
-  <div 
-    key={i} 
-    className={`thumb-item ${activeGallery.imgIdx === i ? 'active' : ''}`}
-    onClick={() => setActiveGallery({...activeGallery, imgIdx: i})}
-    // ENSURE THIS DIV IS NOT COLLAPSED
-    style={{ position: 'relative', width: '120px', height: '120px', flexShrink: 0 }}
-  >
-    <Image 
-      src={img} 
-      alt="Thumbnail" 
-      fill 
-      sizes="120px" 
-      style={{ objectFit: 'cover' }} 
-    />
-  </div>
-))}
-</div>
+        {photographyData[activeGallery.catIdx].images.map((img, i) => (
+          <div 
+            key={i} 
+            className={`thumb-item ${activeGallery.imgIdx === i ? 'active' : ''}`}
+            onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: i})}}
+          >
+            <Image src={img} alt="Thumbnail" fill sizes="120px" style={{ objectFit: 'cover' }} />
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 )}

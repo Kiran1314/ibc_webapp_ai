@@ -19,10 +19,99 @@ html { -webkit-font-smoothing: antialiased; }
   background: rgba(5, 8, 16, 0.95); backdrop-filter: blur(12px);
   display: flex; align-items: center; justify-content: center; padding: 40px;
 }
+/* Ensure the modal container handles the switch between mobile and desktop */
+/* Modal Container: Flex column on mobile, row on desktop */
 .modal-container { 
-  display: flex; width: 100%; max-width: 1400px; height: 80vh; gap: 20px; position: relative; 
+  display: flex; 
+  width: 95vw; 
+  max-width: 1200px; 
+  height: 90vh; 
+  gap: 15px; 
+  position: relative;
+  flex-direction: column; /* Default mobile-first */
 }
 
+@media (min-width: 769px) {
+  .modal-container { flex-direction: row; }
+}
+
+/* Main View: Maximized space for the image */
+.main-view { 
+  position: relative; 
+  flex: 1; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  overflow: hidden;
+}
+
+/* Navigation Buttons: Floating on the edges */
+.nav-btn { 
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.5); 
+  border: none;
+  border-radius: 50%; 
+  width: 50px; height: 50px; 
+  color: #fff; cursor: pointer;
+}
+.nav-btn.prev { left: 10px; }
+.nav-btn.next { right: 10px; }
+
+/* Thumbnail Sidebar: Stacks at the bottom */
+.thumb-sidebar { 
+  display: flex; 
+  gap: 10px; 
+  height: 100px; 
+  overflow-x: auto; 
+  flex-shrink: 0;
+}
+
+@media (min-width: 769px) {
+  .thumb-sidebar { 
+    width: 140px; 
+    height: auto; 
+    flex-direction: column; 
+    overflow-y: auto; 
+    overflow-x: hidden;
+  }
+}
+
+.thumb-item { 
+  position: relative; 
+  width: 100px; height: 100px; 
+  cursor: pointer; 
+  border-radius: 6px; 
+  overflow: hidden; 
+  flex-shrink: 0;
+}
+.thumb-item.active { border: 2px solid #0070f3; }
+
+@media (max-width: 768px) {
+  /* Hide thumbnails entirely if you only want the main image on mobile */
+  .thumb-sidebar { 
+    display: none; 
+  }
+  
+  /* Or if you want them visible, stack them below */
+  .modal-container { 
+    flex-direction: column; 
+    height: auto; 
+  }
+
+  .main-view { 
+    width: 100%; 
+    height: 60vh; 
+  }
+  
+  /* Ensure navigation is below */
+  .nav-btn { 
+    position: relative; 
+    transform: none; 
+  }
+}
 /* Main Image Area: Anchors the navigation buttons */
 .main-view { 
   position: relative; flex: 1; height: 100%; display: flex; align-items: center; justify-content: center; 
@@ -91,3 +180,4 @@ html { -webkit-font-smoothing: antialiased; }
   pointer-events: auto;
   z-index: 20;
 }
+

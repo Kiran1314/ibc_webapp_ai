@@ -469,15 +469,19 @@ const handlePhotoClick = (item) => {
       >
         <div style={{ width: '100%', aspectRatio: '16/9', maxHeight: '75vh', background: '#000', borderRadius: '12px', overflow: 'hidden' }}>
           {filteredItems[activeVideoIndex].videoUrl && (
-            <iframe
-              width="100%" height="100%"
-              // FIXED: Extracting ID directly from the active item
-              src={`https://www.youtube.com/embed/${extractYouTubeId(filteredItems[activeVideoIndex].videoUrl)}?autoplay=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
-              title={filteredItems[activeVideoIndex].title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
+           <iframe
+  width="100%"
+  height="100%"
+  // Use youtube-nocookie.com to avoid cookie-based blocks
+  src={`https://www.youtube-nocookie.com/embed/${extractYouTubeId(filteredItems[activeVideoIndex].videoUrl)}?autoplay=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
+  title={filteredItems[activeVideoIndex].title}
+  frameBorder="0"
+  // CRITICAL: This attribute tells YouTube where the request is coming from
+  referrerPolicy="strict-origin-when-cross-origin"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  allowFullScreen
+  style={{ width: '100%', height: '100%', display: 'block' }}
+/>
           )}
         </div>
 

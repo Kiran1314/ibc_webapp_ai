@@ -26,6 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${redHat.variable} ${workSans.variable}`}>
       <head>
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
         <link rel="stylesheet" href="/assets/css/style.css" />
       </head>
       <body>

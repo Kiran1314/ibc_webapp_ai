@@ -418,7 +418,7 @@ const handlePhotoClick = (item) => {
         </div>
       </div>
 
-     {activeVideoIndex !== null && (
+    {activeVideoIndex !== null && (
   <div 
     onClick={closeVideoModal}
     style={{
@@ -431,14 +431,14 @@ const handlePhotoClick = (item) => {
       alignItems: 'center',
       justifyContent: 'center',
       backdropFilter: 'blur(12px)',
-      padding: '40px'
+      padding: '20px' // Reduced padding for mobile space
     }}
   >
     <button 
       onClick={closeVideoModal}
       style={{
         position: 'absolute',
-        top: '24px', right: '32px',
+        top: '20px', right: '20px',
         background: 'none', border: 'none',
         color: '#ffffff', fontSize: '40px',
         cursor: 'pointer', zIndex: 10001
@@ -447,58 +447,81 @@ const handlePhotoClick = (item) => {
       &times;
     </button>
 
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', maxWidth: '1400px', position: 'relative' }}>
+    {/* Modal Content Wrapper */}
+    <div style={{ 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center', 
+      width: '100%', 
+      maxWidth: '1400px', 
+      position: 'relative' 
+    }}>
       
-      {/* Prev Button */}
+      {/* Prev Button - Absolute Positioning */}
       <button
         onClick={navigateModalPrev}
         disabled={!filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video')}
         style={{
+          position: 'absolute',
+          left: '0px',
+          zIndex: 10,
           background: 'rgba(255, 255, 255, 0.1)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '50%', width: '54px', height: '54px',
+          borderRadius: '50%', width: '45px', height: '45px',
           color: '#ffffff', cursor: 'pointer',
           visibility: filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video') ? 'visible' : 'hidden'
         }}
       >&#10094;</button>
 
-      {/* Video Content */}
+      {/* Video Content - Takes full width on mobile */}
       <div 
         onClick={(e) => e.stopPropagation()}
-        style={{ flex: 1, margin: '0 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '90vw' }}
+        style={{ 
+          flex: 1, 
+          margin: '0 50px', // Space for buttons
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          width: '100%' 
+        }}
       >
-        <div style={{ width: '100%', aspectRatio: '16/9', maxHeight: '75vh', background: '#000', borderRadius: '12px', overflow: 'hidden' }}>
+        <div style={{ 
+          width: '100%', 
+          aspectRatio: '16/9', 
+          background: '#000', 
+          borderRadius: '12px', 
+          overflow: 'hidden' 
+        }}>
           {filteredItems[activeVideoIndex].videoUrl && (
-           <iframe
-  width="100%"
-  height="100%"
-  // Use youtube-nocookie.com to avoid cookie-based blocks
-  src={`https://www.youtube-nocookie.com/embed/${extractYouTubeId(filteredItems[activeVideoIndex].videoUrl)}?autoplay=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
-  title={filteredItems[activeVideoIndex].title}
-  frameBorder="0"
-  // CRITICAL: This attribute tells YouTube where the request is coming from
-  referrerPolicy="strict-origin-when-cross-origin"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  allowFullScreen
-  style={{ width: '100%', height: '100%', display: 'block' }}
-/>
+            <iframe
+              width="100%" height="100%"
+              src={`https://www.youtube-nocookie.com/embed/${extractYouTubeId(filteredItems[activeVideoIndex].videoUrl)}?autoplay=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
+              title={filteredItems[activeVideoIndex].title}
+              frameBorder="0"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              style={{ width: '100%', height: '100%', display: 'block' }}
+            />
           )}
         </div>
 
-        <h2 style={{ color: '#ffffff', marginTop: '24px', fontSize: '24px', fontWeight: '600', textAlign: 'center' }}>
-          {/* FIXED: Referencing active item properties */}
+        <h2 style={{ color: '#ffffff', marginTop: '16px', fontSize: '18px', fontWeight: '600', textAlign: 'center' }}>
           {filteredItems[activeVideoIndex].badge} - {filteredItems[activeVideoIndex].title}
         </h2>
       </div>
 
-      {/* Next Button */}
+      {/* Next Button - Absolute Positioning */}
       <button
         onClick={navigateModalNext}
         disabled={!filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video')}
         style={{
+          position: 'absolute',
+          right: '0px',
+          zIndex: 10,
           background: 'rgba(255, 255, 255, 0.1)',
           border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '50%', width: '54px', height: '54px',
+          borderRadius: '50%', width: '45px', height: '45px',
           color: '#ffffff', cursor: 'pointer',
           visibility: filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video') ? 'visible' : 'hidden'
         }}

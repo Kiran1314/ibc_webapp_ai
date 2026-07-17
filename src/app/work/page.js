@@ -525,13 +525,13 @@ const handlePhotoClick = (item) => {
   </div>
 )}
 
-      {activeGallery && (
+     {activeGallery && (
   <div className="modal-overlay" onClick={() => setActiveGallery(null)}>
     <div className="modal-container" onClick={e => e.stopPropagation()}>
       
       <button className="close-btn" onClick={() => setActiveGallery(null)}>&times;</button>
       
-      {/* Main Image Stage */}
+      {/* Main Image Stage: flex-grow-1 ensures it takes remaining space */}
       <div className="main-view">
         <Image 
           src={photographyData[activeGallery.catIdx].images[activeGallery.imgIdx]} 
@@ -552,7 +552,7 @@ const handlePhotoClick = (item) => {
         >&#10095;</button>
       </div>
 
-      {/* Thumbnails: Visible on all devices, stacks at bottom on mobile */}
+      {/* Thumbnails: Flex-wrap allows this to drop below main-view */}
       <div className="thumb-sidebar">
         {photographyData[activeGallery.catIdx].images.map((img, i) => (
           <div 
@@ -567,7 +567,6 @@ const handlePhotoClick = (item) => {
     </div>
   </div>
 )}
-  
     </>
   );
 

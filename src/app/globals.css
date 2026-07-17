@@ -21,35 +21,55 @@ html { -webkit-font-smoothing: antialiased; }
 }
 /* Ensure the modal container handles the switch between mobile and desktop */
 /* Modal Container: Flex column on mobile, row on desktop */
+/* Container: Use wrap to force thumb-sidebar below on small screens */
 .modal-container { 
   display: flex; 
+  flex-wrap: wrap; 
   width: 95vw; 
   max-width: 1200px; 
   height: 90vh; 
   gap: 15px; 
   position: relative;
-  flex-direction: column; /* Default mobile-first */
+  align-content: flex-start; /* Keeps content top-aligned */
 }
 
-@media (min-width: 769px) {
-  .modal-container { flex-direction: row; }
-}
-
-/* Main View: Maximized space for the image */
+/* Main View: Mobile First - Expand to full width */
 .main-view { 
   position: relative; 
-  flex: 1; 
+  flex: 1 1 100%; /* Grow and shrink, basis 100% (full width) */
+  min-height: 50vh; 
   display: flex; 
   align-items: center; 
   justify-content: center; 
-  overflow: hidden;
 }
 
-/* Navigation Buttons: Floating on the edges */
+/* Thumbnails: Visible, horizontal scroll on mobile */
+.thumb-sidebar { 
+  flex: 0 0 100%; /* Always full width */
+  display: flex; 
+  gap: 10px; 
+  height: 100px; 
+  overflow-x: auto; 
+  overflow-y: hidden;
+  flex-shrink: 0;
+}
+
+/* Desktop Styles: Switch back to column for sidebar */
+@media (min-width: 769px) {
+  .modal-container { flex-wrap: nowrap; }
+  .main-view { flex: 1; }
+  .thumb-sidebar { 
+    flex: 0 0 140px; 
+    height: auto; 
+    flex-direction: column; 
+    overflow-x: hidden; 
+    overflow-y: auto; 
+  }
+}
+
+/* Navigation Buttons: Fixed size/position */
 .nav-btn { 
-  position: absolute; 
-  top: 50%; 
-  transform: translateY(-50%); 
+  position: absolute; top: 50%; transform: translateY(-50%); 
   z-index: 100;
   background: rgba(0, 0, 0, 0.5); 
   border: none;
@@ -60,14 +80,15 @@ html { -webkit-font-smoothing: antialiased; }
 .nav-btn.prev { left: 10px; }
 .nav-btn.next { right: 10px; }
 
-/* Thumbnail Sidebar: Stacks at the bottom */
-.thumb-sidebar { 
-  display: flex; 
-  gap: 10px; 
-  height: 100px; 
-  overflow-x: auto; 
+.thumb-item { 
+  position: relative; 
+  width: 100px; height: 100px; 
+  cursor: pointer; 
+  border-radius: 6px; 
+  overflow: hidden; 
   flex-shrink: 0;
 }
+.thumb-item.active { border: 2px solid #0070f3; }
 
 @media (min-width: 769px) {
   .thumb-sidebar { 

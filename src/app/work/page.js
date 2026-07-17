@@ -425,13 +425,13 @@ const handlePhotoClick = (item) => {
       position: 'fixed',
       top: 0, left: 0,
       width: '100vw', height: '100vh',
-      backgroundColor: 'rgba(5, 8, 16, 0.95)',
+      backgroundColor: 'rgba(5, 8, 16, 0.98)',
       zIndex: 9999,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       backdropFilter: 'blur(12px)',
-      padding: '20px' // Reduced padding for mobile space
+      padding: '10px' // Reduced padding for more space
     }}
   >
     <button 
@@ -447,49 +447,47 @@ const handlePhotoClick = (item) => {
       &times;
     </button>
 
-    {/* Modal Content Wrapper */}
-    <div style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center', 
-      width: '100%', 
-      maxWidth: '1400px', 
-      position: 'relative' 
-    }}>
+    <div 
+      style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        width: '100%', 
+        maxWidth: '1600px', // Increased max width
+        position: 'relative' 
+      }}
+    >
       
-      {/* Prev Button - Absolute Positioning */}
+      {/* Prev Button - Positioned absolutely to stay on the side */}
       <button
         onClick={navigateModalPrev}
         disabled={!filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video')}
         style={{
-          position: 'absolute',
-          left: '0px',
-          zIndex: 10,
-          background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '50%', width: '45px', height: '45px',
+          position: 'absolute', left: '10px', zIndex: 10002,
+          background: 'rgba(255, 255, 255, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          borderRadius: '50%', width: '50px', height: '50px',
           color: '#ffffff', cursor: 'pointer',
           visibility: filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video') ? 'visible' : 'hidden'
         }}
       >&#10094;</button>
 
-      {/* Video Content - Takes full width on mobile */}
+      {/* Video Content */}
       <div 
         onClick={(e) => e.stopPropagation()}
         style={{ 
-          flex: 1, 
-          margin: '0 50px', // Space for buttons
+          width: '100%', 
           display: 'flex', 
           flexDirection: 'column', 
-          alignItems: 'center', 
-          width: '100%' 
+          alignItems: 'center' 
         }}
       >
         <div style={{ 
           width: '100%', 
           aspectRatio: '16/9', 
+          maxHeight: '85vh', // Increased height for portrait
           background: '#000', 
-          borderRadius: '12px', 
+          borderRadius: '8px', 
           overflow: 'hidden' 
         }}>
           {filteredItems[activeVideoIndex].videoUrl && (
@@ -499,29 +497,26 @@ const handlePhotoClick = (item) => {
               title={filteredItems[activeVideoIndex].title}
               frameBorder="0"
               referrerPolicy="strict-origin-when-cross-origin"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allow="autoplay; encrypted-media; picture-in-picture"
               allowFullScreen
-              style={{ width: '100%', height: '100%', display: 'block' }}
             />
           )}
         </div>
 
-        <h2 style={{ color: '#ffffff', marginTop: '16px', fontSize: '18px', fontWeight: '600', textAlign: 'center' }}>
+        <h2 style={{ color: '#ffffff', marginTop: '16px', fontSize: '18px', textAlign: 'center', padding: '0 10px' }}>
           {filteredItems[activeVideoIndex].badge} - {filteredItems[activeVideoIndex].title}
         </h2>
       </div>
 
-      {/* Next Button - Absolute Positioning */}
+      {/* Next Button - Positioned absolutely to stay on the side */}
       <button
         onClick={navigateModalNext}
         disabled={!filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video')}
         style={{
-          position: 'absolute',
-          right: '0px',
-          zIndex: 10,
-          background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '50%', width: '45px', height: '45px',
+          position: 'absolute', right: '10px', zIndex: 10002,
+          background: 'rgba(255, 255, 255, 0.15)',
+          border: '1px solid rgba(255, 255, 255, 0.3)',
+          borderRadius: '50%', width: '50px', height: '50px',
           color: '#ffffff', cursor: 'pointer',
           visibility: filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video') ? 'visible' : 'hidden'
         }}

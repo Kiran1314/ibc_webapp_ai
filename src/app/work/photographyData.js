@@ -5,7 +5,7 @@ export const photographyData = [
     label: 'Industrial Photography',
     images: [
       'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FPhotography%2FIndustrial%2F11.webp?alt=media&token=652c8651-cc88-49aa-a317-c348159e6661',
-       'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FPhotography%2FIndustrial%2F1.webp?alt=media&token=688f1a27-1620-46ab-bb94-c669a425d7b2',
+      'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FPhotography%2FIndustrial%2F1.webp?alt=media&token=688f1a27-1620-46ab-bb94-c669a425d7b2',
       'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FPhotography%2FIndustrial%2F10.webp?alt=media&token=4ef525b5-89fe-40f8-98e4-e64fc84fade0',
       'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FPhotography%2FIndustrial%2F12.webp?alt=media&token=579f986f-4df9-4ed8-af4c-127fd0a1edf5',
       'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FPhotography%2FIndustrial%2F14.webp?alt=media&token=09dfbb7f-67cb-4345-a5a8-18e03025a286',

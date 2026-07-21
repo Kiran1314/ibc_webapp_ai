@@ -23,7 +23,7 @@ export default function Work() {
     { id: 'digital', label: 'Digital' }
   ];
 
-  // Sub-filters mapping dictionary based on main filter selection
+  // Custom sub-filter mapping per exact requirements
   const subFiltersMap = {
     audio: ['English', 'Arabic', 'French', 'Hindi', 'Urdu'],
     video: [
@@ -41,14 +41,15 @@ export default function Work() {
       'Virtual Reality', 
       'Social Media Reel'
     ],
-    photo: [
-      'Industrial Photography', 
-      'Event Photography', 
-      'Facilities Photography', 
-      'Property Photography'
-    ],
+    photo: ['Industrial Photography', 'Event Photography', 'Facilities Photography', 'Property Photography'],
     ai: ['Product Campaign', 'Avatar-Based'],
     digital: ['Corporate', 'Ecommerce']
+  };
+
+  // Reset subfilter whenever main filter changes
+  const handleMainFilterChange = (id) => {
+    setFilter(id);
+    setSubFilter('all');
   };
 
   const youtubeVideoData = [
@@ -65,16 +66,15 @@ export default function Work() {
     // Timelapse Productions
     { category: 'video', badge: 'Timelapse', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=m7s_bBwnkxU' },
     { category: 'video', badge: 'Timelapse', title: 'Majid Al Futtaim', videoUrl: 'https://www.youtube.com/watch?v=BKM4ROd5nr8' },
-    { category: 'video', badge: 'Timelapse', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=szc17K-ZsG0' },
     { category: 'video', badge: 'Timelapse', title: 'Scan Electro Mechanical', videoUrl: 'https://www.youtube.com/watch?v=IacUWAZwgls' },
 
     // Drone Productions
     { category: 'video', badge: 'Drone Footage', title: 'Drone Showcase', videoUrl: 'https://www.youtube.com/watch?v=3UHRsLUKDNg' },
-    { category: 'video', badge: 'Drone Footage', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=szc17K-ZsG0' },
+    { category: 'video', badge: 'Drone Footage Timelapse', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=szc17K-ZsG0' },
     { category: 'video', badge: 'Drone Footage', title: 'Emitech', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=cSrsOeWn5I4' },
 
     // Testimonial Videos
-    { category: 'video', badge: 'Testimonial', title: 'Sharjah Ladies Club', videoUrl: 'https://www.youtube.com/watch?v=uMwgrpkAqZo' },
+     { category: 'video', badge: 'Testimonial', title: 'Sharjah Ladies Club', videoUrl: 'https://www.youtube.com/watch?v=uMwgrpkAqZo' },
     { category: 'video', badge: 'Testimonial', title: 'Al Sharq Hospital', videoUrl: 'https://www.youtube.com/watch?v=0Q6nbRPw6FM&t=388s' },
     { category: 'video', badge: 'Testimonial', title: 'Canon', videoUrl: 'https://www.youtube.com/watch?v=q0LbDWQghSE' },
     { category: 'video', badge: 'Testimonial', title: 'Power Group', videoUrl: 'https://www.youtube.com/watch?v=ijygND8UMi8' },
@@ -141,10 +141,15 @@ export default function Work() {
     ? youtubeVideoData.map(item => ({ ...item, desc: '' }))
     : [...structuralPortfolioItems, ...youtubeVideoData.map(item => ({ ...item, desc: '' })), ...photographyCategoryItems];
 
+  // Filtering implementation matching category and sub-filters
   const filteredItems = baseCombinedItems.filter(item => {
-    const matchesCategory = filter === 'all' || item.category === filter;
-    const matchesSub = subFilter === 'all' || item.badge.toLowerCase().includes(subFilter.toLowerCase()) || item.title.toLowerCase().includes(subFilter.toLowerCase());
-    return matchesCategory && matchesSub;
+    if (filter !== 'all' && item.category !== filter) return false;
+    if (subFilter !== 'all') {
+      const matchBadge = item.badge && item.badge.toLowerCase().includes(subFilter.toLowerCase());
+      const matchTitle = item.title && item.title.toLowerCase().includes(subFilter.toLowerCase());
+      return matchBadge || matchTitle;
+    }
+    return true;
   });
 
   useEffect(() => {
@@ -260,32 +265,13 @@ export default function Work() {
           0% { opacity: 0; transform: translateY(30px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        /* Custom Sub-filter Tab Glow & Gradient Styles */
         .sub-filter-tab {
-          white-space: nowrap;
-          flex-shrink: 0;
-          font-size: 12px;
-          font-weight: 500;
-          padding: 8px 14px;
-          border-radius: 8px; /* Square rounded corner tab look */
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          color: #a0aec0;
-          cursor: pointer;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .sub-filter-tab:hover {
-          background: linear-gradient(135deg, rgba(0, 112, 243, 0.25), rgba(0, 212, 255, 0.25));
-          border-color: rgba(0, 112, 243, 0.6);
-          color: #ffffff;
-          box-shadow: 0 0 15px rgba(0, 112, 243, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.2);
-          transform: translateY(-1px);
-        }
-        .sub-filter-tab.active {
-          background: linear-gradient(135deg, #0070f3, #00d4ff);
-          border-color: #00d4ff;
-          color: #ffffff;
-          box-shadow: 0 0 20px rgba(0, 112, 243, 0.6);
+          box-shadow: 0 0 20px rgba(0, 112, 243, 0.65), 0 0 8px rgba(121, 40, 202, 0.45);
+          transform: translateY(-2px);
+          border-color: rgba(255, 255, 255, 0.4) !important;
         }
       `}</style>
 
@@ -328,7 +314,6 @@ export default function Work() {
             </p>
           </div>
 
-          {/* Main Filters */}
           <div 
             className="wfilter reveal in-view" 
             style={{ 
@@ -338,7 +323,8 @@ export default function Work() {
               overflowX: 'auto', 
               WebkitOverflowScrolling: 'touch',
               paddingTop: '4px', 
-              paddingBottom: '10px',
+              paddingBottom: '20px',
+              marginBottom: '10px',
               paddingLeft: 'clamp(22px, 6vw, 80px)',
               paddingRight: 'clamp(22px, 6vw, 80px)',
               position: 'relative',
@@ -349,10 +335,7 @@ export default function Work() {
               <button
                 key={btn.id}
                 className={`wfbtn ${filter === btn.id ? 'active' : ''}`}
-                onClick={() => {
-                  setFilter(btn.id);
-                  setSubFilter('all');
-                }}
+                onClick={() => handleMainFilterChange(btn.id)}
                 style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
               >
                 {btn.label}
@@ -360,39 +343,72 @@ export default function Work() {
             ))}
           </div>
 
-          {/* Sub-Filters (Conditionally displayed when a specific category except 'all' is selected) */}
+          {/* Sub-Filters Tabs Row (Shown when a specific main category is selected, excluding 'all') */}
           {filter !== 'all' && subFiltersMap[filter] && (
             <div 
-              className="wfilter-sub reveal in-view" 
-              style={{ 
-                width: '100%', 
-                display: 'flex', 
-                gap: '8px', 
-                overflowX: 'auto', 
+              className="sub-filter-container reveal in-view"
+              style={{
+                width: '100%',
+                display: 'flex',
+                gap: '10px',
+                overflowX: 'auto',
                 WebkitOverflowScrolling: 'touch',
-                paddingTop: '4px', 
-                paddingBottom: '20px',
+                paddingBottom: '24px',
+                marginBottom: '20px',
                 paddingLeft: 'clamp(22px, 6vw, 80px)',
                 paddingRight: 'clamp(22px, 6vw, 80px)',
-                position: 'relative',
-                zIndex: 5 
+                zIndex: 4
               }}
             >
               <button
-                className={`sub-filter-tab ${subFilter === 'all' ? 'active' : ''}`}
                 onClick={() => setSubFilter('all')}
+                className="sub-filter-tab"
+                style={{
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  background: subFilter === 'all' 
+                    ? 'linear-gradient(135deg, #0070f3 0%, #7928ca 100%)' 
+                    : 'rgba(255, 255, 255, 0.05)',
+                  color: '#ffffff',
+                  border: subFilter === 'all' ? '1px solid rgba(255, 255, 255, 0.4)' : '1px solid rgba(255, 255, 255, 0.12)',
+                  boxShadow: subFilter === 'all' ? '0 0 15px rgba(0, 112, 243, 0.4)' : 'none'
+                }}
               >
                 All {filterButtons.find(b => b.id === filter)?.label}
               </button>
-              {subFiltersMap[filter].map((sub, idx) => (
-                <button
-                  key={idx}
-                  className={`sub-filter-tab ${subFilter === sub ? 'active' : ''}`}
-                  onClick={() => setSubFilter(sub)}
-                >
-                  {sub}
-                </button>
-              ))}
+
+              {subFiltersMap[filter].map((sub) => {
+                const isActive = subFilter === sub;
+                return (
+                  <button
+                    key={sub}
+                    onClick={() => setSubFilter(sub)}
+                    className="sub-filter-tab"
+                    style={{
+                      whiteSpace: 'nowrap',
+                      flexShrink: 0,
+                      padding: '8px 16px',
+                      borderRadius: '8px',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      background: isActive 
+                        ? 'linear-gradient(135deg, #0070f3 0%, #7928ca 100%)' 
+                        : 'rgba(255, 255, 255, 0.05)',
+                      color: isActive ? '#ffffff' : '#a1a1aa',
+                      border: isActive ? '1px solid rgba(255, 255, 255, 0.4)' : '1px solid rgba(255, 255, 255, 0.1)',
+                      boxShadow: isActive ? '0 0 15px rgba(0, 112, 243, 0.4)' : 'none'
+                    }}
+                  >
+                    {sub}
+                  </button>
+                );
+              })}
             </div>
           )}
 
@@ -424,14 +440,14 @@ export default function Work() {
                 style={{ 
                   display: 'block', 
                   width: '100%', 
-                  cursor: 'pointer',
+                  cursor: 'pointer', 
                   pointerEvents: 'auto' 
                 }}
               >
                 <div 
                   className="wthumb" 
                   style={{ 
-                    position: 'relative',
+                    position: 'relative', 
                     width: '100%',
                     aspectRatio: '16/9',
                     borderRadius: '8px',
@@ -482,148 +498,149 @@ export default function Work() {
         </div>
       </div>
 
-      {activeVideoIndex !== null && (
-        <div 
+    {activeVideoIndex !== null && (
+      <div 
+        onClick={closeVideoModal}
+        style={{
+          position: 'fixed',
+          top: 0, left: 0,
+          width: '100vw', height: '100vh',
+          backgroundColor: 'rgba(5, 8, 16, 0.98)',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backdropFilter: 'blur(12px)',
+          padding: '10px'
+        }}
+      >
+        <button 
           onClick={closeVideoModal}
           style={{
-            position: 'fixed',
-            top: 0, left: 0,
-            width: '100vw', height: '100vh',
-            backgroundColor: 'rgba(5, 8, 16, 0.98)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(12px)',
-            padding: '10px'
+            position: 'absolute',
+            top: '20px', right: '20px',
+            background: 'none', border: 'none',
+            color: '#ffffff', fontSize: '40px',
+            cursor: 'pointer', zIndex: 10001
           }}
         >
-          <button 
-            onClick={closeVideoModal}
+          &times;
+        </button>
+
+        <div 
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            width: '100%', 
+            maxWidth: '1600px', 
+            position: 'relative' 
+          }}
+        >
+          
+          <button
+            onClick={navigateModalPrev}
+            disabled={!filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video')}
             style={{
-              position: 'absolute',
-              top: '20px', right: '20px',
-              background: 'none', border: 'none',
-              color: '#ffffff', fontSize: '40px',
-              cursor: 'pointer', zIndex: 10001
+              position: 'absolute', left: '10px', zIndex: 10002,
+              background: 'rgba(255, 255, 255, 0.15)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              borderRadius: '50%', width: '50px', height: '50px',
+              color: '#ffffff', cursor: 'pointer',
+              visibility: filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video') ? 'visible' : 'hidden'
             }}
-          >
-            &times;
-          </button>
+          >&#10094;</button>
 
           <div 
+            onClick={(e) => e.stopPropagation()}
             style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
               width: '100%', 
-              maxWidth: '1600px', 
-              position: 'relative' 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center' 
             }}
           >
-            <button
-              onClick={navigateModalPrev}
-              disabled={!filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video')}
-              style={{
-                position: 'absolute', left: '10px', zIndex: 10002,
-                background: 'rgba(255, 255, 255, 0.15)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '50%', width: '50px', height: '50px',
-                color: '#ffffff', cursor: 'pointer',
-                visibility: filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video') ? 'visible' : 'hidden'
-              }}
-            >&#10094;</button>
-
-            <div 
-              onClick={(e) => e.stopPropagation()}
-              style={{ 
-                width: '100%', 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center' 
-              }}
-            >
-              <div style={{ 
-                width: '100%', 
-                aspectRatio: '16/9', 
-                maxHeight: '85vh', 
-                background: '#000', 
-                borderRadius: '8px', 
-                overflow: 'hidden' 
-              }}>
-                {filteredItems[activeVideoIndex].videoUrl && (
-                  <iframe
-                    width="100%" height="100%"
-                    src={`https://www.youtube-nocookie.com/embed/${extractYouTubeId(filteredItems[activeVideoIndex].videoUrl)}?autoplay=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
-                    title={filteredItems[activeVideoIndex].title}
-                    frameBorder="0"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  />
-                )}
-              </div>
-
-              <h2 style={{ color: '#ffffff', marginTop: '16px', fontSize: '18px', textAlign: 'center', padding: '0 10px' }}>
-                {filteredItems[activeVideoIndex].badge} - {filteredItems[activeVideoIndex].title}
-              </h2>
+            <div style={{ 
+              width: '100%', 
+              aspectRatio: '16/9', 
+              maxHeight: '85vh', 
+              background: '#000', 
+              borderRadius: '8px', 
+              overflow: 'hidden' 
+            }}>
+              {filteredItems[activeVideoIndex].videoUrl && (
+                <iframe
+                  width="100%" height="100%"
+                  src={`https://www.youtube-nocookie.com/embed/${extractYouTubeId(filteredItems[activeVideoIndex].videoUrl)}?autoplay=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
+                  title={filteredItems[activeVideoIndex].title}
+                  frameBorder="0"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                />
+              )}
             </div>
 
-            <button
-              onClick={navigateModalNext}
-              disabled={!filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video')}
-              style={{
-                position: 'absolute', right: '10px', zIndex: 10002,
-                background: 'rgba(255, 255, 255, 0.15)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '50%', width: '50px', height: '50px',
-                color: '#ffffff', cursor: 'pointer',
-                visibility: filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video') ? 'visible' : 'hidden'
-              }}
+            <h2 style={{ color: '#ffffff', marginTop: '16px', fontSize: '18px', textAlign: 'center', padding: '0 10px' }}>
+              {filteredItems[activeVideoIndex].badge} - {filteredItems[activeVideoIndex].title}
+            </h2>
+          </div>
+
+          <button
+            onClick={navigateModalNext}
+            disabled={!filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video')}
+            style={{
+              position: 'absolute', right: '10px', zIndex: 10002,
+              background: 'rgba(255, 255, 255, 0.15)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              borderRadius: '50%', width: '50px', height: '50px',
+              color: '#ffffff', cursor: 'pointer',
+              visibility: filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video') ? 'visible' : 'hidden'
+            }}
+          >&#10095;</button>
+        </div>
+      </div>
+    )}
+
+    {activeGallery && (
+      <div className="modal-overlay" onClick={() => setActiveGallery(null)}>
+        <div className="modal-container" onClick={e => e.stopPropagation()}>
+          
+          <button className="close-btn" onClick={() => setActiveGallery(null)}>&times;</button>
+          
+          <div className="main-view">
+            <Image 
+              src={photographyData[activeGallery.catIdx].images[activeGallery.imgIdx]} 
+              alt="Large View" 
+              fill 
+              sizes="(max-width: 1200px) 90vw, 1100px"
+              style={{ objectFit: 'contain' }} 
+            />
+            
+            <button 
+              className="nav-btn prev" 
+              onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: Math.max(0, activeGallery.imgIdx - 1)})}}
+            >&#10094;</button>
+            <button 
+              className="nav-btn next" 
+              onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: Math.min(photographyData[activeGallery.catIdx].images.length - 1, activeGallery.imgIdx + 1)})}}
             >&#10095;</button>
           </div>
-        </div>
-      )}
 
-      {activeGallery && (
-        <div className="modal-overlay" onClick={() => setActiveGallery(null)}>
-          <div className="modal-container" onClick={e => e.stopPropagation()}>
-            
-            <button className="close-btn" onClick={() => setActiveGallery(null)}>&times;</button>
-            
-            <div className="main-view">
-              <Image 
-                src={photographyData[activeGallery.catIdx].images[activeGallery.imgIdx]} 
-                alt="Large View" 
-                fill 
-                sizes="(max-width: 1200px) 90vw, 1100px"
-                style={{ objectFit: 'contain' }} 
-              />
-              
-              <button 
-                className="nav-btn prev" 
-                onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: Math.max(0, activeGallery.imgIdx - 1)})}}
-              >&#10094;</button>
-              <button 
-                className="nav-btn next" 
-                onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: Math.min(photographyData[activeGallery.catIdx].images.length - 1, activeGallery.imgIdx + 1)})}}
-              >&#10095;</button>
-            </div>
-
-            <div className="thumb-sidebar">
-              {photographyData[activeGallery.catIdx].images.map((img, i) => (
-                <div 
-                  key={i} 
-                  className={`thumb-item ${activeGallery.imgIdx === i ? 'active' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: i})}}
-                >
-                  <Image src={img} alt="Thumbnail" fill sizes="120px" style={{ objectFit: 'cover' }} />
-                </div>
-              ))}
-            </div>
+          <div className="thumb-sidebar">
+            {photographyData[activeGallery.catIdx].images.map((img, i) => (
+              <div 
+                key={i} 
+                className={`thumb-item ${activeGallery.imgIdx === i ? 'active' : ''}`}
+                onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: i})}}
+              >
+                <Image src={img} alt="Thumbnail" fill sizes="120px" style={{ objectFit: 'cover' }} />
+              </div>
+            ))}
           </div>
         </div>
-      )}
+      </div>
+    )}
     </>
   );
 }

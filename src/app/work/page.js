@@ -53,73 +53,69 @@ export default function Work() {
 
   const youtubeVideoData = [
     // Event Productions
-    { category: 'video', badge: 'Event', title: 'Sharjah Ladies Club', videoUrl: 'https://www.youtube.com/watch?v=uMwgrpkAqZo' },
-    { category: 'video', badge: 'Event', title: 'Agnice Iftar Event', videoUrl: 'https://www.youtube.com/watch?v=F54oY2qkvZ4' },
-    { category: 'video', badge: 'Event', title: 'HR Summit & Expo', videoUrl: 'https://www.youtube.com/watch?v=pVkCroer8oc' },
+    { category: 'video', badge1: 'Event', badge2: 'Testimonial', title: 'Sharjah Ladies Club', videoUrl: 'https://www.youtube.com/watch?v=uMwgrpkAqZo' },
+    { category: 'video', badge1: 'Event', title: 'Agnice Iftar Event', videoUrl: 'https://www.youtube.com/watch?v=F54oY2qkvZ4' },
+    { category: 'video', badge1: 'Event', title: 'HR Summit & Expo', videoUrl: 'https://www.youtube.com/watch?v=pVkCroer8oc' },
 
     // Corporate Videos
-    { category: 'video', badge: 'Corporate Presentation', title: 'Al Khaleej', videoUrl: 'https://www.youtube.com/watch?v=T2QXEV3bwcg' },
-    { category: 'video', badge: 'Corporate Presentation', title: 'Scitra', videoUrl: 'https://www.youtube.com/watch?v=5lLXv-CsmUk' },
-    { category: 'video', badge: 'Corporate Presentation', title: 'ACME', videoUrl: 'https://www.youtube.com/watch?v=ORqROH8rsJ4' },
+    { category: 'video', badge1: 'Corporate Presentation', title: 'Al Khaleej', videoUrl: 'https://www.youtube.com/watch?v=T2QXEV3bwcg' },
+    { category: 'video', badge1: 'Corporate Presentation', title: 'Scitra', videoUrl: 'https://www.youtube.com/watch?v=5lLXv-CsmUk' },
+    { category: 'video', badge1: 'Corporate Presentation', title: 'ACME', videoUrl: 'https://www.youtube.com/watch?v=ORqROH8rsJ4' },
 
-    // Timelapse Productions
-    { category: 'video', badge: 'Timelapse', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=m7s_bBwnkxU' },
-    { category: 'video', badge: 'Timelapse', title: 'Majid Al Futtaim', videoUrl: 'https://www.youtube.com/watch?v=BKM4ROd5nr8' },
-    { category: 'video', badge: 'Timelapse', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=szc17K-ZsG0' },
-    { category: 'video', badge: 'Timelapse', title: 'Scan Electro Mechanical', videoUrl: 'https://www.youtube.com/watch?v=IacUWAZwgls' },
+    // Timelapse & Drone Productions
+    { category: 'video', badge1: 'Timelapse', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=m7s_bBwnkxU' },
+    { category: 'video', badge1: 'Timelapse', title: 'Majid Al Futtaim', videoUrl: 'https://www.youtube.com/watch?v=BKM4ROd5nr8' },
+    { category: 'video', badge1: 'Timelapse', badge2: 'Drone Footage', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=szc17K-ZsG0' },
+    { category: 'video', badge1: 'Timelapse', title: 'Scan Electro Mechanical', videoUrl: 'https://www.youtube.com/watch?v=IacUWAZwgls' },
+    { category: 'video', badge1: 'Drone Footage', title: 'Drone Showcase', videoUrl: 'https://www.youtube.com/watch?v=3UHRsLUKDNg' },
+    { category: 'video', badge1: 'Drone Footage', title: 'Emitech', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=cSrsOeWn5I4' },
 
-    // Drone Productions
-    { category: 'video', badge: 'Drone Footage', title: 'Drone Showcase', videoUrl: 'https://www.youtube.com/watch?v=3UHRsLUKDNg' },
-    { category: 'video', badge: 'Drone Footage', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=szc17K-ZsG0' },
-    { category: 'video', badge: 'Drone Footage', title: 'Emitech', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=cSrsOeWn5I4' },
-
-    // Testimonial Videos
-    { category: 'video', badge: 'Testimonial', title: 'Sharjah Ladies Club', videoUrl: 'https://www.youtube.com/watch?v=uMwgrpkAqZo' },
-    { category: 'video', badge: 'Testimonial', title: 'Al Sharq Hospital', videoUrl: 'https://www.youtube.com/watch?v=0Q6nbRPw6FM&t=388s' },
-    { category: 'video', badge: 'Testimonial', title: 'Canon', videoUrl: 'https://www.youtube.com/watch?v=q0LbDWQghSE' },
-    { category: 'video', badge: 'Testimonial', title: 'Power Group', videoUrl: 'https://www.youtube.com/watch?v=ijygND8UMi8' },
+    // Testimonial Videos (Removed Sharjah Ladies Club duplicate here)
+    { category: 'video', badge1: 'Testimonial', title: 'Al Sharq Hospital', videoUrl: 'https://www.youtube.com/watch?v=0Q6nbRPw6FM&t=388s' },
+    { category: 'video', badge1: 'Testimonial', title: 'Canon', videoUrl: 'https://www.youtube.com/watch?v=q0LbDWQghSE' },
+    { category: 'video', badge1: 'Testimonial', title: 'Power Group', videoUrl: 'https://www.youtube.com/watch?v=ijygND8UMi8' },
 
     // 360° Videos
-    { category: 'video', badge: '360° Footage', title: '360° Experience', videoUrl: 'https://www.youtube.com/watch?v=3JYKRGzJ4og' },
-    { category: 'video', badge: '360° Footage', title: '360° Experience', videoUrl: 'https://www.youtube.com/watch?v=Kwnb64MnGbw' },
-    { category: 'video', badge: '360° Footage', title: '360° Experience', videoUrl: 'https://www.youtube.com/watch?v=aRTLsRoA_CI' },
+    { category: 'video', badge1: '360° Footage', title: '360° Experience 1', videoUrl: 'https://www.youtube.com/watch?v=3JYKRGzJ4og' },
+    { category: 'video', badge1: '360° Footage', title: '360° Experience 2', videoUrl: 'https://www.youtube.com/watch?v=Kwnb64MnGbw' },
+    { category: 'video', badge1: '360° Footage', title: '360° Experience 3', videoUrl: 'https://www.youtube.com/watch?v=aRTLsRoA_CI' },
 
     // Tutorial & E-Learning
-    { category: 'video', badge: 'E-Learning', title: 'Driving Classes', videoUrl: 'https://www.youtube.com/watch?v=vENU9kXnZRA' },
-    { category: 'video', badge: 'E-Learning', title: 'Driving Classes', videoUrl: 'https://www.youtube.com/watch?v=mdSOGQcRiMQ' },
-    { category: 'video', badge: 'Tutorial Animation', title: 'TCL GCC', videoUrl: 'https://www.youtube.com/watch?v=LhFD5ksDn3U' },
+    { category: 'video', badge1: 'E-Learning', title: 'Driving Classes 1', videoUrl: 'https://www.youtube.com/watch?v=vENU9kXnZRA' },
+    { category: 'video', badge1: 'E-Learning', title: 'Driving Classes 2', videoUrl: 'https://www.youtube.com/watch?v=mdSOGQcRiMQ' },
+    { category: 'video', badge1: 'Tutorial', badge2: 'Animation', title: 'TCL GCC', videoUrl: 'https://www.youtube.com/watch?v=LhFD5ksDn3U' },
 
     // Commercials
-    { category: 'video', badge: 'Commercial', title: 'Buraq Car Rental', videoUrl: 'https://www.youtube.com/watch?v=2zyRRmCpTSA' },
-    { category: 'video', badge: 'Commercial Animation', title: 'BNC Network', videoUrl: 'https://www.youtube.com/watch?v=KZmduB-zE2E' },
-    { category: 'video', badge: 'Commercial', title: 'Buraq Car Rental', videoUrl: 'https://www.youtube.com/watch?v=rPLxJIXUul4' },
+    { category: 'video', badge1: 'Commercial', title: 'Buraq Car Rental 1', videoUrl: 'https://www.youtube.com/watch?v=2zyRRmCpTSA' },
+    { category: 'video', badge1: 'Commercial', badge2: 'Animation', title: 'BNC Network', videoUrl: 'https://www.youtube.com/watch?v=KZmduB-zE2E' },
+    { category: 'video', badge1: 'Commercial', title: 'Buraq Car Rental 2', videoUrl: 'https://www.youtube.com/watch?v=rPLxJIXUul4' },
 
     // Dubbing
-    { category: 'video', badge: 'Dubbing', title: 'Urdu', videoUrl: 'https://www.youtube.com/watch?v=qJxg9lSLpD8' },
-    { category: 'video', badge: 'Dubbing', title: 'English', videoUrl: 'https://www.youtube.com/watch?v=AlinFX6ePJE' },
-    { category: 'video', badge: 'Dubbing', title: 'Hindi', videoUrl: 'https://www.youtube.com/watch?v=MsVVtI_0_o4' },
+    { category: 'video', badge1: 'Dubbing', title: 'Urdu', videoUrl: 'https://www.youtube.com/watch?v=qJxg9lSLpD8' },
+    { category: 'video', badge1: 'Dubbing', title: 'English', videoUrl: 'https://www.youtube.com/watch?v=AlinFX6ePJE' },
+    { category: 'video', badge1: 'Dubbing', title: 'Hindi', videoUrl: 'https://www.youtube.com/watch?v=MsVVtI_0_o4' },
 
     // Animation
-    { category: 'video', badge: 'Animation', title: 'House Tour', videoUrl: 'https://www.youtube.com/watch?v=MTuwPmqcFKQ' },
-    { category: 'video', badge: 'Animation', title: 'Dell', videoUrl: 'https://www.youtube.com/watch?v=0BbudrtTAQY' },
-    { category: 'video', badge: 'Animation E-Learning', title: 'Car Driving Test', videoUrl: 'https://www.youtube.com/watch?v=JO0kED7fNb8' },
+    { category: 'video', badge1: 'Animation', title: 'House Tour', videoUrl: 'https://www.youtube.com/watch?v=MTuwPmqcFKQ' },
+    { category: 'video', badge1: 'Animation', title: 'Dell', videoUrl: 'https://www.youtube.com/watch?v=0BbudrtTAQY' },
+    { category: 'video', badge1: 'Animation', badge2: 'E-Learning', title: 'Car Driving Test', videoUrl: 'https://www.youtube.com/watch?v=JO0kED7fNb8' },
 
     // AR / VR
-    { category: 'video', badge: 'Augmented Reality', title: 'AR Experience', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=4StiZ_bQW7Q' },
-    { category: 'video', badge: 'Virtual Reality', title: 'VR Experience', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=LQFUyO7pVH0' },
-    { category: 'video', badge: 'Augmented Reality', title: 'AR Experience', videoUrl: 'https://www.youtube.com/watch?v=z4RjEz0Wg5M' },
+    { category: 'video', badge1: 'Augmented Reality', title: 'AR Experience 1', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=4StiZ_bQW7Q' },
+    { category: 'video', badge1: 'Virtual Reality', title: 'VR Experience', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=LQFUyO7pVH0' },
+    { category: 'video', badge1: 'Augmented Reality', title: 'AR Experience 2', videoUrl: 'https://www.youtube.com/watch?v=z4RjEz0Wg5M' },
 
     // Social Media Reels
-    { category: 'video', badge: 'Social Media Reel', title: 'Social Media Reel 01', videoUrl: 'https://www.youtube.com/shorts/jTyHmCd4HBU' },
-    { category: 'video', badge: 'Social Media Reel', title: 'Social Media Reel 02', videoUrl: 'https://www.youtube.com/shorts/mwwpkud5Yzc' },
-    { category: 'video', badge: 'Social Media Reel', title: 'Social Media Reel 03', videoUrl: 'https://www.youtube.com/shorts/F6OQvgGwSI0' }
+    { category: 'video', badge1: 'Social Media Reel', title: 'Social Media Reel 01', videoUrl: 'https://www.youtube.com/shorts/jTyHmCd4HBU' },
+    { category: 'video', badge1: 'Social Media Reel', title: 'Social Media Reel 02', videoUrl: 'https://www.youtube.com/shorts/mwwpkud5Yzc' },
+    { category: 'video', badge1: 'Social Media Reel', title: 'Social Media Reel 03', videoUrl: 'https://www.youtube.com/shorts/F6OQvgGwSI0' }
   ];
 
   const structuralPortfolioItems = [
-    { category: 'audio', badge: 'Audio', title: 'DEWA — Multilingual IVR System', desc: 'Complete 6-language IVR recording and production.' }, 
-    { category: 'ai', badge: 'AI Production', title: 'Retail Brand — AI Product Campaign', desc: '100+ AI-generated product visuals for e-commerce launch.' },
-    { category: 'digital', badge: 'Digital', title: 'Corporate Group — E-Learning Platform', desc: 'Full LMS development with 40+ interactive modules.' },
-    { category: 'audio', badge: 'Audio', title: 'National Brand — Jingle Production', desc: 'Original brand jingle composed and produced in 5 languages.' }
+    { category: 'audio', badge1: 'Audio', title: 'DEWA — Multilingual IVR System', desc: 'Complete 6-language IVR recording and production.' }, 
+    { category: 'ai', badge1: 'AI Production', title: 'Retail Brand — AI Product Campaign', desc: '100+ AI-generated product visuals for e-commerce launch.' },
+    { category: 'digital', badge1: 'Digital', title: 'Corporate Group — E-Learning Platform', desc: 'Full LMS development with 40+ interactive modules.' },
+    { category: 'audio', badge1: 'Audio', title: 'National Brand — Jingle Production', desc: 'Original brand jingle composed and produced in 5 languages.' }
   ];
 
   const extractYouTubeId = (url) => {
@@ -131,7 +127,7 @@ export default function Work() {
 
   const photographyCategoryItems = photographyData.map((cat, idx) => ({
     category: 'photo',
-    badge: 'Photography',
+    badge1: 'Photography',
     title: cat.label,
     isGallery: true,
     catIdx: idx
@@ -143,7 +139,13 @@ export default function Work() {
 
   const filteredItems = baseCombinedItems.filter(item => {
     const matchesCategory = filter === 'all' || item.category === filter;
-    const matchesSub = subFilter === 'all' || item.badge.toLowerCase().includes(subFilter.toLowerCase()) || item.title.toLowerCase().includes(subFilter.toLowerCase());
+    
+    const badge1Match = item.badge1 && item.badge1.toLowerCase().includes(subFilter.toLowerCase());
+    const badge2Match = item.badge2 && item.badge2.toLowerCase().includes(subFilter.toLowerCase());
+    const titleMatch = item.title && item.title.toLowerCase().includes(subFilter.toLowerCase());
+
+    const matchesSub = subFilter === 'all' || badge1Match || badge2Match || titleMatch;
+    
     return matchesCategory && matchesSub;
   });
 
@@ -260,14 +262,13 @@ export default function Work() {
           0% { opacity: 0; transform: translateY(30px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        /* Custom Sub-filter Tab Glow & Gradient Styles */
         .sub-filter-tab {
           white-space: nowrap;
           flex-shrink: 0;
           font-size: 12px;
           font-weight: 500;
           padding: 8px 14px;
-          border-radius: 8px; /* Square rounded corner tab look */
+          border-radius: 8px;
           background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
           border: 1px solid rgba(255, 255, 255, 0.12);
           color: #a0aec0;
@@ -328,7 +329,6 @@ export default function Work() {
             </p>
           </div>
 
-          {/* Main Filters */}
           <div 
             className="wfilter reveal in-view" 
             style={{ 
@@ -360,7 +360,6 @@ export default function Work() {
             ))}
           </div>
 
-          {/* Sub-Filters (Conditionally displayed when a specific category except 'all' is selected) */}
           {filter !== 'all' && subFiltersMap[filter] && (
             <div 
               className="wfilter-sub reveal in-view" 
@@ -439,14 +438,30 @@ export default function Work() {
                     backgroundColor: '#1a2035'
                   }}
                 >
-                  <span style={{
+                  {/* Updated Multi-span Badge Container */}
+                  <div style={{
                     position: 'absolute', top: '12px', left: '12px', zIndex: 20,
-                    fontSize: '13px', padding: '6px 14px', fontWeight: '600',
-                    backgroundColor: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(4px)',
-                    color: '#fff', borderRadius: '20px'
+                    display: 'flex', gap: '8px'
                   }}>
-                    {item.badge}
-                  </span>
+                    {item.badge1 && (
+                      <span style={{
+                        fontSize: '13px', padding: '6px 14px', fontWeight: '600',
+                        backgroundColor: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(4px)',
+                        color: '#fff', borderRadius: '20px'
+                      }}>
+                        {item.badge1}
+                      </span>
+                    )}
+                    {item.badge2 && (
+                      <span style={{
+                        fontSize: '13px', padding: '6px 14px', fontWeight: '600',
+                        backgroundColor: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(4px)',
+                        color: '#fff', borderRadius: '20px'
+                      }}>
+                        {item.badge2}
+                      </span>
+                    )}
+                  </div>
 
                   <Image 
                     src={imgSrc} 
@@ -482,6 +497,7 @@ export default function Work() {
         </div>
       </div>
 
+      {/* Modal View for Videos */}
       {activeVideoIndex !== null && (
         <div 
           onClick={closeVideoModal}
@@ -565,7 +581,7 @@ export default function Work() {
               </div>
 
               <h2 style={{ color: '#ffffff', marginTop: '16px', fontSize: '18px', textAlign: 'center', padding: '0 10px' }}>
-                {filteredItems[activeVideoIndex].badge} - {filteredItems[activeVideoIndex].title}
+                {filteredItems[activeVideoIndex].badge1}{filteredItems[activeVideoIndex].badge2 ? ` | ${filteredItems[activeVideoIndex].badge2}` : ''} - {filteredItems[activeVideoIndex].title}
               </h2>
             </div>
 
@@ -585,6 +601,7 @@ export default function Work() {
         </div>
       )}
 
+      {/* Modal View for Image Gallery */}
       {activeGallery && (
         <div className="modal-overlay" onClick={() => setActiveGallery(null)}>
           <div className="modal-container" onClick={e => e.stopPropagation()}>

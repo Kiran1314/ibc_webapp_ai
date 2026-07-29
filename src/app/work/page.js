@@ -206,8 +206,6 @@ export default function Work() {
     digital: ['Corporate', 'Ecommerce']
   };
 
-   
-
   const youtubeVideoData = [
     { category: 'video', badge1: 'Event', badge2: 'Testimonial', title: 'Sharjah Ladies Club', videoUrl: 'https://www.youtube.com/watch?v=uMwgrpkAqZo' },
     { category: 'video', badge1: 'Event', title: 'Agnice Iftar Event', videoUrl: 'https://www.youtube.com/watch?v=F54oY2qkvZ4' },
@@ -388,6 +386,27 @@ export default function Work() {
           font-weight: 700;
           box-shadow: 0 0 15px rgba(0, 112, 243, 0.5);
         }
+
+        /* Mobile Friendly Pagination Bar */
+        .pagination-bar {
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+          padding-bottom: 80px;
+          padding-left: clamp(22px, 6vw, 80px);
+          padding-right: clamp(22px, 6vw, 80px);
+          overflow-x: auto;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+        }
+        .pagination-bar::-webkit-scrollbar {
+          display: none;
+        }
+        @media (max-width: 768px) {
+          .pagination-bar {
+            justify-content: flex-start;
+          }
+        }
       `}</style>
 
       <div className="page active" id="pg-work" ref={containerRef} style={{ overflowX: 'clip', width: '100%' }}>
@@ -480,33 +499,32 @@ export default function Work() {
                         style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                       >
                        {cat.icon && (
-  cat.icon.startsWith('https') || cat.icon.startsWith('/') || cat.icon.includes('.') ? (
-    <img 
-      src={cat.icon} 
-      alt="Category Icon" 
-      width="16" 
-      height="12" 
-      style={{ borderRadius: '2px', objectFit: 'cover' }} 
-    />
-  ) : (
-    <span>{cat.icon}</span>
-  )
-)} {cat.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({cat.count})</span>
+                          cat.icon.startsWith('https') || cat.icon.startsWith('/') || cat.icon.includes('.') ? (
+                            <img 
+                              src={cat.icon} 
+                              alt="Category Icon" 
+                              width="16" 
+                              height="12" 
+                              style={{ borderRadius: '2px', objectFit: 'cover' }} 
+                            />
+                          ) : (
+                            <span>{cat.icon}</span>
+                          )
+                        )} {cat.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({cat.count})</span>
                       </button>
                     ))
                   ) : (
-                audioLanguages.map((lang, idx) => (
-  <button
-    key={idx}
-    className={`sub-filter-tab ${subFilter === (lang.name === 'All Languages' ? 'all' : lang.name) ? 'active-lang' : ''}`}
-    onClick={() => setSubFilter(lang.name === 'All Languages' ? 'all' : lang.name)}
-    style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-  >
-    <img src={lang.icon} alt={lang.name} width="16" height="12" style={{ borderRadius: '2px', objectFit: 'cover' }} />
-    {lang.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({lang.count})</span>
-  </button>
-))
-                    
+                    audioLanguages.map((lang, idx) => (
+                      <button
+                        key={idx}
+                        className={`sub-filter-tab ${subFilter === (lang.name === 'All Languages' ? 'all' : lang.name) ? 'active-lang' : ''}`}
+                        onClick={() => setSubFilter(lang.name === 'All Languages' ? 'all' : lang.name)}
+                        style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                      >
+                        <img src={lang.icon} alt={lang.name} width="16" height="12" style={{ borderRadius: '2px', objectFit: 'cover' }} />
+                        {lang.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({lang.count})</span>
+                      </button>
+                    ))
                   )}
                 </div>
               </div>
@@ -583,21 +601,27 @@ export default function Work() {
             )}
           </div>
 
-          {/* PAGINATION */}
+          {/* PAGINATION (Mobile Optimized) */}
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', paddingBottom: '80px', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)' }}>
+            <div className="pagination-bar">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <button
                   key={p}
                   onClick={() => { setCurrentPage(p); window.scrollTo({ top: 350, behavior: 'smooth' }); }}
                   style={{
-                    padding: '8px 16px',
+                    minWidth: '40px',
+                    height: '40px',
+                    padding: '8px 14px',
                     borderRadius: '8px',
                     background: currentPage === p ? 'linear-gradient(135deg, #0070f3, #00d4ff)' : 'rgba(255,255,255,0.05)',
                     border: currentPage === p ? '1px solid #00d4ff' : '1px solid rgba(255,255,255,0.1)',
                     color: '#fff',
                     fontWeight: '600',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                   }}
                 >
                   {p}

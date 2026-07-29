@@ -2,17 +2,189 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { photographyData } from '../work/photographyData'; 
+import { audioCategories, audioLanguages, audioTracksData } from '../work/audiotracks';
 import Image from 'next/image';
+import { GB, AE, IN, PK, FR, DE, RU, ES, CN, IT, PT, NL, TR, IR, BD, LK } from 'react-flag-icons';
+
+// Modern Mini Audio Player Component with Replay & Clean Metas
+function AudioPlayerCard({ track }) {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState('00:00');
+  const [durationTime, setDurationTime] = useState('00:45');
+
+  const formatTime = (secs) => {
+    if (isNaN(secs)) return '00:00';
+    const mins = Math.floor(secs / 60);
+    const remainSecs = Math.floor(secs % 60);
+    return `${mins < 10 ? '0' : ''}${mins}:${remainSecs < 10 ? '0' : ''}${remainSecs}`;
+  };
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch(err => console.error("Playback prevented:", err));
+    }
+  };
+
+  const restartAudio = () => {
+    if (!audioRef.current) return;
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().then(() => {
+      setIsPlaying(true);
+    }).catch(err => console.error("Replay prevented:", err));
+  };
+
+  const toggleMute = () => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+
+  const handleTimeUpdate = () => {
+    if (!audioRef.current) return;
+    const current = audioRef.current.currentTime;
+    const duration = audioRef.current.duration || 45;
+    setProgress((current / duration) * 100);
+    setCurrentTime(formatTime(current));
+    if (!isNaN(audioRef.current.duration)) {
+      setDurationTime(formatTime(audioRef.current.duration));
+    }
+  };
+
+  const subCategoryLabel = track.category || track.language || 'General';
+
+  return (
+    <div style={{
+      background: 'linear-gradient(135deg, rgba(16, 22, 38, 0.95), rgba(10, 14, 26, 0.98))',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      borderRadius: '16px',
+      padding: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      position: 'relative',
+      overflow: 'hidden',
+      boxShadow: isPlaying ? '0 0 25px rgba(0, 212, 255, 0.25), inset 0 0 10px rgba(0, 112, 243, 0.15)' : '0 8px 24px rgba(0, 0, 0, 0.3)',
+      transition: 'all 0.3s ease'
+    }}>
+      <audio 
+        ref={audioRef} 
+        src={track.audioUrl} 
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={() => setIsPlaying(false)}
+      />
+
+      {/* Top Audio Player Unit */}
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.02)',
+        border: '1px solid rgba(255, 255, 255, 0.06)',
+        borderRadius: '12px',
+        padding: '16px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '14px',
+        marginBottom: '16px'
+      }}>
+        {/* Play Button */}
+        <button 
+          onClick={togglePlay}
+          style={{
+            background: isPlaying ? '#00d4ff' : '#0b0f19',
+            border: '2px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: '12px',
+            width: '44px',
+            height: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: isPlaying ? '#000' : '#ffffff',
+            cursor: 'pointer',
+            flexShrink: 0,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          {isPlaying ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5V19L19 12L8 5Z"/></svg>
+          )}
+        </button>
+
+        {/* Progress & Waveform Track */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '3px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #0070f3, #00d4ff)', transition: 'width 0.1s linear' }} />
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#6b7280', fontFamily: 'monospace' }}>
+            <span>{currentTime}</span>
+            <span>{durationTime}</span>
+          </div>
+        </div>
+
+        {/* Replay Button */}
+        <button 
+          onClick={restartAudio}
+          title="Restart Audio"
+          style={{
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.12)',
+            borderRadius: '50%',
+            width: '32px',
+            height: '32px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#9ca3af',
+            cursor: 'pointer',
+            fontSize: '13px',
+            flexShrink: 0
+          }}
+        >
+          ↺
+        </button>
+
+        {/* Mute Button */}
+        <button 
+          onClick={toggleMute}
+          style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '15px', flexShrink: 0 }}
+        >
+          {isMuted ? '🔇' : '🔊'}
+        </button>
+      </div>
+
+      {/* Bottom Track Meta */}
+      <div>
+        <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff', marginBottom: '4px', lineHeight: '1.3' }}>
+          {track.title}
+        </h3>
+        <p style={{ fontSize: '12px', color: '#9ca3af', margin: 0 }}>
+          {subCategoryLabel} <span style={{ margin: '0 4px', color: '#4b5563' }}>•</span> Voiceover Track
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function Work() {
   const [filter, setFilter] = useState('all');
+  const [subFilterType, setSubFilterType] = useState('category'); // 'category' or 'language'
   const [subFilter, setSubFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 24;
+
   const [isMounted, setIsMounted] = useState(false);
   const [activeVideoIndex, setActiveVideoIndex] = useState(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const containerRef = useRef(null);
-
   const [activeGallery, setActiveGallery] = useState(null);
+  const containerRef = useRef(null);
 
   const filterButtons = [
     { id: 'all', label: 'All Work' },
@@ -23,99 +195,61 @@ export default function Work() {
     { id: 'digital', label: 'Digital' }
   ];
 
-  // Sub-filters mapping dictionary based on main filter selection
   const subFiltersMap = {
-    audio: ['English', 'Arabic', 'French', 'Hindi', 'Urdu'],
     video: [
-      'Event', 
-      'Testimonial', 
-      'Corporate Presentation', 
-      'Timelapse', 
-      'Drone Footage', 
-      '360° Footage', 
-      'E-Learning', 
-      'Commercial', 
-      'Animation', 
-      'Dubbing', 
-      'Augmented Reality', 
-      'Virtual Reality', 
-      'Social Media Reel'
+      'Event', 'Testimonial', 'Corporate Presentation', 'Timelapse', 
+      'Drone Footage', '360° Footage', 'E-Learning', 'Commercial', 
+      'Animation', 'Dubbing', 'Augmented Reality', 'Virtual Reality', 'Social Media Reel'
     ],
-    photo: [
-      'Industrial Photography', 
-      'Event Photography', 
-      'Facilities Photography', 
-      'Property Photography'
-    ],
+    photo: ['Industrial Photography', 'Event Photography', 'Facilities Photography', 'Property Photography'],
     ai: ['Product Campaign', 'Avatar-Based'],
     digital: ['Corporate', 'Ecommerce']
   };
 
+   
+
   const youtubeVideoData = [
-    // Event Productions
     { category: 'video', badge1: 'Event', badge2: 'Testimonial', title: 'Sharjah Ladies Club', videoUrl: 'https://www.youtube.com/watch?v=uMwgrpkAqZo' },
     { category: 'video', badge1: 'Event', title: 'Agnice Iftar Event', videoUrl: 'https://www.youtube.com/watch?v=F54oY2qkvZ4' },
     { category: 'video', badge1: 'Event', title: 'HR Summit & Expo', videoUrl: 'https://www.youtube.com/watch?v=pVkCroer8oc' },
-
-    // Corporate Videos
     { category: 'video', badge1: 'Corporate Presentation', title: 'Al Khaleej', videoUrl: 'https://www.youtube.com/watch?v=T2QXEV3bwcg' },
     { category: 'video', badge1: 'Corporate Presentation', title: 'Scitra', videoUrl: 'https://www.youtube.com/watch?v=5lLXv-CsmUk' },
     { category: 'video', badge1: 'Corporate Presentation', title: 'ACME', videoUrl: 'https://www.youtube.com/watch?v=ORqROH8rsJ4' },
-
-    // Timelapse & Drone Productions
     { category: 'video', badge1: 'Timelapse', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=m7s_bBwnkxU' },
     { category: 'video', badge1: 'Timelapse', title: 'Majid Al Futtaim', videoUrl: 'https://www.youtube.com/watch?v=BKM4ROd5nr8' },
     { category: 'video', badge1: 'Timelapse', badge2: 'Drone Footage', title: 'Enova', videoUrl: 'https://www.youtube.com/watch?v=szc17K-ZsG0' },
     { category: 'video', badge1: 'Timelapse', title: 'Scan Electro Mechanical', videoUrl: 'https://www.youtube.com/watch?v=IacUWAZwgls' },
     { category: 'video', badge1: 'Drone Footage', title: 'Drone Showcase', videoUrl: 'https://www.youtube.com/watch?v=3UHRsLUKDNg' },
     { category: 'video', badge1: 'Drone Footage', title: 'Emitech', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=cSrsOeWn5I4' },
-
-    // Testimonial Videos (Removed Sharjah Ladies Club duplicate here)
     { category: 'video', badge1: 'Testimonial', title: 'Al Sharq Hospital', videoUrl: 'https://www.youtube.com/watch?v=0Q6nbRPw6FM&t=388s' },
     { category: 'video', badge1: 'Testimonial', title: 'Canon', videoUrl: 'https://www.youtube.com/watch?v=q0LbDWQghSE' },
     { category: 'video', badge1: 'Testimonial', title: 'Power Group', videoUrl: 'https://www.youtube.com/watch?v=ijygND8UMi8' },
-
-    // 360° Videos
     { category: 'video', badge1: '360° Footage', title: '360° Experience 1', videoUrl: 'https://www.youtube.com/watch?v=3JYKRGzJ4og' },
     { category: 'video', badge1: '360° Footage', title: '360° Experience 2', videoUrl: 'https://www.youtube.com/watch?v=Kwnb64MnGbw' },
     { category: 'video', badge1: '360° Footage', title: '360° Experience 3', videoUrl: 'https://www.youtube.com/watch?v=aRTLsRoA_CI' },
-
-    // Tutorial & E-Learning
     { category: 'video', badge1: 'E-Learning', title: 'Driving Classes 1', videoUrl: 'https://www.youtube.com/watch?v=vENU9kXnZRA' },
     { category: 'video', badge1: 'E-Learning', title: 'Driving Classes 2', videoUrl: 'https://www.youtube.com/watch?v=mdSOGQcRiMQ' },
     { category: 'video', badge1: 'Tutorial', badge2: 'Animation', title: 'TCL GCC', videoUrl: 'https://www.youtube.com/watch?v=LhFD5ksDn3U' },
-
-    // Commercials
     { category: 'video', badge1: 'Commercial', title: 'Buraq Car Rental 1', videoUrl: 'https://www.youtube.com/watch?v=2zyRRmCpTSA' },
     { category: 'video', badge1: 'Commercial', badge2: 'Animation', title: 'BNC Network', videoUrl: 'https://www.youtube.com/watch?v=KZmduB-zE2E' },
     { category: 'video', badge1: 'Commercial', title: 'Buraq Car Rental 2', videoUrl: 'https://www.youtube.com/watch?v=rPLxJIXUul4' },
-
-    // Dubbing
     { category: 'video', badge1: 'Dubbing', title: 'Urdu', videoUrl: 'https://www.youtube.com/watch?v=qJxg9lSLpD8' },
     { category: 'video', badge1: 'Dubbing', title: 'English', videoUrl: 'https://www.youtube.com/watch?v=AlinFX6ePJE' },
     { category: 'video', badge1: 'Dubbing', title: 'Hindi', videoUrl: 'https://www.youtube.com/watch?v=MsVVtI_0_o4' },
-
-    // Animation
     { category: 'video', badge1: 'Animation', title: 'House Tour', videoUrl: 'https://www.youtube.com/watch?v=MTuwPmqcFKQ' },
     { category: 'video', badge1: 'Animation', title: 'Dell', videoUrl: 'https://www.youtube.com/watch?v=0BbudrtTAQY' },
     { category: 'video', badge1: 'Animation', badge2: 'E-Learning', title: 'Car Driving Test', videoUrl: 'https://www.youtube.com/watch?v=JO0kED7fNb8' },
-
-    // AR / VR
     { category: 'video', badge1: 'Augmented Reality', title: 'AR Experience 1', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=4StiZ_bQW7Q' },
     { category: 'video', badge1: 'Virtual Reality', title: 'VR Experience', videoUrl: 'https://www.youtube.com/watch?app=desktop&v=LQFUyO7pVH0' },
     { category: 'video', badge1: 'Augmented Reality', title: 'AR Experience 2', videoUrl: 'https://www.youtube.com/watch?v=z4RjEz0Wg5M' },
-
-    // Social Media Reels
     { category: 'video', badge1: 'Social Media Reel', title: 'Social Media Reel 01', videoUrl: 'https://www.youtube.com/shorts/jTyHmCd4HBU' },
     { category: 'video', badge1: 'Social Media Reel', title: 'Social Media Reel 02', videoUrl: 'https://www.youtube.com/shorts/mwwpkud5Yzc' },
     { category: 'video', badge1: 'Social Media Reel', title: 'Social Media Reel 03', videoUrl: 'https://www.youtube.com/shorts/F6OQvgGwSI0' }
   ];
 
   const structuralPortfolioItems = [
-    { category: 'audio', badge1: 'Audio', title: 'DEWA — Multilingual IVR System', desc: 'Complete 6-language IVR recording and production.' }, 
     { category: 'ai', badge1: 'AI Production', title: 'Retail Brand — AI Product Campaign', desc: '100+ AI-generated product visuals for e-commerce launch.' },
-    { category: 'digital', badge1: 'Digital', title: 'Corporate Group — E-Learning Platform', desc: 'Full LMS development with 40+ interactive modules.' },
-    { category: 'audio', badge1: 'Audio', title: 'National Brand — Jingle Production', desc: 'Original brand jingle composed and produced in 5 languages.' }
+    { category: 'digital', badge1: 'Digital', title: 'Corporate Group — E-Learning Platform', desc: 'Full LMS development with 40+ interactive modules.' }
   ];
 
   const extractYouTubeId = (url) => {
@@ -133,511 +267,364 @@ export default function Work() {
     catIdx: idx
   }));
 
-  const baseCombinedItems = filter === 'video' 
-    ? youtubeVideoData.map(item => ({ ...item, desc: '' }))
-    : [...structuralPortfolioItems, ...youtubeVideoData.map(item => ({ ...item, desc: '' })), ...photographyCategoryItems];
+  const getCombinedItems = () => {
+    if (filter === 'audio') {
+      return audioTracksData.filter(track => {
+        if (subFilter === 'all') return true;
+        if (subFilterType === 'category') {
+          return track.type === 'category' && track.category.toLowerCase() === subFilter.toLowerCase();
+        } else {
+          return track.type === 'language' && track.language.toLowerCase() === subFilter.toLowerCase();
+        }
+      });
+    }
 
-  const filteredItems = baseCombinedItems.filter(item => {
-    const matchesCategory = filter === 'all' || item.category === filter;
-    
-    const badge1Match = item.badge1 && item.badge1.toLowerCase().includes(subFilter.toLowerCase());
-    const badge2Match = item.badge2 && item.badge2.toLowerCase().includes(subFilter.toLowerCase());
-    const titleMatch = item.title && item.title.toLowerCase().includes(subFilter.toLowerCase());
+    if (filter === 'video') {
+      return youtubeVideoData.filter(item => {
+        const matchesSub = subFilter === 'all' || 
+          (item.badge1 && item.badge1.toLowerCase().includes(subFilter.toLowerCase())) ||
+          (item.badge2 && item.badge2.toLowerCase().includes(subFilter.toLowerCase())) ||
+          (item.title && item.title.toLowerCase().includes(subFilter.toLowerCase()));
+        return matchesSub;
+      });
+    }
 
-    const matchesSub = subFilter === 'all' || badge1Match || badge2Match || titleMatch;
-    
-    return matchesCategory && matchesSub;
-  });
+    const baseItems = [...structuralPortfolioItems, ...youtubeVideoData, ...photographyCategoryItems];
+    return baseItems.filter(item => {
+      const matchesCategory = filter === 'all' || item.category === filter;
+      const matchesSub = subFilter === 'all' || 
+        (item.badge1 && item.badge1.toLowerCase().includes(subFilter.toLowerCase())) ||
+        (item.badge2 && item.badge2.toLowerCase().includes(subFilter.toLowerCase())) ||
+        (item.title && item.title.toLowerCase().includes(subFilter.toLowerCase()));
+      return matchesCategory && matchesSub;
+    });
+  };
+
+  const allFilteredItems = getCombinedItems();
+  const totalPages = Math.ceil(allFilteredItems.length / itemsPerPage);
+  const paginatedItems = allFilteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    if (window.scrollY <= 10) {
-      document.body.classList.add('home-hero-top');
-    } else {
-      document.body.classList.remove('home-hero-top');
-    }
-
-    const handleScrollMetrics = () => {
-      if (window.scrollY > 10) {
-        document.body.classList.remove('home-hero-top');
-      } else {
-        document.body.classList.add('home-hero-top');
-      }
-    };
-    window.addEventListener('scroll', handleScrollMetrics);
-
-    return () => {
-      window.removeEventListener('scroll', handleScrollMetrics);
-      document.body.classList.remove('home-hero-top');
-    };
-  }, []);
-
-  useEffect(() => {
-    const revealElements = containerRef.current?.querySelectorAll('.reveal');
-    if (!revealElements || revealElements.length === 0) return;
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -100px 0px',
-      threshold: 0.05
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-        } else {
-          entry.target.classList.remove('in-view');
-        }
-      });
-    }, observerOptions);
-
-    revealElements.forEach((el) => observer.observe(el));
-
-    return () => {
-      revealElements.forEach((el) => observer.unobserve(el));
-    };
-  }, [filter, subFilter]);
-
-  const openVideoModal = (index) => {
-    const item = filteredItems[index];
-    if (item && item.category === 'video' && item.videoUrl) {
-      setActiveVideoIndex(index);
-    } else {
-      console.error("Video data missing for index:", index);
-    }
-  };
-
-  const closeVideoModal = () => {
-    setActiveVideoIndex(null);
-  };
-
-  const navigateModalPrev = (e) => {
-    e.stopPropagation();
-    if (activeVideoIndex === null) return;
-    
-    let targetIdx = activeVideoIndex - 1;
-    while (targetIdx >= 0) {
-      if (filteredItems[targetIdx].category === 'video') {
-        setActiveVideoIndex(targetIdx);
-        return;
-      }
-      targetIdx--;
-    }
-  };
-
-  const navigateModalNext = (e) => {
-    e.stopPropagation();
-    if (activeVideoIndex === null) return;
-
-    let targetIdx = activeVideoIndex + 1;
-    while (targetIdx < filteredItems.length) {
-      if (filteredItems[targetIdx].category === 'video') {
-        setActiveVideoIndex(targetIdx);
-        return;
-      }
-      targetIdx++;
-    }
-  };
-
-  const handlePhotoClick = (item) => {
-    if (item.isGallery && photographyData[item.catIdx]) {
-      setActiveGallery({ catIdx: item.catIdx, imgIdx: 0 });
-    } else {
-      console.error("Gallery data not found for:", item);
-    }
-  };
+    setCurrentPage(1);
+  }, [filter, subFilterType, subFilter]);
 
   return (
     <>
       <title>Work Samples | IBC Studio</title>
       <meta name="description" content="Browse our curated selection of high-impact visual campaigns, corporate films, and multilingual audio architectures produced for UAE’s leading brands." />
-      <meta name="keywords" content="video production showcase uae, corporate film portfolio dubai, professional photography samples" />
       
       <style>{`
-        @keyframes fadeInUpModal {
-          0% { opacity: 0; transform: translateY(30px); }
-          100% { opacity: 1; transform: translateY(0); }
+        /* Main Category Pill Buttons (Fully Rounded) */
+        .main-wfbtn {
+          white-space: nowrap;
+          flex-shrink: 0;
+          padding: 10px 22px;
+          border-radius: 50px;
+          font-weight: 600;
+          font-size: 14px;
+          cursor: pointer;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #a0aec0;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .main-wfbtn:hover, .main-wfbtn.active {
+          background: linear-gradient(135deg, #0070f3, #00d4ff);
+          border-color: #00d4ff;
+          color: #ffffff;
+          box-shadow: 0 0 20px rgba(0, 112, 243, 0.5);
+        }
+
+        /* Subcategory Tabs: Horizontal scroll on mobile, wrapped on desktop */
+        .sub-filters-container {
+          display: flex;
+          gap: 6px;
+          overflow-x: auto;
+          scrollbar-width: none;
+          padding-bottom: 4px;
+        }
+        @media (min-width: 1024px) {
+          .sub-filters-container {
+            flex-wrap: wrap;
+            overflow-x: visible;
+            max-height: 120px;
+            overflow-y: auto;
+          }
+        }
+
+        /* Subcategory Tab Styling (Square Rounded Corners) */
         .sub-filter-tab {
           white-space: nowrap;
           flex-shrink: 0;
           font-size: 12px;
           font-weight: 500;
-          padding: 8px 14px;
+          padding: 7px 14px;
           border-radius: 8px;
-          background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.1);
           color: #a0aec0;
           cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.2s ease;
         }
         .sub-filter-tab:hover {
-          background: linear-gradient(135deg, rgba(0, 112, 243, 0.25), rgba(0, 212, 255, 0.25));
-          border-color: rgba(0, 112, 243, 0.6);
+          border-color: rgba(255, 255, 255, 0.3);
           color: #ffffff;
-          box-shadow: 0 0 15px rgba(0, 112, 243, 0.4), inset 0 0 10px rgba(0, 212, 255, 0.2);
-          transform: translateY(-1px);
         }
-        .sub-filter-tab.active {
-          background: linear-gradient(135deg, #0070f3, #00d4ff);
-          border-color: #00d4ff;
-          color: #ffffff;
-          box-shadow: 0 0 20px rgba(0, 112, 243, 0.6);
+        .sub-filter-tab.active-cat {
+          background: #00d4ff !important;
+          border-color: #00d4ff !important;
+          color: #000000 !important;
+          font-weight: 700;
+          box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+        .sub-filter-tab.active-lang {
+          background: #0070f3 !important;
+          border-color: #00d4ff !important;
+          color: #ffffff !important;
+          font-weight: 700;
+          box-shadow: 0 0 15px rgba(0, 112, 243, 0.5);
         }
       `}</style>
 
-      <div className="page active" id="pg-work" ref={containerRef}>
-        <div 
-          className="pw" 
-          style={{ 
-            width: '100%',
-            opacity: isMounted ? 1 : 0,
-            transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
-            transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
-          }}
-        >
+      <div className="page active" id="pg-work" ref={containerRef} style={{ overflowX: 'clip', width: '100%' }}>
+        <div className="pw" style={{ width: '100%', opacity: isMounted ? 1 : 0, transition: 'opacity 0.65s ease' }}>
           
-          <div 
-            className="sec reveal in-view" 
-            style={{ 
-              paddingTop: 'clamp(120px, 12vh, 160px)', 
-              paddingBottom: '36px', 
-              width: '100%',
-              paddingLeft: 'clamp(22px, 6vw, 80px)',
-              paddingRight: 'clamp(22px, 6vw, 80px)'
-            }}
-          >
+          {/* Header Section */}
+          <div className="sec" style={{ paddingTop: 'clamp(120px, 15vh, 160px)', paddingBottom: '24px', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)' }}>
             <div className="lbl">Portfolio</div>
-            <h1 
-              className="title" 
-              style={{ 
-                marginBottom: '28px', 
-                wordBreak: 'break-word', 
-                overflowWrap: 'break-word',
-                fontSize: 'clamp(32px, 5vw, 50px)', 
-                lineHeight: '1.1' 
-              }}
-            >
+            <h1 className="title" style={{ marginBottom: '16px', fontSize: 'clamp(32px, 5vw, 50px)' }}>
               Work That Speaks
             </h1>
-            <p className="desc" style={{ width: '100%', maxWidth: '540px', marginBottom: 0, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+            <p className="desc" style={{ maxWidth: '540px', marginBottom: 0 }}>
               A curated selection of projects across our core service areas.
             </p>
           </div>
 
-          <div 
-            className="wfilter reveal in-view" 
-            style={{ 
-              width: '100%', 
-              display: 'flex', 
-              gap: '9px', 
-              overflowX: 'auto', 
-              WebkitOverflowScrolling: 'touch',
-              paddingTop: '4px', 
-              paddingBottom: '10px',
-              paddingLeft: 'clamp(22px, 6vw, 80px)',
-              paddingRight: 'clamp(22px, 6vw, 80px)',
-              position: 'relative',
-              zIndex: 5 
-            }}
-          >
-            {filterButtons.map((btn) => (
-              <button
-                key={btn.id}
-                className={`wfbtn ${filter === btn.id ? 'active' : ''}`}
-                onClick={() => {
-                  setFilter(btn.id);
-                  setSubFilter('all');
-                }}
-                style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
-              >
-                {btn.label}
-              </button>
-            ))}
+          {/* STANDALONE STICKY FILTER SECTION */}
+          <div style={{
+            position: 'sticky',
+            top: '64px',
+            zIndex: 999,
+            background: 'rgba(10, 14, 26, 0.95)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            paddingTop: '14px',
+            paddingBottom: '14px',
+            paddingLeft: 'clamp(22px, 6vw, 80px)',
+            paddingRight: 'clamp(22px, 6vw, 80px)',
+            marginBottom: '35px',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+          }}>
+            {/* Main Category Buttons (Full Rounded Pills) */}
+            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', scrollbarWidth: 'none' }}>
+              {filterButtons.map((btn) => (
+                <button
+                  key={btn.id}
+                  className={`main-wfbtn ${filter === btn.id ? 'active' : ''}`}
+                  onClick={() => {
+                    setFilter(btn.id);
+                    setSubFilter('all');
+                    setSubFilterType('category');
+                  }}
+                >
+                  {btn.label}
+                </button>
+              ))}
+            </div>
+
+            {/* AUDIO SUB-FILTERS (Categories & Languages with Real Emoji Flags) */}
+            {filter === 'audio' && (
+              <div style={{ marginTop: '8px' }}>
+                <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                  <button 
+                    onClick={() => { setSubFilterType('category'); setSubFilter('all'); }}
+                    style={{
+                      padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer',
+                      background: subFilterType === 'category' ? '#00d4ff' : 'rgba(255,255,255,0.05)',
+                      color: subFilterType === 'category' ? '#000000' : '#ffffff',
+                      border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '6px',
+                      boxShadow: subFilterType === 'category' ? '0 0 15px rgba(0, 212, 255, 0.4)' : 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span>🎧</span> CATEGORIES {subFilterType === 'category' ? '▲' : '▼'}
+                  </button>
+                  <button 
+                    onClick={() => { setSubFilterType('language'); setSubFilter('all'); }}
+                    style={{
+                      padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer',
+                      background: subFilterType === 'language' ? '#0070f3' : 'rgba(255,255,255,0.05)',
+                      color: '#ffffff',
+                      border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '6px',
+                      boxShadow: subFilterType === 'language' ? '0 0 15px rgba(0, 112, 243, 0.5)' : 'none',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span>🔊</span> LANGUAGES {subFilterType === 'language' ? '▲' : '▼'}
+                  </button>
+                </div>
+
+                <div className="sub-filters-container">
+                  {subFilterType === 'category' ? (
+                    audioCategories.map((cat, idx) => (
+                      <button
+                        key={idx}
+                        className={`sub-filter-tab ${subFilter === (cat.name === 'All Categories' ? 'all' : cat.name) ? 'active-cat' : ''}`}
+                        onClick={() => setSubFilter(cat.name === 'All Categories' ? 'all' : cat.name)}
+                        style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+                      >
+                        <span>{cat.icon}</span> {cat.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({cat.count})</span>
+                      </button>
+                    ))
+                  ) : (
+                audioLanguages.map((lang, idx) => (
+  <button
+    key={idx}
+    className={`sub-filter-tab ${subFilter === (lang.name === 'All Languages' ? 'all' : lang.name) ? 'active-lang' : ''}`}
+    onClick={() => setSubFilter(lang.name === 'All Languages' ? 'all' : lang.name)}
+    style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+  >
+    <img src={lang.icon} alt={lang.name} width="16" height="12" style={{ borderRadius: '2px', objectFit: 'cover' }} />
+    {lang.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({lang.count})</span>
+  </button>
+))
+                    
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* OTHER SUB-FILTERS (Video, Photo, etc.) */}
+            {filter !== 'all' && filter !== 'audio' && subFiltersMap[filter] && (
+              <div className="sub-filters-container" style={{ marginTop: '10px' }}>
+                <button className={`sub-filter-tab ${subFilter === 'all' ? 'active-cat' : ''}`} onClick={() => setSubFilter('all')}>
+                  All
+                </button>
+                {subFiltersMap[filter].map((sub, idx) => (
+                  <button key={idx} className={`sub-filter-tab ${subFilter === sub ? 'active-cat' : ''}`} onClick={() => setSubFilter(sub)}>
+                    {sub}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {filter !== 'all' && subFiltersMap[filter] && (
-            <div 
-              className="wfilter-sub reveal in-view" 
-              style={{ 
-                width: '100%', 
-                display: 'flex', 
-                gap: '8px', 
-                overflowX: 'auto', 
-                WebkitOverflowScrolling: 'touch',
-                paddingTop: '4px', 
-                paddingBottom: '20px',
-                paddingLeft: 'clamp(22px, 6vw, 80px)',
-                paddingRight: 'clamp(22px, 6vw, 80px)',
-                position: 'relative',
-                zIndex: 5 
-              }}
-            >
-              <button
-                className={`sub-filter-tab ${subFilter === 'all' ? 'active' : ''}`}
-                onClick={() => setSubFilter('all')}
-              >
-                All {filterButtons.find(b => b.id === filter)?.label}
-              </button>
-              {subFiltersMap[filter].map((sub, idx) => (
+          {/* GRID SECTION */}
+          <div style={{ 
+            paddingBottom: '60px', 
+            paddingLeft: 'clamp(22px, 6vw, 80px)', 
+            paddingRight: 'clamp(22px, 6vw, 80px)'
+          }}>
+            {filter === 'audio' ? (
+              <div className="grid grid-cols-2 lg:grid-cols-4" style={{ display: 'grid', gap: '20px' }}>
+                {paginatedItems.map((track, index) => (
+                  <AudioPlayerCard key={track.id || index} track={track} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ display: 'grid', gap: '30px' }}>
+                {paginatedItems.map((item, index) => {
+                  const videoId = item.category === 'video' ? extractYouTubeId(item.videoUrl) : null;
+                  const imgSrc = item.isGallery 
+                    ? photographyData[item.catIdx].images[0] 
+                    : (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://placehold.co/600x400/000000/FFFFFF/png?text=IBC+Studio');
+
+                  return (
+                    <div 
+                      key={index} 
+                      onClick={() => {
+                        if (item.category === 'video') {
+                          const realIndex = (currentPage - 1) * itemsPerPage + index;
+                          setActiveVideoIndex(realIndex);
+                        }
+                        if (item.isGallery) {
+                          setActiveGallery({ catIdx: item.catIdx, imgIdx: 0 });
+                        }
+                      }}
+                      style={{ cursor: 'pointer', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+                    >
+                      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', backgroundColor: '#1a2035' }}>
+                        <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 10, display: 'flex', gap: '6px' }}>
+                          {item.badge1 && <span style={{ fontSize: '11px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', borderRadius: '12px' }}>{item.badge1}</span>}
+                          {item.badge2 && <span style={{ fontSize: '11px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', borderRadius: '12px' }}>{item.badge2}</span>}
+                        </div>
+                        <Image src={imgSrc} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
+                        {item.category === 'video' && (
+                          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#0070f3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5V19L19 12L8 5Z" fill="#ffffff" /></svg>
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ padding: '16px' }}>
+                        <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#fff' }}>{item.title}</h3>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* PAGINATION */}
+          {totalPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', paddingBottom: '80px', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)' }}>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <button
-                  key={idx}
-                  className={`sub-filter-tab ${subFilter === sub ? 'active' : ''}`}
-                  onClick={() => setSubFilter(sub)}
+                  key={p}
+                  onClick={() => { setCurrentPage(p); window.scrollTo({ top: 350, behavior: 'smooth' }); }}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    background: currentPage === p ? 'linear-gradient(135deg, #0070f3, #00d4ff)' : 'rgba(255,255,255,0.05)',
+                    border: currentPage === p ? '1px solid #00d4ff' : '1px solid rgba(255,255,255,0.1)',
+                    color: '#fff',
+                    fontWeight: '600',
+                    cursor: 'pointer'
+                  }}
                 >
-                  {sub}
+                  {p}
                 </button>
               ))}
             </div>
           )}
 
-        <div 
-          className="wgrid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20 px-[clamp(22px,6vw,80px)]" 
-          style={{ 
-            width: '100%', 
-            paddingBottom: '80px',
-            paddingLeft: 'clamp(22px, 6vw, 80px)',
-            paddingRight: 'clamp(22px, 6vw, 80px)',
-            display: 'grid', 
-            gap: '30px'
-          }}
-        >
-          {filteredItems.map((item, index) => {
-            const videoId = item.category === 'video' ? extractYouTubeId(item.videoUrl) : null;
-            const imgSrc = item.isGallery 
-              ? photographyData[item.catIdx].images[0] 
-              : (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://placehold.co/600x400/000000/FFFFFF/png?text=No+Video');
-
-            return (
-              <div 
-                key={`${filter}-${subFilter}-${index}`} 
-                className="witem reveal"
-                onClick={() => {
-                  if (item.category === 'video') openVideoModal(index);
-                  if (item.isGallery) handlePhotoClick(item);
-                }}
-                style={{ 
-                  display: 'block', 
-                  width: '100%', 
-                  cursor: 'pointer',
-                  pointerEvents: 'auto' 
-                }}
-              >
-                <div 
-                  className="wthumb" 
-                  style={{ 
-                    position: 'relative',
-                    width: '100%',
-                    aspectRatio: '16/9',
-                    borderRadius: '8px',
-                    overflow: 'hidden',
-                    backgroundColor: '#1a2035'
-                  }}
-                >
-                  {/* Updated Multi-span Badge Container */}
-                  <div style={{
-                    position: 'absolute', top: '12px', left: '12px', zIndex: 20,
-                    display: 'flex', gap: '8px'
-                  }}>
-                    {item.badge1 && (
-                      <span style={{
-                        fontSize: '13px', padding: '6px 14px', fontWeight: '600',
-                        backgroundColor: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(4px)',
-                        color: '#fff', borderRadius: '20px'
-                      }}>
-                        {item.badge1}
-                      </span>
-                    )}
-                    {item.badge2 && (
-                      <span style={{
-                        fontSize: '13px', padding: '6px 14px', fontWeight: '600',
-                        backgroundColor: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(4px)',
-                        color: '#fff', borderRadius: '20px'
-                      }}>
-                        {item.badge2}
-                      </span>
-                    )}
-                  </div>
-
-                  <Image 
-                    src={imgSrc} 
-                    alt={item.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: 'cover' }}
-                  />
-
-                  {item.category === 'video' && (
-                    <div style={{
-                      position: 'absolute', top: '50%', left: '50%',
-                      transform: 'translate(-50%, -50%)', zIndex: 10,
-                      width: '56px', height: '56px', borderRadius: '50%',
-                      backgroundColor: '#0070f3', display: 'flex',
-                      alignItems: 'center', justifyContent: 'center',
-                      pointerEvents: 'none'
-                    }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                        <path d="M8 5V19L19 12L8 5Z" fill="#ffffff" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="wi" style={{ marginTop: '16px' }}>
-                  <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '6px' }}>{item.title}</h3>
-                </div>
-              </div>
-            );
-          })}
-        </div>
         </div>
       </div>
 
-      {/* Modal View for Videos */}
+      {/* Video Modal */}
       {activeVideoIndex !== null && (
-        <div 
-          onClick={closeVideoModal}
-          style={{
-            position: 'fixed',
-            top: 0, left: 0,
-            width: '100vw', height: '100vh',
-            backgroundColor: 'rgba(5, 8, 16, 0.98)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backdropFilter: 'blur(12px)',
-            padding: '10px'
-          }}
-        >
-          <button 
-            onClick={closeVideoModal}
-            style={{
-              position: 'absolute',
-              top: '20px', right: '20px',
-              background: 'none', border: 'none',
-              color: '#ffffff', fontSize: '40px',
-              cursor: 'pointer', zIndex: 10001
-            }}
-          >
-            &times;
-          </button>
-
-          <div 
-            style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
-              width: '100%', 
-              maxWidth: '1600px', 
-              position: 'relative' 
-            }}
-          >
-            <button
-              onClick={navigateModalPrev}
-              disabled={!filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video')}
-              style={{
-                position: 'absolute', left: '10px', zIndex: 10002,
-                background: 'rgba(255, 255, 255, 0.15)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '50%', width: '50px', height: '50px',
-                color: '#ffffff', cursor: 'pointer',
-                visibility: filteredItems.slice(0, activeVideoIndex).some(i => i.category === 'video') ? 'visible' : 'hidden'
-              }}
-            >&#10094;</button>
-
-            <div 
-              onClick={(e) => e.stopPropagation()}
-              style={{ 
-                width: '100%', 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center' 
-              }}
-            >
-              <div style={{ 
-                width: '100%', 
-                aspectRatio: '16/9', 
-                maxHeight: '85vh', 
-                background: '#000', 
-                borderRadius: '8px', 
-                overflow: 'hidden' 
-              }}>
-                {filteredItems[activeVideoIndex].videoUrl && (
-                  <iframe
-                    width="100%" height="100%"
-                    src={`https://www.youtube-nocookie.com/embed/${extractYouTubeId(filteredItems[activeVideoIndex].videoUrl)}?autoplay=1&origin=${typeof window !== 'undefined' ? window.location.origin : ''}`}
-                    title={filteredItems[activeVideoIndex].title}
-                    frameBorder="0"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  />
-                )}
-              </div>
-
-              <h2 style={{ color: '#ffffff', marginTop: '16px', fontSize: '18px', textAlign: 'center', padding: '0 10px' }}>
-                {filteredItems[activeVideoIndex].badge1}{filteredItems[activeVideoIndex].badge2 ? ` | ${filteredItems[activeVideoIndex].badge2}` : ''} - {filteredItems[activeVideoIndex].title}
-              </h2>
-            </div>
-
-            <button
-              onClick={navigateModalNext}
-              disabled={!filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video')}
-              style={{
-                position: 'absolute', right: '10px', zIndex: 10002,
-                background: 'rgba(255, 255, 255, 0.15)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '50%', width: '50px', height: '50px',
-                color: '#ffffff', cursor: 'pointer',
-                visibility: filteredItems.slice(activeVideoIndex + 1).some(i => i.category === 'video') ? 'visible' : 'hidden'
-              }}
-            >&#10095;</button>
+        <div onClick={() => setActiveVideoIndex(null)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(5, 8, 16, 0.95)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: '1000px', aspectRatio: '16/9', background: '#000', borderRadius: '12px', overflow: 'hidden', position: 'relative' }}>
+            <button onClick={() => setActiveVideoIndex(null)} style={{ position: 'absolute', top: '15px', right: '15px', background: 'none', border: 'none', color: '#fff', fontSize: '32px', cursor: 'pointer', zIndex: 100 }}>&times;</button>
+            <iframe
+              width="100%" height="100%"
+              src={`https://www.youtube-nocookie.com/embed/${extractYouTubeId(allFilteredItems[activeVideoIndex]?.videoUrl)}?autoplay=1`}
+              title="Video Player"
+              frameBorder="0"
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            />
           </div>
         </div>
       )}
 
-      {/* Modal View for Image Gallery */}
+      {/* Photo Gallery Modal */}
       {activeGallery && (
-        <div className="modal-overlay" onClick={() => setActiveGallery(null)}>
-          <div className="modal-container" onClick={e => e.stopPropagation()}>
-            
-            <button className="close-btn" onClick={() => setActiveGallery(null)}>&times;</button>
-            
-            <div className="main-view">
-              <Image 
-                src={photographyData[activeGallery.catIdx].images[activeGallery.imgIdx]} 
-                alt="Large View" 
-                fill 
-                sizes="(max-width: 1200px) 90vw, 1100px"
-                style={{ objectFit: 'contain' }} 
-              />
-              
-              <button 
-                className="nav-btn prev" 
-                onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: Math.max(0, activeGallery.imgIdx - 1)})}}
-              >&#10094;</button>
-              <button 
-                className="nav-btn next" 
-                onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: Math.min(photographyData[activeGallery.catIdx].images.length - 1, activeGallery.imgIdx + 1)})}}
-              >&#10095;</button>
-            </div>
-
-            <div className="thumb-sidebar">
-              {photographyData[activeGallery.catIdx].images.map((img, i) => (
-                <div 
-                  key={i} 
-                  className={`thumb-item ${activeGallery.imgIdx === i ? 'active' : ''}`}
-                  onClick={(e) => { e.stopPropagation(); setActiveGallery({...activeGallery, imgIdx: i})}}
-                >
-                  <Image src={img} alt="Thumbnail" fill sizes="120px" style={{ objectFit: 'cover' }} />
-                </div>
-              ))}
-            </div>
+        <div onClick={() => setActiveGallery(null)} style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ position: 'relative', width: '90vw', height: '80vh' }}>
+            <button onClick={() => setActiveGallery(null)} style={{ position: 'absolute', top: 10, right: 10, color: '#fff', fontSize: '36px', background: 'none', border: 'none', cursor: 'pointer', zIndex: 100 }}>&times;</button>
+            <Image 
+              src={photographyData[activeGallery.catIdx].images[activeGallery.imgIdx]} 
+              alt="Gallery View" 
+              fill 
+              style={{ objectFit: 'contain' }} 
+            />
           </div>
         </div>
       )}

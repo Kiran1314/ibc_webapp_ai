@@ -479,7 +479,19 @@ export default function Work() {
                         onClick={() => setSubFilter(cat.name === 'All Categories' ? 'all' : cat.name)}
                         style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                       >
-                        <span>{cat.icon}</span> {cat.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({cat.count})</span>
+                       {cat.icon && (
+  cat.icon.startsWith('https') || cat.icon.startsWith('/') || cat.icon.includes('.') ? (
+    <img 
+      src={cat.icon} 
+      alt="Category Icon" 
+      width="16" 
+      height="12" 
+      style={{ borderRadius: '2px', objectFit: 'cover' }} 
+    />
+  ) : (
+    <span>{cat.icon}</span>
+  )
+)} {cat.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({cat.count})</span>
                       </button>
                     ))
                   ) : (
@@ -522,7 +534,7 @@ export default function Work() {
             paddingRight: 'clamp(22px, 6vw, 80px)'
           }}>
             {filter === 'audio' ? (
-              <div className="grid grid-cols-2 lg:grid-cols-4" style={{ display: 'grid', gap: '20px' }}>
+              <div className="grid grid-cols-1 lg:grid-cols-4" style={{ display: 'grid', gap: '20px' }}>
                 {paginatedItems.map((track, index) => (
                   <AudioPlayerCard key={track.id || index} track={track} />
                 ))}

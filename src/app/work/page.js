@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { photographyData } from '../work/photographyData'; 
 import { audioCategories, audioLanguages, audioTracksData } from '../work/audiotracks';
 import Image from 'next/image';
-import { GB, AE, IN, PK, FR, DE, RU, ES, CN, IT, PT, NL, TR, IR, BD, LK } from 'react-flag-icons';
+ 
+
 
 // Modern Mini Audio Player Component with Replay & Clean Metas
 function AudioPlayerCard({ track }) {

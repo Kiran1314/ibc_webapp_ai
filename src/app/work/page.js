@@ -1,11 +1,10 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { photographyData } from '../work/photographyData'; 
 import { audioCategories, audioLanguages, audioTracksData } from '../work/audiotracks';
 import Image from 'next/image';
- 
-
 
 // Modern Mini Audio Player Component with Replay & Clean Metas
 function AudioPlayerCard({ track }) {
@@ -186,6 +185,7 @@ export default function Work() {
   const [activeVideoIndex, setActiveVideoIndex] = useState(null);
   const [activeGallery, setActiveGallery] = useState(null);
   const containerRef = useRef(null);
+  const stickyFilterRef = useRef(null); // Ref for automatic scrolling to top of sticky filter bar
 
   const filterButtons = [
     { id: 'all', label: 'All Work' },
@@ -311,13 +311,26 @@ export default function Work() {
     setCurrentPage(1);
   }, [filter, subFilterType, subFilter]);
 
+  // Handler to change main category and automatically scroll to the sticky filter bar
+  const handleMainCategorySelect = (btnId) => {
+    setFilter(btnId);
+    setSubFilter('all');
+    setSubFilterType('category');
+
+    if (stickyFilterRef.current) {
+      const yOffset = -64; // Navbar height offset
+      const element = stickyFilterRef.current;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <title>Work Samples | IBC Studio</title>
       <meta name="description" content="Browse our curated selection of high-impact visual campaigns, corporate films, and multilingual audio architectures produced for UAE’s leading brands." />
       
       <style>{`
-        /* Main Category Pill Buttons (Fully Rounded) */
         .main-wfbtn {
           white-space: nowrap;
           flex-shrink: 0;
@@ -338,7 +351,6 @@ export default function Work() {
           box-shadow: 0 0 20px rgba(0, 112, 243, 0.5);
         }
 
-        /* Subcategory Tabs: Horizontal scroll on mobile, wrapped on desktop */
         .sub-filters-container {
           display: flex;
           gap: 6px;
@@ -355,7 +367,6 @@ export default function Work() {
           }
         }
 
-        /* Subcategory Tab Styling (Square Rounded Corners) */
         .sub-filter-tab {
           white-space: nowrap;
           flex-shrink: 0;
@@ -388,7 +399,6 @@ export default function Work() {
           box-shadow: 0 0 15px rgba(0, 112, 243, 0.5);
         }
 
-        /* Mobile Friendly Pagination Bar */
         .pagination-bar {
           display: flex;
           justify-content: center;
@@ -398,22 +408,15 @@ export default function Work() {
           padding-right: clamp(22px, 6vw, 80px);
           overflow-x: auto;
           scrollbar-width: none;
-          -webkit-overflow-scrolling: touch;
         }
         .pagination-bar::-webkit-scrollbar {
           display: none;
-        }
-        @media (max-width: 768px) {
-          .pagination-bar {
-            justify-content: flex-start;
-          }
         }
       `}</style>
 
       <div className="page active" id="pg-work" ref={containerRef} style={{ overflowX: 'clip', width: '100%' }}>
         <div className="pw" style={{ width: '100%', opacity: isMounted ? 1 : 0, transition: 'opacity 0.65s ease' }}>
           
-          {/* Header Section */}
           <div className="sec" style={{ paddingTop: 'clamp(120px, 15vh, 160px)', paddingBottom: '24px', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)' }}>
             <div className="lbl">Portfolio</div>
             <h1 className="title" style={{ marginBottom: '16px', fontSize: 'clamp(32px, 5vw, 50px)' }}>
@@ -425,7 +428,7 @@ export default function Work() {
           </div>
 
           {/* STANDALONE STICKY FILTER SECTION */}
-          <div style={{
+          <div ref={stickyFilterRef} style={{
             position: 'sticky',
             top: '64px',
             zIndex: 999,
@@ -441,174 +444,210 @@ export default function Work() {
             marginBottom: '35px',
             boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
           }}>
-            {/* Main Category Buttons (Full Rounded Pills) */}
             <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', scrollbarWidth: 'none' }}>
               {filterButtons.map((btn) => (
                 <button
                   key={btn.id}
                   className={`main-wfbtn ${filter === btn.id ? 'active' : ''}`}
-                  onClick={() => {
-                    setFilter(btn.id);
-                    setSubFilter('all');
-                    setSubFilterType('category');
-                  }}
+                  onClick={() => handleMainCategorySelect(btn.id)}
                 >
                   {btn.label}
                 </button>
               ))}
             </div>
 
-            {/* AUDIO SUB-FILTERS (Categories & Languages with Real Emoji Flags) */}
-            {filter === 'audio' && (
-              <div style={{ marginTop: '8px' }}>
-                <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                  <button 
-                    onClick={() => { setSubFilterType('category'); setSubFilter('all'); }}
-                    style={{
-                      padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer',
-                      background: subFilterType === 'category' ? '#00d4ff' : 'rgba(255,255,255,0.05)',
-                      color: subFilterType === 'category' ? '#000000' : '#ffffff',
-                      border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '6px',
-                      boxShadow: subFilterType === 'category' ? '0 0 15px rgba(0, 212, 255, 0.4)' : 'none',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <span>🎧</span> CATEGORIES {subFilterType === 'category' ? '▲' : '▼'}
-                  </button>
-                  <button 
-                    onClick={() => { setSubFilterType('language'); setSubFilter('all'); }}
-                    style={{
-                      padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer',
-                      background: subFilterType === 'language' ? '#0070f3' : 'rgba(255,255,255,0.05)',
-                      color: '#ffffff',
-                      border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '6px',
-                      boxShadow: subFilterType === 'language' ? '0 0 15px rgba(0, 112, 243, 0.5)' : 'none',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <span>🔊</span> LANGUAGES {subFilterType === 'language' ? '▲' : '▼'}
-                  </button>
-                </div>
-
-                <div className="sub-filters-container">
-                  {subFilterType === 'category' ? (
-                    audioCategories.map((cat, idx) => (
-                      <button
-                        key={idx}
-                        className={`sub-filter-tab ${subFilter === (cat.name === 'All Categories' ? 'all' : cat.name) ? 'active-cat' : ''}`}
-                        onClick={() => setSubFilter(cat.name === 'All Categories' ? 'all' : cat.name)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
-                      >
-                       {cat.icon && (
-                          cat.icon.startsWith('https') || cat.icon.startsWith('/') || cat.icon.includes('.') ? (
-                            <img 
-                              src={cat.icon} 
-                              alt="Category Icon" 
-                              width="16" 
-                              height="12" 
-                              style={{ borderRadius: '2px', objectFit: 'cover' }} 
-                            />
-                          ) : (
-                            <span>{cat.icon}</span>
-                          )
-                        )} {cat.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({cat.count})</span>
-                      </button>
-                    ))
-                  ) : (
-                    audioLanguages.map((lang, idx) => (
-                      <button
-                        key={idx}
-                        className={`sub-filter-tab ${subFilter === (lang.name === 'All Languages' ? 'all' : lang.name) ? 'active-lang' : ''}`}
-                        onClick={() => setSubFilter(lang.name === 'All Languages' ? 'all' : lang.name)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-                      >
-                        <img src={lang.icon} alt={lang.name} width="16" height="12" style={{ borderRadius: '2px', objectFit: 'cover' }} />
-                        {lang.name} <span style={{ opacity: 0.7, fontSize: '11px' }}>({lang.count})</span>
-                      </button>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* OTHER SUB-FILTERS (Video, Photo, etc.) */}
-            {filter !== 'all' && filter !== 'audio' && subFiltersMap[filter] && (
-              <div className="sub-filters-container" style={{ marginTop: '10px' }}>
-                <button className={`sub-filter-tab ${subFilter === 'all' ? 'active-cat' : ''}`} onClick={() => setSubFilter('all')}>
-                  All
-                </button>
-                {subFiltersMap[filter].map((sub, idx) => (
-                  <button key={idx} className={`sub-filter-tab ${subFilter === sub ? 'active-cat' : ''}`} onClick={() => setSubFilter(sub)}>
-                    {sub}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* GRID SECTION */}
-          <div style={{ 
-            paddingBottom: '60px', 
-            paddingLeft: 'clamp(22px, 6vw, 80px)', 
-            paddingRight: 'clamp(22px, 6vw, 80px)'
-          }}>
-            {filter === 'audio' ? (
-              <div className="grid grid-cols-1 lg:grid-cols-4" style={{ display: 'grid', gap: '20px' }}>
-                {paginatedItems.map((track, index) => (
-                  <AudioPlayerCard key={track.id || index} track={track} />
-                ))}
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ display: 'grid', gap: '30px' }}>
-                {paginatedItems.map((item, index) => {
-                  const videoId = item.category === 'video' ? extractYouTubeId(item.videoUrl) : null;
-                  const imgSrc = item.isGallery 
-                    ? photographyData[item.catIdx].images[0] 
-                    : (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://placehold.co/600x400/000000/FFFFFF/png?text=IBC+Studio');
-
-                  return (
-                    <div 
-                      key={index} 
-                      onClick={() => {
-                        if (item.category === 'video') {
-                          const realIndex = (currentPage - 1) * itemsPerPage + index;
-                          setActiveVideoIndex(realIndex);
-                        }
-                        if (item.isGallery) {
-                          setActiveGallery({ catIdx: item.catIdx, imgIdx: 0 });
-                        }
+            {/* ANIMATED SLIDE-DOWN SUB-FILTERS FOR AUDIO */}
+            <AnimatePresence mode="wait">
+              {filter === 'audio' && (
+                <motion.div 
+                  key="audio-subfilters"
+                  initial={{ opacity: 0, y: -15, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                  exit={{ opacity: 0, y: -15, height: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  style={{ marginTop: '8px', overflow: 'hidden' }}
+                >
+                  <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                    <button 
+                      onClick={() => { setSubFilterType('category'); setSubFilter('all'); }}
+                      style={{
+                        padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer',
+                        background: subFilterType === 'category' ? '#00d4ff' : 'rgba(255,255,255,0.05)',
+                        color: subFilterType === 'category' ? '#000000' : '#ffffff',
+                        border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '6px',
+                        boxShadow: subFilterType === 'category' ? '0 0 15px rgba(0, 212, 255, 0.4)' : 'none',
+                        transition: 'all 0.2s ease'
                       }}
-                      style={{ cursor: 'pointer', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
                     >
-                      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', backgroundColor: '#1a2035' }}>
-                        <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 10, display: 'flex', gap: '6px' }}>
-                          {item.badge1 && <span style={{ fontSize: '11px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', borderRadius: '12px' }}>{item.badge1}</span>}
-                          {item.badge2 && <span style={{ fontSize: '11px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', borderRadius: '12px' }}>{item.badge2}</span>}
-                        </div>
-                        <Image src={imgSrc} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
-                        {item.category === 'video' && (
-                          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#0070f3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5V19L19 12L8 5Z" fill="#ffffff" /></svg>
-                          </div>
-                        )}
-                      </div>
-                      <div style={{ padding: '16px' }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#fff' }}>{item.title}</h3>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                      <span>🎧</span> CATEGORIES {subFilterType === 'category' ? '▲' : '▼'}
+                    </button>
+                    <button 
+                      onClick={() => { setSubFilterType('language'); setSubFilter('all'); }}
+                      style={{
+                        padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer',
+                        background: subFilterType === 'language' ? '#0070f3' : 'rgba(255,255,255,0.05)',
+                        color: '#ffffff',
+                        border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', gap: '6px',
+                        boxShadow: subFilterType === 'language' ? '0 0 15px rgba(0, 112, 243, 0.5)' : 'none',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      <span>🔊</span> LANGUAGES {subFilterType === 'language' ? '▲' : '▼'}
+                    </button>
+                  </div>
+
+                  <div className="sub-filters-container">
+                    {subFilterType === 'category' ? (
+                      audioCategories.map((cat, idx) => {
+                        const isImg = cat.icon && (cat.icon.startsWith('http') || cat.icon.startsWith('/') || cat.icon.includes('.'));
+                        return (
+                          <button
+                            key={idx}
+                            className={`sub-filter-tab ${subFilter === (cat.name === 'All Categories' ? 'all' : cat.name) ? 'active-cat' : ''}`}
+                            onClick={() => setSubFilter(cat.name === 'All Categories' ? 'all' : cat.name)}
+                            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                          >
+                            {isImg ? (
+                              <img src={cat.icon} alt="" width="16" height="12" style={{ borderRadius: '2px', objectFit: 'cover' }} />
+                            ) : (
+                              <span>{cat.icon}</span>
+                            )}
+                            <span>{cat.name}</span>
+                            <span style={{ opacity: 0.7, fontSize: '11px' }}>({cat.count})</span>
+                          </button>
+                        );
+                      })
+                    ) : (
+                      audioLanguages.map((lang, idx) => {
+                        const isImg = lang.icon && (lang.icon.startsWith('http') || lang.icon.startsWith('/') || lang.icon.includes('.'));
+                        return (
+                          <button
+                            key={idx}
+                            className={`sub-filter-tab ${subFilter === (lang.name === 'All Languages' ? 'all' : lang.name) ? 'active-lang' : ''}`}
+                            onClick={() => setSubFilter(lang.name === 'All Languages' ? 'all' : lang.name)}
+                            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                          >
+                            {isImg ? (
+                              <img src={lang.icon} alt="" width="16" height="12" style={{ borderRadius: '2px', objectFit: 'cover' }} />
+                            ) : (
+                              <span>{lang.icon}</span>
+                            )}
+                            <span>{lang.name}</span>
+                            <span style={{ opacity: 0.7, fontSize: '11px' }}>({lang.count})</span>
+                          </button>
+                        );
+                      })
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* ANIMATED SLIDE-DOWN SUB-FILTERS FOR OTHER CATEGORIES */}
+            <AnimatePresence mode="wait">
+              {filter !== 'all' && filter !== 'audio' && subFiltersMap[filter] && (
+                <motion.div 
+                  key={`${filter}-subfilters`}
+                  initial={{ opacity: 0, y: -15, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                  exit={{ opacity: 0, y: -15, height: 0 }}
+                  transition={{ duration: 0.35, ease: 'easeOut' }}
+                  className="sub-filters-container" 
+                  style={{ marginTop: '10px', overflow: 'hidden' }}
+                >
+                  <button className={`sub-filter-tab ${subFilter === 'all' ? 'active-cat' : ''}`} onClick={() => setSubFilter('all')}>
+                    All
+                  </button>
+                  {subFiltersMap[filter].map((sub, idx) => (
+                    <button key={idx} className={`sub-filter-tab ${subFilter === sub ? 'active-cat' : ''}`} onClick={() => setSubFilter(sub)}>
+                      {sub}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* PAGINATION (Mobile Optimized) */}
+          {/* ANIMATED GRID CONTENTS SECTION */}
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={`${filter}-${subFilter}-${subFilterType}-${currentPage}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              style={{ 
+                paddingBottom: '60px', 
+                paddingLeft: 'clamp(22px, 6vw, 80px)', 
+                paddingRight: 'clamp(22px, 6vw, 80px)'
+              }}
+            >
+              {filter === 'audio' ? (
+                <div className="grid grid-cols-1 lg:grid-cols-4" style={{ display: 'grid', gap: '20px' }}>
+                  {paginatedItems.map((track, index) => (
+                    <AudioPlayerCard key={track.id || index} track={track} />
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ display: 'grid', gap: '30px' }}>
+                  {paginatedItems.map((item, index) => {
+                    const videoId = item.category === 'video' ? extractYouTubeId(item.videoUrl) : null;
+                    const imgSrc = item.isGallery 
+                      ? photographyData[item.catIdx].images[0] 
+                      : (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://placehold.co/600x400/000000/FFFFFF/png?text=IBC+Studio');
+
+                    return (
+                      <div 
+                        key={index} 
+                        onClick={() => {
+                          if (item.category === 'video') {
+                            const realIndex = (currentPage - 1) * itemsPerPage + index;
+                            setActiveVideoIndex(realIndex);
+                          }
+                          if (item.isGallery) {
+                            setActiveGallery({ catIdx: item.catIdx, imgIdx: 0 });
+                          }
+                        }}
+                        style={{ cursor: 'pointer', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+                      >
+                        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', backgroundColor: '#1a2035' }}>
+                          <div style={{ position: 'absolute', top: '10px', left: '10px', zIndex: 10, display: 'flex', gap: '6px' }}>
+                            {item.badge1 && <span style={{ fontSize: '11px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', borderRadius: '12px' }}>{item.badge1}</span>}
+                            {item.badge2 && <span style={{ fontSize: '11px', padding: '4px 10px', backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff', borderRadius: '12px' }}>{item.badge2}</span>}
+                          </div>
+                          <Image src={imgSrc} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
+                          {item.category === 'video' && (
+                            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#0070f3', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 5V19L19 12L8 5Z" fill="#ffffff" /></svg>
+                            </div>
+                          )}
+                        </div>
+                        <div style={{ padding: '16px' }}>
+                          <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#fff' }}>{item.title}</h3>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* PAGINATION */}
           {totalPages > 1 && (
             <div className="pagination-bar">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <button
                   key={p}
-                  onClick={() => { setCurrentPage(p); window.scrollTo({ top: 350, behavior: 'smooth' }); }}
+                  onClick={() => { 
+                    setCurrentPage(p); 
+                    if (stickyFilterRef.current) {
+                      const yOffset = -64;
+                      const element = stickyFilterRef.current;
+                      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                      window.scrollTo({ top: y, behavior: 'smooth' });
+                    }
+                  }}
                   style={{
                     minWidth: '40px',
                     height: '40px',

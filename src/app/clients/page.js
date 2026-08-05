@@ -174,7 +174,7 @@ export default function Clients() {
 
           {/* LOGO TILES PLATFORM MATRIX - INDIVIDUAL ITEMS INJECTION */}
           <div 
-            className="cpgrid" 
+            className="cpgrid reveal in-view" 
             style={{ 
               width: '100%', 
               paddingBottom: '80px',
@@ -186,7 +186,7 @@ export default function Clients() {
             {corporateClients.map((client, index) => (
               <div 
                 key={index} 
-                className="cpc reveal"
+                className="cpc"
                 style={{
                   wordBreak: 'break-word',
                   overflowWrap: 'break-word',

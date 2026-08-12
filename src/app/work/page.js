@@ -82,7 +82,6 @@ function AudioPlayerCard({ track }) {
         onEnded={() => setIsPlaying(false)}
       />
 
-      {/* Top Audio Player Unit */}
       <div style={{
         background: 'rgba(255, 255, 255, 0.02)',
         border: '1px solid rgba(255, 255, 255, 0.06)',
@@ -93,8 +92,8 @@ function AudioPlayerCard({ track }) {
         gap: '14px',
         marginBottom: '16px'
       }}>
-        {/* Play Button */}
         <button 
+          type="button"
           onClick={togglePlay}
           style={{
             background: isPlaying ? '#00d4ff' : '#0b0f19',
@@ -119,7 +118,6 @@ function AudioPlayerCard({ track }) {
           )}
         </button>
 
-        {/* Progress & Waveform Track */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <div style={{ width: '100%', height: '6px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '3px', position: 'relative', overflow: 'hidden' }}>
             <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg, #0070f3, #00d4ff)', transition: 'width 0.1s linear' }} />
@@ -130,8 +128,8 @@ function AudioPlayerCard({ track }) {
           </div>
         </div>
 
-        {/* Replay Button */}
         <button 
+          type="button"
           onClick={restartAudio}
           title="Restart Audio"
           style={{
@@ -152,8 +150,8 @@ function AudioPlayerCard({ track }) {
           ↺
         </button>
 
-        {/* Mute Button */}
         <button 
+          type="button"
           onClick={toggleMute}
           style={{ background: 'none', border: 'none', color: '#9ca3af', cursor: 'pointer', fontSize: '15px', flexShrink: 0 }}
         >
@@ -161,7 +159,6 @@ function AudioPlayerCard({ track }) {
         </button>
       </div>
 
-      {/* Bottom Track Meta */}
       <div>
         <h3 style={{ fontSize: '14px', fontWeight: '700', color: '#ffffff', marginBottom: '4px', lineHeight: '1.3' }}>
           {track.title}
@@ -175,7 +172,7 @@ function AudioPlayerCard({ track }) {
 }
 
 export default function Work() {
-  const [filter, setFilter] = useState('all');
+  const [filter, setFilter] = useState('all-work');
   const [subFilterType, setSubFilterType] = useState('category'); // 'category' or 'language'
   const [subFilter, setSubFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -185,15 +182,15 @@ export default function Work() {
   const [activeVideoIndex, setActiveVideoIndex] = useState(null);
   const [activeGallery, setActiveGallery] = useState(null);
   const containerRef = useRef(null);
-  const stickyFilterRef = useRef(null); // Ref for automatic scrolling to top of sticky filter bar
+  const stickyFilterRef = useRef(null);
 
   const filterButtons = [
-    { id: 'all', label: 'All Work' },
-    { id: 'audio', label: 'Audio' },
-    { id: 'video', label: 'Video' },
-    { id: 'photo', label: 'Photography' },
-    { id: 'ai', label: 'AI Production' },
-    { id: 'digital', label: 'Digital' }
+    { id: 'all-work', label: 'All Work', href: '/work' },
+    { id: 'audio', label: 'Audio', href: '/work' },
+    { id: 'video', label: 'Video', href: '/work' },
+    { id: 'photo', label: 'Photography', href: '/work' },
+    { id: 'ai', label: 'AI Production', href: '/work' },
+    { id: 'digital', label: 'Digital', href: '/work' }
   ];
 
   const subFiltersMap = {
@@ -290,7 +287,7 @@ export default function Work() {
 
     const baseItems = [...structuralPortfolioItems, ...youtubeVideoData, ...photographyCategoryItems];
     return baseItems.filter(item => {
-      const matchesCategory = filter === 'all' || item.category === filter;
+      const matchesCategory = filter === 'all-work' || item.category === filter;
       const matchesSub = subFilter === 'all' || 
         (item.badge1 && item.badge1.toLowerCase().includes(subFilter.toLowerCase())) ||
         (item.badge2 && item.badge2.toLowerCase().includes(subFilter.toLowerCase())) ||
@@ -311,14 +308,19 @@ export default function Work() {
     setCurrentPage(1);
   }, [filter, subFilterType, subFilter]);
 
-  // Handler to change main category and automatically scroll to the sticky filter bar
-  const handleMainCategorySelect = (btnId) => {
+  const handleMainCategorySelect = (e, btnId) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.nativeEvent?.stopImmediatePropagation?.();
+    }
+    
     setFilter(btnId);
     setSubFilter('all');
     setSubFilterType('category');
 
     if (stickyFilterRef.current) {
-      const yOffset = -64; // Navbar height offset
+      const yOffset = -64;
       const element = stickyFilterRef.current;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
@@ -343,6 +345,10 @@ export default function Work() {
           border: 1px solid rgba(255, 255, 255, 0.12);
           color: #a0aec0;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
         .main-wfbtn:hover, .main-wfbtn.active {
           background: linear-gradient(135deg, #0070f3, #00d4ff);
@@ -444,15 +450,25 @@ export default function Work() {
             marginBottom: '35px',
             boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
           }}>
-            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px', scrollbarWidth: 'none' }}>
+            <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingTop: '20px', paddingBottom: '10px', scrollbarWidth: 'none' }}>
               {filterButtons.map((btn) => (
-                <button
+                <Link
                   key={btn.id}
+                  href={btn.href}
+                  prefetch={false}
                   className={`main-wfbtn ${filter === btn.id ? 'active' : ''}`}
-                  onClick={() => handleMainCategorySelect(btn.id)}
+                  onClick={(e) => handleMainCategorySelect(e, btn.id)}
+                  onDoubleClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.nativeEvent?.stopImmediatePropagation?.();
+                  }}
+                  onMouseDown={(e) => {
+                    e.stopPropagation();
+                  }}
                 >
                   {btn.label}
-                </button>
+                </Link>
               ))}
             </div>
 
@@ -469,6 +485,7 @@ export default function Work() {
                 >
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
                     <button 
+                      type="button"
                       onClick={() => { setSubFilterType('category'); setSubFilter('all'); }}
                       style={{
                         padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer',
@@ -482,6 +499,7 @@ export default function Work() {
                       <span>🎧</span> CATEGORIES {subFilterType === 'category' ? '▲' : '▼'}
                     </button>
                     <button 
+                      type="button"
                       onClick={() => { setSubFilterType('language'); setSubFilter('all'); }}
                       style={{
                         padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '700', cursor: 'pointer',
@@ -503,6 +521,7 @@ export default function Work() {
                         return (
                           <button
                             key={idx}
+                            type="button"
                             className={`sub-filter-tab ${subFilter === (cat.name === 'All Categories' ? 'all' : cat.name) ? 'active-cat' : ''}`}
                             onClick={() => setSubFilter(cat.name === 'All Categories' ? 'all' : cat.name)}
                             style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -523,6 +542,7 @@ export default function Work() {
                         return (
                           <button
                             key={idx}
+                            type="button"
                             className={`sub-filter-tab ${subFilter === (lang.name === 'All Languages' ? 'all' : lang.name) ? 'active-lang' : ''}`}
                             onClick={() => setSubFilter(lang.name === 'All Languages' ? 'all' : lang.name)}
                             style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -545,7 +565,7 @@ export default function Work() {
 
             {/* ANIMATED SLIDE-DOWN SUB-FILTERS FOR OTHER CATEGORIES */}
             <AnimatePresence mode="wait">
-              {filter !== 'all' && filter !== 'audio' && subFiltersMap[filter] && (
+              {filter !== 'all-work' && filter !== 'audio' && subFiltersMap[filter] && (
                 <motion.div 
                   key={`${filter}-subfilters`}
                   initial={{ opacity: 0, y: -15, height: 0 }}
@@ -555,11 +575,11 @@ export default function Work() {
                   className="sub-filters-container" 
                   style={{ marginTop: '10px', overflow: 'hidden' }}
                 >
-                  <button className={`sub-filter-tab ${subFilter === 'all' ? 'active-cat' : ''}`} onClick={() => setSubFilter('all')}>
+                  <button type="button" className={`sub-filter-tab ${subFilter === 'all' ? 'active-cat' : ''}`} onClick={() => setSubFilter('all')}>
                     All
                   </button>
                   {subFiltersMap[filter].map((sub, idx) => (
-                    <button key={idx} className={`sub-filter-tab ${subFilter === sub ? 'active-cat' : ''}`} onClick={() => setSubFilter(sub)}>
+                    <button key={idx} type="button" className={`sub-filter-tab ${subFilter === sub ? 'active-cat' : ''}`} onClick={() => setSubFilter(sub)}>
                       {sub}
                     </button>
                   ))}
@@ -589,7 +609,7 @@ export default function Work() {
                   ))}
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4" style={{ display: 'grid', gap: '30px' }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style={{ display: 'grid', gap: '30px' }}>
                   {paginatedItems.map((item, index) => {
                     const videoId = item.category === 'video' ? extractYouTubeId(item.videoUrl) : null;
                     const imgSrc = item.isGallery 
@@ -639,6 +659,7 @@ export default function Work() {
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                 <button
                   key={p}
+                  type="button"
                   onClick={() => { 
                     setCurrentPage(p); 
                     if (stickyFilterRef.current) {

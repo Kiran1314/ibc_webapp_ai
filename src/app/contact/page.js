@@ -49,13 +49,13 @@ export default function Contact() {
     };
     window.addEventListener('scroll', handleScrollMetrics);
     
-    // High-Performance Intersection Observer for nested grid blocks
+    // High-Performance Intersection Observer for nested grid blocks (triggers once on scroll down)
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
       root: null,
-      rootMargin: '0px 0px -100px 0px',
+      rootMargin: '0px 0px -50px 0px',
       threshold: 0.05
     };
 
@@ -63,8 +63,7 @@ export default function Contact() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-        } else {
-          entry.target.classList.remove('in-view');
+          observer.unobserve(entry.target); // Stays permanently visible once scrolled into view
         }
       });
     }, observerOptions);

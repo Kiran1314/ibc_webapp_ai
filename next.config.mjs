@@ -5,6 +5,8 @@ const nextConfig = {
       { protocol: 'https', hostname: 'firebasestorage.googleapis.com', pathname: '/**' },
       { protocol: 'https', hostname: 'img.youtube.com', pathname: '/**' },
       { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },
+      {protocol: 'https', hostname: 'plus.unsplash.com', pathname: '/**'}
+        
     ],
   },
 };

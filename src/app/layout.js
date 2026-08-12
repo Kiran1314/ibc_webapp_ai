@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {/* Lenis Provider wraps the content for global smooth scroll */}
-        <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
+        <ReactLenis root options={{ lerp: 0.1, duration: 0.5, smoothWheel: true }}>
           <Header />
           <main>{children}</main>
           <Footer />

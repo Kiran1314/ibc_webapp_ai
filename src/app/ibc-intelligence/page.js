@@ -26,16 +26,16 @@ export default function IBCIntelligence() {
 
     const observerOptions = {
       root: null,
-      rootMargin: '0px 0px -100px 0px', // Triggers 100px before the element fully enters view bounds
+      rootMargin: '0px 0px -50px 0px', // Triggers slightly before element enters view bounds
       threshold: 0.05 // Fires immediately when 5% of the element is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
+        // Only trigger fade-in when scrolling down into view; do not remove class when scrolling up
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-        } else {
-          entry.target.classList.remove('in-view'); // Re-triggers animations seamlessly when scrolling up/down
+          observer.unobserve(entry.target); // Unobserve once animated so it stays visible permanently
         }
       });
     }, observerOptions);
@@ -103,8 +103,6 @@ export default function IBCIntelligence() {
             <div className="igl2" aria-hidden="true"></div>
             
             <div className="ibdg" style={{ width: '100%', display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-            
-                    
                  <div className="logo" style={{ cursor: 'default'  }}>
                       <img 
                         src="/assets/images/logo/intel4.webp" 
@@ -117,9 +115,6 @@ export default function IBCIntelligence() {
                         }} 
                       />
                     </div> 
-             
-                 
-            
               <div className="ibdn" style={{ fontSize: '28px'}} >IBC <em>Intelligence</em></div>
               <span className="ibdp">AI Advisory</span>
             </div>
@@ -167,7 +162,6 @@ export default function IBCIntelligence() {
                   <span className="itg">Advisory + Execution</span>
                   <span className="itg">Workflow Optimization</span>
                   <span className="itg">Decision Support</span>
-                   
                 </div>
               </div>
 
@@ -295,7 +289,6 @@ export default function IBCIntelligence() {
               <div className="ic reveal"><div className="icn">04</div><h3>Reporting & Decision Support</h3><p style={{ wordBreak: 'break-word' }}>Enhancing visibility, analysis, and operational decision-making.</p></div>
               <div className="ic reveal"><div className="icn">05</div><h3>Lead & Sales Workflow Support</h3><p style={{ wordBreak: 'break-word' }}>Supporting qualification, routing, and communication workflows.</p></div>
               <div className="ic reveal"><div className="icn">06</div><h3>AI Assistants & Customer Support</h3><p style={{ wordBreak: 'break-word' }}>Deploying intelligent assistants to support customer interactions, answer queries, and streamline service workflows.</p></div>
-           
             </div>
           </div>
 

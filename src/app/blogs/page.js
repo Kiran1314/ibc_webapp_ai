@@ -35,23 +35,22 @@ export default function Blogs() {
     };
   }, []);
 
-  // High-Performance Intersection Observer Engine for nested feed scroll-fades
+  // High-Performance Intersection Observer Engine (Triggers only on scroll down and stays in view)
   useEffect(() => {
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
-      root: null, // Viewport defaults directly to the browser screen window
-      rootMargin: '0px 0px -100px 0px', // Triggers 100px before the element fully enters screen bounds
-      threshold: 0.05 // Fires immediately when 5% of the item box is visible
+      root: null, 
+      rootMargin: '0px 0px -50px 0px', 
+      threshold: 0.05 
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-        } else {
-          entry.target.classList.remove('in-view'); // Re-triggers animations seamlessly when scrolling up/down
+          observer.unobserve(entry.target); // Keeps elements visible permanently once scrolled into view
         }
       });
     }, observerOptions);
@@ -74,7 +73,6 @@ export default function Blogs() {
 
   return (
     <>
-      {/* INJECT INLINE SEO META REVIEWS DIRECTLY INTO THE ASSIGNED DOM HEAD PORT */}
       <title>Blogs | IBC Studio</title>
       <meta name="description" content="Explore fresh industry perspectives covering premium corporate video production, commercial photography strategies, native multilingual audio setups, and practical AI workflow advisory out of Dubai, UAE." />
       <meta name="keywords" content="video production company UAE, AI video generation Dubai, commercial photographer Dubai, industrial photography Dubai, corporate video Dubai, post production studio Dubai, multi language media localization uae" />
@@ -85,7 +83,6 @@ export default function Blogs() {
       <meta property="og:site_name" content="IBC Studio" />
 
       <div className="page active" id="pg-blogs" ref={containerRef}>
-        {/* LINK-TRANSITION SCREEN MOUNT TRANSITION FX */}
         <div 
           className="pw" 
           style={{ 
@@ -96,7 +93,7 @@ export default function Blogs() {
           }}
         >
           
-          {/* TOP HEADER SECTION - FLUID RESPONSIVE THEME PADDING */}
+          {/* TOP HEADER SECTION */}
           <div 
             className="sec reveal in-view" 
             style={{ 
@@ -126,7 +123,6 @@ export default function Blogs() {
               paddingBottom: '44px'
             }}
           >
-            {/* Main Hero Card - Animates via Scroll Observer */}
             <Link href="/blogs/ai-video-storytelling-2025" className="bfcard reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
               <div className="bfthumb" style={{ background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)' }}></div>
               <div className="bfbody">
@@ -140,7 +136,6 @@ export default function Blogs() {
               </div>
             </Link>
 
-            {/* Right Sidebar Secondary Cards Stack - Individual elements track scroll space */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', width: '100%' }}>
               <Link href="/blogs/power-of-cinematic-corporate-films" className="bfcard secondary-feat reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
                 <div className="bthumb secondary-thumb" style={{ background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)' }}></div>

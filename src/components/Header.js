@@ -76,21 +76,21 @@ export default function Header() {
 
   return (
     <header id="hdr" className={`${isOpen ? 'menu-open' : ''} ${isScrolled ? 'scrolled' : ''}`}>
-      {/* HIGH-RES LOGO LINK PANEL */}
+      {/* HIGH-RES & SHARP LOGO LINK PANEL */}
       <Link href="/" className="logo" onClick={closeMenu}>
         <Image 
           src="/assets/images/logo/main-logo.png" 
           alt="IBC Studio Logo" 
-          width={145}          
+          width={145}           
           height={100}         
           priority={true}      // Fixes the LCP warning by preloading the image
           loading="eager"      // Explicitly silences the browser console warning
           unoptimized          // Bypasses Next.js compression for maximum sharpness
           style={{
-            width: '145px',    
-            height: 'auto',    // Fixes the aspect ratio warning
+            width: '130px',    
+            height: '65px',    // Fixes the aspect ratio warning
             maxWidth: '100%',  // Prevents overflow on tiny screens
-            display: 'block'
+            display: 'block'   // Ensures the logo is above other elements
           }}
         />
       </Link>

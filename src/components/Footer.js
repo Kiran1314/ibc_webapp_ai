@@ -7,7 +7,7 @@ export default function Footer() {
     <footer>
       <div className="ft-grid">
         <div className="ft-brand">
-          <div className="logo" style={{ cursor: 'default', marginTop: '-100px' }}>
+          <div className="logo" style={{ cursor: 'default', marginTop: '-50px' }}>
             <Image 
               src="/assets/images/logo/main-logo.png" 
               alt="IBC Studio Logo" 
@@ -15,13 +15,13 @@ export default function Footer() {
               height={300}         // Proportional height
               unoptimized          // Bypasses compression to ensure maximum sharpness
               style={{
-                width: '300px',    // Enforces your exact 300px display width
+                width: '265px',    // Enforces your exact 300px display width
                 height: 'auto',    // Maintains aspect ratio automatically
                 display: 'block'
               }}
             />
           </div>
-          <p style={{ cursor: 'default', marginTop: '-60px' }}>
+          <p style={{ cursor: 'default', marginTop: '10px' }}>
             Dubai-based media production house delivering audio, video, photography, AI-powered content, and digital media solutions with over 19 years of experience.
           </p>
           <div className="ft-social">

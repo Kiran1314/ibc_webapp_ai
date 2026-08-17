@@ -7,7 +7,7 @@ export default function Footer() {
     <footer>
       <div className="ft-grid">
         <div className="ft-brand">
-          <div className="logo" style={{ cursor: 'default', marginTop: '-50px' }}>
+          <div className="logo" style={{ cursor: 'default', marginTop: '-30px' }}>
             <Image 
               src="/assets/images/logo/main-logo.png" 
               alt="IBC Studio Logo" 

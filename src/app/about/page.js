@@ -6,10 +6,24 @@ import Image from 'next/image';
 export default function About() {
   const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef(null);
+  const videoRef = useRef(null);
 
   // Trigger page layout entry animation immediately on mount hydration
   useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  // Force-trigger video play programmatically on mount for strict browser policies (Safari/iOS)
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true; // Required for autoplay on Safari
+      videoRef.current.play().then(() => {
+        // Once playback successfully starts, you can smoothly adjust volume if desired
+        videoRef.current.volume = 0.6;
+      }).catch((error) => {
+        console.log("Autoplay prevented by browser policy:", error);
+      });
+    }
   }, []);
 
   // Synchronize dynamic header top transparency style metrics with body attributes
@@ -48,7 +62,6 @@ export default function About() {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        // Trigger fade-in on scroll down and permanently lock element in-view
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
           observer.unobserve(entry.target);
@@ -92,12 +105,11 @@ export default function About() {
             style={{ 
               width: '100%', 
               paddingTop: 'clamp(120px, 12vh, 160px)', 
-              paddingBottom: '60px',
-              paddingLeft: 'clamp(22px, 6vw, 80px)', 
-              paddingRight: 'clamp(22px, 6vw, 80px)' 
+              paddingBottom: '0px'
             }}
           >
-            <div>
+            {/* Padded Content Block for Text and Buttons */}
+            <div style={{ paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)', marginBottom: '40px' }}>
               <div className="lbl">Our Story</div>
               <h1 style={{ wordBreak: 'break-word', fontSize: 'clamp(36px, 4.8vw, 58px)', lineHeight: '1.1' }}>
                 More Than a Studio.<br />A Creative Force.
@@ -115,18 +127,18 @@ export default function About() {
               </div>
             </div>
             
-            <div className="avwrap" style={{ width: '100%', marginTop: '30px', borderRadius: '16px', overflow: 'hidden', position: 'relative', aspectRatio: '16/9', background: '#000' }}>
+            {/* Rounded Video Wrapper */}
+            <div className="avwrap" style={{ width: '100%', marginTop: '30px', marginBottom: '30px', overflow: 'hidden', position: 'relative', aspectRatio: '16/9', background: '#000', borderRadius: '16px' }}>
               <video 
-                src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FAUSpage_main%2FIBC%202026%20Services%20video%2010th%20august.mkv?alt=media&token=1186e5ba-7707-43d0-9ae9-ab73fb2ed40f" 
+                ref={videoRef}
+                src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FAUSpage_main%2FIBC%202026%20Services%20video%2010th%20august_1.webm?alt=media&token=73d07e33-1c41-4d9d-9c72-51460dd1ca98" 
                 autoPlay 
-                loop 
-                muted={false} 
+                loop  
                 playsInline
                 controls
                 controlsList="nodownload"
                 disablePictureInPicture
-                ref={(el) => { if (el) el.volume = 0.6; }}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', borderRadius: 'inherit' }}
               />
             </div>
           </div>

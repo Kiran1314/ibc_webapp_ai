@@ -30,8 +30,17 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="/assets/css/style.css" />
       </head>
       <body>
-        {/* Lenis Provider wraps the content for global smooth scroll */}
-        <ReactLenis root options={{ lerp: 0.1, duration: 0.5, smoothWheel: true }}>
+        {/* Optimized Lenis Provider for fast, butter-smooth cross-device scrolling */}
+        <ReactLenis 
+          root 
+          options={{ 
+            lerp: 0.15,           // Higher value = faster, snappier response time
+            wheelMultiplier: 1.3, // Increases mouse wheel speed across Windows & Mac
+            duration: 0.6,        // Shorter duration prevents scroll queuing / lag
+            smoothWheel: true,    // Enables smooth momentum for standard mouse wheels
+            smoothTouch: false,   // Prevents trackpad lag on MacBooks and touch screens
+          }}
+        >
           <Header />
           <main>{children}</main>
           <Footer />

@@ -5,7 +5,10 @@ import Link from 'next/link';
 
 export default function Blogs() {
   const [isMounted, setIsMounted] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const containerRef = useRef(null);
+
+  const BLOGS_PER_PAGE = 6;
 
   // Trigger full structural page load fade-in on initial layout mount
   useEffect(() => {
@@ -27,6 +30,7 @@ export default function Blogs() {
         document.body.classList.add('home-hero-top');
       }
     };
+
     window.addEventListener('scroll', handleScrollMetrics);
 
     return () => {
@@ -35,22 +39,24 @@ export default function Blogs() {
     };
   }, []);
 
-  // High-Performance Intersection Observer Engine (Triggers only on scroll down and stays in view)
+  // High-Performance Intersection Observer Engine
   useEffect(() => {
-    const revealElements = containerRef.current?.querySelectorAll('.reveal');
+    const revealElements =
+      containerRef.current?.querySelectorAll('.reveal');
+
     if (!revealElements || revealElements.length === 0) return;
 
     const observerOptions = {
-      root: null, 
-      rootMargin: '0px 0px -50px 0px', 
-      threshold: 0.05 
+      root: null,
+      rootMargin: '0px 0px -50px 0px',
+      threshold: 0.05,
     };
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-          observer.unobserve(entry.target); // Keeps elements visible permanently once scrolled into view
+          observer.unobserve(entry.target);
         }
       });
     }, observerOptions);
@@ -60,141 +66,781 @@ export default function Blogs() {
     return () => {
       revealElements.forEach((el) => observer.unobserve(el));
     };
-  }, []);
+  }, [currentPage]);
+
+  /*
+   * ============================================================
+   * ALL BLOG DATA
+   * ============================================================
+   *
+   * Keep newest blogs first.
+   *
+   * The first 3 are displayed in the "Latest Articles" section.
+   *
+   * All remaining blogs are displayed in the paginated archive.
+   *
+   * Add future blogs at the TOP of this array.
+   */
 
   const archiveBlogs = [
-    { slug: "what-makes-a-great-product-photograph", tag: "Photography", title: "What Makes a Great Product Photograph", desc: "The technical and creative decisions that separate average shots from ones that actually sell.", date: "Feb 2025" },
-    { slug: "multilingual-media-arabic-first-uae", tag: "Localization", title: "Multilingual Media: Why Arabic First Matters in the UAE", desc: "The cultural and commercial case for leading with Arabic in your media production strategy.", date: "Jan 2025" },
-    { slug: "brand-listening-ai-market-research", tag: "IBC Intelligence", title: "Brand Listening: How AI is Changing Market Research", desc: "How real-time AI social listening is transforming how brands understand their audience.", date: "Dec 2024" },
-    { slug: "rise-of-aerial-cinematography-gulf", tag: "Drone", title: "The Rise of Aerial Cinematography in the Gulf", desc: "How drone technology is reshaping real estate, events, and infrastructure storytelling in the UAE.", date: "Nov 2024" },
-    { slug: "e-learning-2025-platforms-that-work", tag: "Digital", title: "E-Learning in 2025: Platforms That Actually Work", desc: "Design principles behind e-learning platforms that employees actually use and enjoy.", date: "Oct 2024" },
-    { slug: "jingles-are-back-brands-investing", tag: "Audio", title: "Jingles Are Back — Why Brands Are Investing Again", desc: "The surprising resurgence of brand audio identity and what it means for your marketing.", date: "Sep 2024" }
+    {
+      slug: 'what-makes-a-great-product-photograph',
+      tag: 'Photography',
+      title: 'What Makes a Great Product Photograph',
+      desc: 'The technical and creative decisions that separate average shots from ones that actually sell.',
+      date: 'Feb 2025',
+    },
+
+    {
+      slug: 'multilingual-media-arabic-first-uae',
+      tag: 'Localization',
+      title: 'Multilingual Media: Why Arabic First Matters in the UAE',
+      desc: 'The cultural and commercial case for leading with Arabic in your media production strategy.',
+      date: 'Jan 2025',
+    },
+
+    {
+      slug: 'brand-listening-ai-market-research',
+      tag: 'IBC Intelligence',
+      title: 'Brand Listening: How AI is Changing Market Research',
+      desc: 'How real-time AI social listening is transforming how brands understand their audience.',
+      date: 'Dec 2024',
+    },
+
+    {
+      slug: 'rise-of-aerial-cinematography-gulf',
+      tag: 'Drone',
+      title: 'The Rise of Aerial Cinematography in the Gulf',
+      desc: 'How drone technology is reshaping real estate, events, and infrastructure storytelling in the UAE.',
+      date: 'Nov 2024',
+    },
+
+    {
+      slug: 'e-learning-2025-platforms-that-work',
+      tag: 'Digital',
+      title: 'E-Learning in 2025: Platforms That Actually Work',
+      desc: 'Design principles behind e-learning platforms that employees actually use and enjoy.',
+      date: 'Oct 2024',
+    },
+
+    {
+      slug: 'jingles-are-back-brands-investing',
+      tag: 'Audio',
+      title: 'Jingles Are Back — Why Brands Are Investing Again',
+      desc: 'The surprising resurgence of brand audio identity and what it means for your marketing.',
+      date: 'Sep 2024',
+    },
   ];
+
+  /*
+   * ============================================================
+   * LATEST 3 ARTICLES
+   * ============================================================
+   */
+
+  const latestBlogs = archiveBlogs.slice(0, 3);
+
+  /*
+   * ============================================================
+   * OLDER ARTICLES
+   * ============================================================
+   *
+   * Everything after the first 3 goes into the archive.
+   */
+
+  const olderBlogs = archiveBlogs.slice(3);
+
+  /*
+   * ============================================================
+   * PAGINATION
+   * ============================================================
+   */
+
+  const totalPages = Math.ceil(olderBlogs.length / BLOGS_PER_PAGE);
+
+  const startIndex = (currentPage - 1) * BLOGS_PER_PAGE;
+
+  const currentBlogs = olderBlogs.slice(
+    startIndex,
+    startIndex + BLOGS_PER_PAGE
+  );
+
+  /*
+   * ============================================================
+   * PAGE CHANGE
+   * ============================================================
+   */
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+
+    // Scroll back to the archive section
+    setTimeout(() => {
+      const archiveSection =
+        document.getElementById('blog-archive');
+
+      if (archiveSection) {
+        archiveSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    }, 50);
+  };
 
   return (
     <>
       <title>Blogs | IBC Studio</title>
-      <meta name="description" content="Explore fresh industry perspectives covering premium corporate video production, commercial photography strategies, native multilingual audio setups, and practical AI workflow advisory out of Dubai, UAE." />
-      <meta name="keywords" content="video production company UAE, AI video generation Dubai, commercial photographer Dubai, industrial photography Dubai, corporate video Dubai, post production studio Dubai, multi language media localization uae" />
+
+      <meta
+        name="description"
+        content="Explore fresh industry perspectives covering premium corporate video production, commercial photography strategies, native multilingual audio setups, and practical AI workflow advisory out of Dubai, UAE."
+      />
+
+      <meta
+        name="keywords"
+        content="video production company UAE, AI video generation Dubai, commercial photographer Dubai, industrial photography Dubai, corporate video Dubai, post production studio Dubai, multi language media localization UAE"
+      />
+
       <meta property="og:type" content="website" />
-      <meta property="og:url" content="https://www.ibcstudio.com/blogs" />
-      <meta property="og:title" content="The IBC Studio Blog | Insights on Media, Production & AI in Dubai" />
-      <meta property="og:description" content="Perspectives on media, production, AI, and the future of brand storytelling across the UAE and GCC region." />
+
+      <meta
+        property="og:url"
+        content="https://www.ibcstudio.com/blogs"
+      />
+
+      <meta
+        property="og:title"
+        content="The IBC Studio Blog | Insights on Media, Production & AI in Dubai"
+      />
+
+      <meta
+        property="og:description"
+        content="Perspectives on media, production, AI, and the future of brand storytelling across the UAE and GCC region."
+      />
+
       <meta property="og:site_name" content="IBC Studio" />
 
-      <div className="page active" id="pg-blogs" ref={containerRef}>
-        <div 
-          className="pw" 
-          style={{ 
+      <div
+        className="page active"
+        id="pg-blogs"
+        ref={containerRef}
+      >
+        <div
+          className="pw"
+          style={{
             width: '100%',
             opacity: isMounted ? 1 : 0,
-            transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
-            transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
+            transform: isMounted
+              ? 'translateY(0)'
+              : 'translateY(12px)',
+            transition:
+              'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
-          
-          {/* TOP HEADER SECTION */}
-          <div 
-            className="sec reveal in-view" 
-            style={{ 
-              paddingTop: 'clamp(120px, 12vh, 160px)', 
-              paddingBottom: '36px', 
+
+          {/* ==================================================
+              TOP HEADER SECTION
+          ================================================== */}
+
+          <div
+            className="sec reveal in-view"
+            style={{
+              paddingTop: 'clamp(120px, 12vh, 160px)',
+              paddingBottom: '36px',
               width: '100%',
               paddingLeft: 'clamp(22px, 6vw, 80px)',
-              paddingRight: 'clamp(22px, 6vw, 80px)'
+              paddingRight: 'clamp(22px, 6vw, 80px)',
             }}
           >
-            <div className="lbl">Insights & Ideas</div>
-            <h1 className="title" style={{ fontSize: 'clamp(32px, 5vw, 50px)', lineHeight: '1.1', wordBreak: 'break-word' }}>
+            <div className="lbl">
+              Insights & Ideas
+            </div>
+
+            <h1
+              className="title"
+              style={{
+                fontSize: 'clamp(32px, 5vw, 50px)',
+                lineHeight: '1.1',
+                wordBreak: 'break-word',
+              }}
+            >
               The IBC Studio Blog
             </h1>
-            <p className="desc" style={{ width: '100%', maxWidth: '540px', marginBottom: 0, wordBreak: 'break-word' }}>
-              Perspectives on media, production, AI, and the future of brand storytelling.
+
+            <p
+              className="desc"
+              style={{
+                width: '100%',
+                maxWidth: '540px',
+                marginBottom: 0,
+                wordBreak: 'break-word',
+              }}
+            >
+              Perspectives on media, production, AI, and the
+              future of brand storytelling.
             </p>
           </div>
 
-          {/* FEATURED ARTICLES SECTION */}
-          <div 
-            className="bfeat" 
-            style={{ 
-              width: '100%', 
+          {/* ==================================================
+              FEATURED ARTICLES
+          ================================================== */}
+
+          <div
+            className="bfeat"
+            style={{
+              width: '100%',
               paddingLeft: 'clamp(22px, 6vw, 80px)',
               paddingRight: 'clamp(22px, 6vw, 80px)',
-              paddingBottom: '44px'
+              paddingBottom: '44px',
             }}
           >
-            <Link href="/blogs/ai-video-storytelling-2025" className="bfcard reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
-              <div className="bfthumb" style={{ background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)' }}></div>
+
+            <Link
+              href="/blogs/ai-video-storytelling-2025"
+              className="bfcard reveal"
+              style={{
+                textDecoration: 'none',
+                display: 'block',
+                width: '100%',
+              }}
+            >
+              <div
+                className="bfthumb"
+                style={{
+                  background:
+                    'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)',
+                }}
+              />
+
               <div className="bfbody">
-                <span className="btag">Featured · AI Production</span>
-                <h2 style={{ fontSize: '22px', wordBreak: 'break-word', lineHeight: '1.2' }}>How AI Video is Redefining Brand Storytelling in 2025</h2>
-                <p style={{ wordBreak: 'break-word', fontSize: '14.5px', color: 'var(--dim)' }}>UAE brands are leveraging AI-generated video to scale content production without sacrificing quality. The shift is faster than most expected.</p>
-                <div className="bmeta" style={{ marginTop: '18px', paddingTop: '18px', borderTop: '1px solid var(--border)' }}>
-                  <span className="bdate">May 2025 · 8 min read</span>
-                  <span className="brm">Read Article →</span>
+
+                <span className="btag">
+                  Featured · AI Production
+                </span>
+
+                <h2
+                  style={{
+                    fontSize: '22px',
+                    wordBreak: 'break-word',
+                    lineHeight: '1.2',
+                  }}
+                >
+                  How AI Video is Redefining Brand Storytelling
+                  in 2025
+                </h2>
+
+                <p
+                  style={{
+                    wordBreak: 'break-word',
+                    fontSize: '14.5px',
+                    color: 'var(--dim)',
+                  }}
+                >
+                  UAE brands are leveraging AI-generated video
+                  to scale content production without sacrificing
+                  quality. The shift is faster than most expected.
+                </p>
+
+                <div
+                  className="bmeta"
+                  style={{
+                    marginTop: '18px',
+                    paddingTop: '18px',
+                    borderTop: '1px solid var(--border)',
+                  }}
+                >
+                  <span className="bdate">
+                    May 2025 · 8 min read
+                  </span>
+
+                  <span className="brm">
+                    Read Article →
+                  </span>
                 </div>
+
               </div>
             </Link>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', width: '100%' }}>
-              <Link href="/blogs/power-of-cinematic-corporate-films" className="bfcard secondary-feat reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
-                <div className="bthumb secondary-thumb" style={{ background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)' }}></div>
-                <div className="bc" style={{ padding: '20px' }}>
-                  <span className="btag">Video Production</span>
-                  <h3 style={{ fontSize: '16px', wordBreak: 'break-word' }}>The Power of Cinematic Corporate Films</h3>
-                  <div className="bmeta" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid transparent' }}>
-                    <span className="bdate">Apr 2025</span>
-                    <span className="brm">Read →</span>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px',
+                width: '100%',
+              }}
+            >
+
+              <Link
+                href="/blogs/the-power-of-cinematic-corporate-films"
+                className="bfcard secondary-feat reveal"
+                style={{
+                  textDecoration: 'none',
+                  display: 'block',
+                  width: '100%',
+                }}
+              >
+                <div
+                  className="bthumb secondary-thumb"
+                  style={{
+                    background:
+                      'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)',
+                  }}
+                />
+
+                <div
+                  className="bc"
+                  style={{ padding: '20px' }}
+                >
+                  <span className="btag">
+                    Video Production
+                  </span>
+
+                  <h3
+                    style={{
+                      fontSize: '16px',
+                      wordBreak: 'break-word',
+                    }}
+                  >
+                    The Power of Cinematic Corporate Films
+                  </h3>
+
+                  <div
+                    className="bmeta"
+                    style={{
+                      marginTop: '10px',
+                      paddingTop: '10px',
+                      borderTop:
+                        '1px solid transparent',
+                    }}
+                  >
+                    <span className="bdate">
+                      Apr 2025
+                    </span>
+
+                    <span className="brm">
+                      Read →
+                    </span>
                   </div>
                 </div>
               </Link>
 
-              <Link href="/blogs/why-your-ivr-voice-matters" className="bfcard secondary-feat reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
-                <div className="bthumb secondary-thumb" style={{ background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)' }}></div>
-                <div className="bc" style={{ padding: '20px' }}>
-                  <span className="btag">Audio</span>
-                  <h3 style={{ fontSize: '16px', wordBreak: 'break-word' }}>Why Your IVR Voice Matters More Than You Think</h3>
-                  <div className="bmeta" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid transparent' }}>
-                    <span className="bdate">Mar 2025</span>
-                    <span className="brm">Read →</span>
+              <Link
+                href="/blogs/why-your-ivr-voice-matters-more-than-you-think"
+                className="bfcard secondary-feat reveal"
+                style={{
+                  textDecoration: 'none',
+                  display: 'block',
+                  width: '100%',
+                }}
+              >
+                <div
+                  className="bthumb secondary-thumb"
+                  style={{
+                    background:
+                      'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)',
+                  }}
+                />
+
+                <div
+                  className="bc"
+                  style={{ padding: '20px' }}
+                >
+                  <span className="btag">
+                    Audio
+                  </span>
+
+                  <h3
+                    style={{
+                      fontSize: '16px',
+                      wordBreak: 'break-word',
+                    }}
+                  >
+                    Why Your IVR Voice Matters More Than You
+                    Think
+                  </h3>
+
+                  <div
+                    className="bmeta"
+                    style={{
+                      marginTop: '10px',
+                      paddingTop: '10px',
+                      borderTop:
+                        '1px solid transparent',
+                    }}
+                  >
+                    <span className="bdate">
+                      Mar 2025
+                    </span>
+
+                    <span className="brm">
+                      Read →
+                    </span>
                   </div>
                 </div>
               </Link>
+
             </div>
           </div>
 
-          {/* LIST SPLITTER SEGMENT LABEL */}
-          <div className="reveal" style={{ padding: '0 20px', paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)', marginBottom: '18px' }}>
-            <div style={{ fontSize: '11.5px', fontWeight: '600', letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--dim)', borderBottom: '1px solid var(--border)', paddingBottom: '14px' }}>
-              All Articles
-            </div>
-          </div>
+          {/* ==================================================
+              LATEST ARTICLES
+          ================================================== */}
 
-          {/* GENERAL ARCHIVE TILES GRID */}
-          <div 
-            className="bgrid" 
-            style={{ 
-              paddingBottom: '80px',
+          <div
+            className="reveal"
+            style={{
               paddingLeft: 'clamp(22px, 6vw, 80px)',
               paddingRight: 'clamp(22px, 6vw, 80px)',
-              gap: '22px'
+              marginBottom: '18px',
             }}
           >
-            {archiveBlogs.map((post, idx) => (
-              <Link href={`/blogs/${post.slug}`} key={idx} className="bcard reveal" style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
-                <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
+            <div
+              style={{
+                fontSize: '11.5px',
+                fontWeight: '600',
+                letterSpacing: '.1em',
+                textTransform: 'uppercase',
+                color: 'var(--dim)',
+                borderBottom:
+                  '1px solid var(--border)',
+                paddingBottom: '14px',
+              }}
+            >
+              Latest Articles
+            </div>
+          </div>
+
+          {/* ==================================================
+              LATEST 3 BLOGS
+          ================================================== */}
+
+          <div
+            className="bgrid"
+            style={{
+              paddingLeft: 'clamp(22px, 6vw, 80px)',
+              paddingRight: 'clamp(22px, 6vw, 80px)',
+              paddingBottom: '60px',
+              gap: '22px',
+            }}
+          >
+            {latestBlogs.map((post) => (
+              <Link
+                href={`/blogs/${post.slug}`}
+                key={post.slug}
+                className="bcard reveal"
+                style={{
+                  textDecoration: 'none',
+                  display: 'block',
+                  width: '100%',
+                }}
+              >
+
+                <div
+                  className="bthumb"
+                  style={{
+                    background:
+                      'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)',
+                  }}
+                />
+
                 <div className="bc">
-                  <span className="btag">{post.tag}</span>
-                  <h3 style={{ wordBreak: 'break-word', fontSize: '16px' }}>{post.title}</h3>
-                  <p style={{ wordBreak: 'break-word', fontSize: '13px', color: 'var(--dim)' }}>{post.desc}</p>
+
+                  <span className="btag">
+                    {post.tag}
+                  </span>
+
+                  <h3
+                    style={{
+                      wordBreak: 'break-word',
+                      fontSize: '16px',
+                    }}
+                  >
+                    {post.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      wordBreak: 'break-word',
+                      fontSize: '13px',
+                      color: 'var(--dim)',
+                    }}
+                  >
+                    {post.desc}
+                  </p>
+
                   <div className="bmeta">
-                    <span className="bdate">{post.date}</span>
-                    <span className="brm">Read →</span>
+
+                    <span className="bdate">
+                      {post.date}
+                    </span>
+
+                    <span className="brm">
+                      Read →
+                    </span>
+
                   </div>
+
                 </div>
               </Link>
             ))}
           </div>
+
+          {/* ==================================================
+              OLDER ARTICLES / PAGINATED ARCHIVE
+          ================================================== */}
+
+          <div
+            id="blog-archive"
+            className="reveal"
+            style={{
+              paddingLeft: 'clamp(22px, 6vw, 80px)',
+              paddingRight: 'clamp(22px, 6vw, 80px)',
+              marginBottom: '18px',
+              scrollMarginTop: '100px',
+            }}
+          >
+            <div
+              style={{
+                fontSize: '11.5px',
+                fontWeight: '600',
+                letterSpacing: '.1em',
+                textTransform: 'uppercase',
+                color: 'var(--dim)',
+                borderBottom:
+                  '1px solid var(--border)',
+                paddingBottom: '14px',
+              }}
+            >
+              All Articles
+            </div>
+          </div>
+
+          {/* ==================================================
+              PAGINATED BLOG GRID
+          ================================================== */}
+
+          <div
+            className="bgrid"
+            style={{
+              paddingBottom: '45px',
+              paddingLeft: 'clamp(22px, 6vw, 80px)',
+              paddingRight: 'clamp(22px, 6vw, 80px)',
+              gap: '22px',
+            }}
+          >
+
+            {currentBlogs.map((post) => (
+              <Link
+                href={`/blogs/${post.slug}`}
+                key={post.slug}
+                className="bcard reveal"
+                style={{
+                  textDecoration: 'none',
+                  display: 'block',
+                  width: '100%',
+                }}
+              >
+
+                <div
+                  className="bthumb"
+                  style={{
+                    background:
+                      'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)',
+                  }}
+                />
+
+                <div className="bc">
+
+                  <span className="btag">
+                    {post.tag}
+                  </span>
+
+                  <h3
+                    style={{
+                      wordBreak: 'break-word',
+                      fontSize: '16px',
+                    }}
+                  >
+                    {post.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      wordBreak: 'break-word',
+                      fontSize: '13px',
+                      color: 'var(--dim)',
+                    }}
+                  >
+                    {post.desc}
+                  </p>
+
+                  <div className="bmeta">
+
+                    <span className="bdate">
+                      {post.date}
+                    </span>
+
+                    <span className="brm">
+                      Read →
+                    </span>
+
+                  </div>
+
+                </div>
+              </Link>
+            ))}
+
+          </div>
+
+          {/* ==================================================
+              PAGINATION
+          ================================================== */}
+
+          {totalPages > 1 && (
+            <div
+              className="reveal"
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '8px',
+                paddingBottom: '80px',
+                paddingLeft: '22px',
+                paddingRight: '22px',
+                flexWrap: 'wrap',
+              }}
+            >
+
+              {/* PREVIOUS */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  handlePageChange(
+                    Math.max(1, currentPage - 1)
+                  )
+                }
+                disabled={currentPage === 1}
+                aria-label="Previous page"
+                style={{
+                  minWidth: '42px',
+                  height: '42px',
+                  padding: '0 14px',
+                  border:
+                    '1px solid var(--border)',
+                  background:
+                    currentPage === 1
+                      ? 'transparent'
+                      : 'var(--card)',
+                  color:
+                    currentPage === 1
+                      ? 'var(--dim)'
+                      : 'inherit',
+                  borderRadius: '8px',
+                  cursor:
+                    currentPage === 1
+                      ? 'not-allowed'
+                      : 'pointer',
+                  transition:
+                    'all 0.25s ease',
+                }}
+              >
+                ←
+              </button>
+
+              {/* PAGE NUMBERS */}
+
+              {Array.from(
+                { length: totalPages },
+                (_, index) => index + 1
+              ).map((page) => (
+                <button
+                  type="button"
+                  key={page}
+                  onClick={() =>
+                    handlePageChange(page)
+                  }
+                  aria-label={`Go to page ${page}`}
+                  aria-current={
+                    currentPage === page
+                      ? 'page'
+                      : undefined
+                  }
+                  style={{
+                    width: '42px',
+                    height: '42px',
+                    border:
+                      currentPage === page
+                        ? '1px solid currentColor'
+                        : '1px solid var(--border)',
+                    background:
+                      currentPage === page
+                        ? 'var(--card)'
+                        : 'transparent',
+                    color:
+                      currentPage === page
+                        ? 'inherit'
+                        : 'var(--dim)',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '13px',
+                    fontWeight:
+                      currentPage === page
+                        ? '600'
+                        : '400',
+                    transition:
+                      'all 0.25s ease',
+                  }}
+                >
+                  {page}
+                </button>
+              ))}
+
+              {/* NEXT */}
+
+              <button
+                type="button"
+                onClick={() =>
+                  handlePageChange(
+                    Math.min(
+                      totalPages,
+                      currentPage + 1
+                    )
+                  )
+                }
+                disabled={
+                  currentPage === totalPages
+                }
+                aria-label="Next page"
+                style={{
+                  minWidth: '42px',
+                  height: '42px',
+                  padding: '0 14px',
+                  border:
+                    '1px solid var(--border)',
+                  background:
+                    currentPage === totalPages
+                      ? 'transparent'
+                      : 'var(--card)',
+                  color:
+                    currentPage === totalPages
+                      ? 'var(--dim)'
+                      : 'inherit',
+                  borderRadius: '8px',
+                  cursor:
+                    currentPage === totalPages
+                      ? 'not-allowed'
+                      : 'pointer',
+                  transition:
+                    'all 0.25s ease',
+                }}
+              >
+                →
+              </button>
+
+            </div>
+          )}
 
         </div>
       </div>

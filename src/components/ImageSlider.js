@@ -63,14 +63,11 @@ const MASTER_IMAGES = [
 ];
 
 export default function ImageSlider() {
-  // Track 3 visible slots independently
   const [visibleSlots, setVisibleSlots] = useState([0, 1, 2]);
 
-  // Handle manual click on any slot to instantly swap it with a random unused image
   const handleImageClick = (slotIndex) => {
     setVisibleSlots((currentSlots) => {
       const newSlots = [...currentSlots];
-      // Find an image index from master pool that isn't currently displayed
       const availableIndices = MASTER_IMAGES.map((_, idx) => idx).filter(
         (idx) => !newSlots.includes(idx)
       );
@@ -82,12 +79,11 @@ export default function ImageSlider() {
     });
   };
 
-  // Staggered asynchronous timers so each slot fades and changes at a different time
   useEffect(() => {
     const timers = [
-      setInterval(() => { handleImageClick(0); }, 3500), // Slot 1 changes every 3.5s
-      setInterval(() => { handleImageClick(1); }, 4800), // Slot 2 changes every 4.8s
-      setInterval(() => { handleImageClick(2); }, 4200)  // Slot 3 changes every 4.2s
+      setInterval(() => { handleImageClick(0); }, 3500),
+      setInterval(() => { handleImageClick(1); }, 4800),
+      setInterval(() => { handleImageClick(2); }, 4200)
     ];
 
     return () => {
@@ -97,14 +93,6 @@ export default function ImageSlider() {
 
   return (
     <div className="slider-wrapper" style={{ height: '300px', position: 'relative', width: '100%', margin: '0 auto' }}>
-      
-      {/* Preload all master images invisibly */}
-      <div style={{ display: 'none' }} aria-hidden="true">
-        {MASTER_IMAGES.map((url, idx) => (
-          <img key={idx} src={url} alt="" />
-        ))}
-      </div>
-
       <div style={{ 
         position: 'relative', 
         width: '100%', 
@@ -130,22 +118,22 @@ export default function ImageSlider() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={imgIndex}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.8, ease: 'easeInOut' }}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', willChange: 'opacity' }}
               >
                 <Image 
                   src={MASTER_IMAGES[imgIndex]} 
                   alt={`Portfolio Showcase ${imgIndex}`} 
                   fill 
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   style={{ objectFit: 'cover' }} 
-                  unoptimized 
-                  priority
+                  unoptimized={false} 
+                  priority={slotIndex === 0}
                 />
                 
-                {/* Hover overlay with interactive switch icon */}
                 <div 
                   className="slider-hover-overlay"
                   style={{

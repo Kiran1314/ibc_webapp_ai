@@ -78,21 +78,22 @@ export default function Header() {
     <header id="hdr" className={`${isOpen ? 'menu-open' : ''} ${isScrolled ? 'scrolled' : ''}`}>
       {/* HIGH-RES & SHARP LOGO LINK PANEL */}
       <Link href="/" className="logo" onClick={closeMenu}>
-        <Image 
-          src="/assets/images/logo/main-logo.svg" 
-          alt="IBC Studio Logo" 
-          width={130}           
-          height={67}         
-          priority={true}      // Fixes the LCP warning by preloading the image
-          loading="eager"      // Explicitly silences the browser console warning
-          unoptimized          // Bypasses Next.js compression for maximum sharpness
-          style={{
-            width: '130px',    
-            height: '67px',    // Fixes the aspect ratio warning
-            maxWidth: '100%',  // Prevents overflow on tiny screens
-            display: 'block'   // Ensures the logo is above other elements
-          }}
-        />
+       <Image 
+              src="/assets/images/logo/main-logo.svg" 
+              alt="IBC Studio Logo" 
+              width={130}          
+              height={67}         
+              priority={true}      
+              fetchPriority="high" // <-- Add this to explicitly fix the Lighthouse warning
+              loading="eager"      
+              unoptimized          
+              style={{
+                width: '130px',    
+                height: '67px',    
+                maxWidth: '100%',  
+                display: 'block'   
+              }}
+            />
       </Link>
       
       {/* RESPONSIVE MOBILE ACCORDION HAMBURGER TOGGLE */}

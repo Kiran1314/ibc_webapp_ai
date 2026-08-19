@@ -3,15 +3,14 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import FaqSection from '@/components/FaqSection';
 
-// Code split below-the-fold components with lightweight skeleton fallbacks to boost Speed Index
+// Code split below-the-fold components with lightweight skeleton fallbacks
 const ImageSlider = dynamic(() => import('@/components/ImageSlider'), { 
-  ssr: false, 
   loading: () => <div style={{ height: '300px', width: '100%', background: 'var(--bg2)', borderRadius: '12px' }} /> 
 });
 
 const LogoBand = dynamic(() => import('@/components/LogoBand'), { 
-  ssr: false,
   loading: () => <div style={{ height: '80px', width: '100%' }} /> 
 });
 
@@ -31,24 +30,34 @@ export default function Home() {
       else document.body.classList.add('home-hero-top');
     };
     if (window.scrollY <= 10) document.body.classList.add('home-hero-top');
-    window.addEventListener('scroll', handleScrollMetrics);
-
-    const revealElements = containerRef.current?.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -50px 0px', threshold: 0.05 });
     
-    revealElements?.forEach((el) => observer.observe(el));
+    // Add passive listener to prevent main-thread blocking on scroll
+    window.addEventListener('scroll', handleScrollMetrics, { passive: true });
+
+    // Defer non-critical observer setup off the initial render path
+    const initObserver = () => {
+      const revealElements = containerRef.current?.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -50px 0px', threshold: 0.05 });
+      
+      revealElements?.forEach((el) => observer.observe(el));
+    };
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initObserver);
+    } else {
+      setTimeout(initObserver, 200);
+    }
 
     return () => {
       window.removeEventListener('scroll', handleScrollMetrics);
       document.body.classList.remove('home-hero-top');
-      revealElements?.forEach((el) => observer.unobserve(el));
     };
   }, []);
 
@@ -81,7 +90,7 @@ export default function Home() {
       <div className="page active" id="pg-home" ref={containerRef}>
         <div className="pw optimized-hero-load">
           
-          {/* HERO SECTION - Instant Paint */}
+          {/* HERO SECTION */}
           <section className="hero reveal in-view">
               <div className="hero-gradient-scene" aria-hidden="true"></div>
               <div className="hero-wave-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
@@ -127,12 +136,10 @@ export default function Home() {
                
             <div style={{ width: '100%', paddingTop: '20px' }}>
               
-              {/* IMAGE SLIDER COMPONENT */}
               <section className="sec reveal" style={{ width: '100%', padding: '60px 0' }}>
                 <ImageSlider />
               </section>
 
-              {/* Testimonials Card Section */}
               <div className="slider-wrapper" style={{ marginTop: '20px' }}>
                 <div className="tgrid">
                   <div className="tcard reveal">
@@ -292,25 +299,7 @@ export default function Home() {
           <div className="divl"></div>
 
           {/* FREQUENTLY ASKED QUESTIONS */}
-          <section className="sec reveal" style={{ width: '100%' }}>
-            <div style={{ textAlign: 'center', width: '100%' }}>
-              <div className="lbl lbl-c">Common Questions</div>
-              <h2 className="title" style={{ wordBreak: 'break-word' }}>Frequently Asked</h2>
-            </div>
-            <div className="faq" style={{ width: '100%', maxWidth: '780px' }}>
-              {faqs.map((faq, index) => (
-                <div key={index} className="fi reveal">
-                  <button className="fq" onClick={() => toggleFaq(index)} style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ paddingRight: '10px', wordBreak: 'break-word' }}>{faq.q}</span>
-                    <span className="fic">{openFaq === index ? '−' : '+'}</span>
-                  </button>
-                  <div className="fa" style={{ display: openFaq === index ? 'block' : 'none', maxHeight: openFaq === index ? '100%' : '0' }}>
-                    <p style={{ wordBreak: 'break-word', paddingBottom: '22px' }}>{faq.a}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+          <FaqSection faqs={faqs} />
 
         </div>
       </div>

@@ -33,14 +33,37 @@ export default function LogoBand() {
   ];
 
   return (
-    <div className="cband" style={{ width: '100%' }}>
-      <div className="chdr" style={{ padding: '0 20px', wordBreak: 'break-word' }}>
+    <div className="cband" style={{ width: '100%', overflow: 'hidden', padding: '20px 0' }}>
+      <div className="chdr" style={{ padding: '0 20px 15px 20px', wordBreak: 'break-word', textAlign: 'center' }}>
         <strong>3,000+ Satisfied Clients</strong> trust IBC Studio
       </div>
-      <div style={{ overflow: 'hidden', width: '100%' }}>
-        <div className="ctrack" style={{ animationDuration: '200s', animationTimingFunction: 'linear', animationIterationCount: 'infinite' }}>
+      <div style={{ overflow: 'hidden', width: '100%', position: 'relative' }}>
+        <div 
+          className="ctrack"
+          style={{
+            display: 'flex',
+            width: 'max-content',
+            alignItems: 'center',
+            animation: 'marquee 200s linear infinite'
+          }}
+        >
           {companies.concat(companies).map((company, idx) => (
-            <div key={idx} className="clog" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 28px', whiteSpace: 'nowrap', width: 'auto', boxSizing: 'border-box' }}>
+            <div 
+              key={idx} 
+              className="clog" 
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                textAlign: 'center', 
+                padding: '0 28px', 
+                whiteSpace: 'nowrap', 
+                boxSizing: 'border-box',
+                fontSize: '15px',
+                fontWeight: 500,
+                color: 'var(--mid, #666)'
+              }}
+            >
               {company}
             </div>
           ))}

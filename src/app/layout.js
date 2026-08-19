@@ -1,4 +1,4 @@
-"use client"; // Required for React context and hooks
+'use client'; // Required for React context and hooks
 
 import "./globals.css";
 import { ReactLenis } from "@studio-freight/react-lenis";
@@ -30,17 +30,8 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="/assets/css/style.css" />
       </head>
       <body>
-        {/* Optimized Lenis Provider for fast, butter-smooth cross-device scrolling */}
-        <ReactLenis 
-          root 
-          options={{ 
-            lerp: 0.15,           // Higher value = faster, snappier response time
-            wheelMultiplier: 1.3, // Increases mouse wheel speed across Windows & Mac
-            duration: 0.6,        // Shorter duration prevents scroll queuing / lag
-            smoothWheel: true,    // Enables smooth momentum for standard mouse wheels
-            smoothTouch: false,   // Prevents trackpad lag on MacBooks and touch screens
-          }}
-        >
+        {/* Optimized Lenis Provider for fast, smooth cross-platform scrolling */}
+        <ReactLenis root options={{ lerp: 0.15, wheelMultiplier: 1.2, smoothWheel: true, syncTouch: false }}>
           <Header />
           <main>{children}</main>
           <Footer />

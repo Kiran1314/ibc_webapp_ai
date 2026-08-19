@@ -1,3 +1,5 @@
+'use client';
+
 export default function LogoBand() {
   const companies = [
     'AECB', 'Abu Dhabi International Airport', 'ADNOC', 'Agnice', 'Ahmed Saddiqi', 'Ahmed Tea', 'Air Arabia', 
@@ -33,18 +35,20 @@ export default function LogoBand() {
   ];
 
   return (
-    <div className="cband" style={{ width: '100%', overflow: 'hidden', padding: '20px 0' }}>
-      <div className="chdr" style={{ padding: '0 20px 15px 20px', wordBreak: 'break-word', textAlign: 'center' }}>
+    <div className="cband" style={{ width: '100%', overflow: 'hidden', padding: '30px 0' }}>
+      <div className="chdr" style={{ padding: '0 20px 20px 20px', wordBreak: 'break-word', textAlign: 'center' }}>
         <strong>3,000+ Satisfied Clients</strong> trust IBC Studio
       </div>
-      <div style={{ overflow: 'hidden', width: '100%', position: 'relative' }}>
+      
+      <div style={{ overflow: 'hidden', width: '100%', position: 'relative', maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
         <div 
           className="ctrack"
           style={{
             display: 'flex',
             width: 'max-content',
-            alignItems: 'center',
-            animation: 'marquee 200s linear infinite'
+            alignItems: 'stretch',
+            animation: 'smoothMarquee 350s linear infinite', /* Slower speed */
+            willChange: 'transform'
           }}
         >
           {companies.concat(companies).map((company, idx) => (
@@ -53,15 +57,25 @@ export default function LogoBand() {
               className="clog" 
               style={{ 
                 display: 'inline-flex', 
+                flexDirection: 'column',
                 alignItems: 'center', 
                 justifyContent: 'center', 
                 textAlign: 'center', 
-                padding: '0 28px', 
-                whiteSpace: 'nowrap', 
+                padding: '14px 18px', 
+                margin: '0 8px',
+                minWidth: '180px',
+                maxWidth: '220px',
+                minHeight: '75px',
                 boxSizing: 'border-box',
-                fontSize: '15px',
+                fontSize: '13.5px',
                 fontWeight: 500,
-                color: 'var(--mid, #666)'
+                lineHeight: '1.35',
+                color: 'var(--mid, #888)',
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+                borderRadius: '10px',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word'
               }}
             >
               {company}
@@ -69,6 +83,17 @@ export default function LogoBand() {
           ))}
         </div>
       </div>
+
+      <style jsx global>{`
+        @keyframes smoothMarquee {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+          100% {
+            transform: translate3d(-50%, 0, 0);
+          }
+        }
+      `}</style>
     </div>
   );
 }

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import FaqSection from '@/components/FaqSection';
+import Image from 'next/image';
 
-// Code split below-the-fold components with lightweight skeleton fallbacks
 const ImageSlider = dynamic(() => import('@/components/ImageSlider'), { 
   loading: () => <div style={{ height: '300px', width: '100%', background: 'var(--bg2)', borderRadius: '12px' }} /> 
 });
@@ -30,18 +30,25 @@ export default function Home() {
     
     window.addEventListener('scroll', handleScrollMetrics, { passive: true });
 
-    // Optimized Intersection Observer for below-the-fold content sections only
-    const revealElements = containerRef.current?.querySelectorAll('.reveal:not(.hero)');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in-view');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -50px 0px', threshold: 0.05 });
-    
-    revealElements?.forEach((el) => observer.observe(el));
+    const observerCallback = () => {
+      const revealElements = containerRef.current?.querySelectorAll('.reveal:not(.hero)');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -50px 0px', threshold: 0.05 });
+      
+      revealElements?.forEach((el) => observer.observe(el));
+    };
+
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(observerCallback);
+    } else {
+      setTimeout(observerCallback, 200);
+    }
 
     return () => {
       window.removeEventListener('scroll', handleScrollMetrics);
@@ -89,7 +96,6 @@ export default function Home() {
           will-change: opacity, transform;
         }
 
-        /* GPU Accelerated Composite Layers for Heavy Hero Background Elements */
         .hero-gradient-scene, .hero-wave-field, .hero-grain, .hvignette {
           transform: translate3d(0, 0, 0);
           will-change: transform;
@@ -101,7 +107,6 @@ export default function Home() {
       <div className="page active" id="pg-home" ref={containerRef}>
         <div className="pw">
           
-          {/* HERO SECTION WITH STAGGERED FADE-IN SEQUENCE */}
           <section className="hero in-view" style={{ position: 'relative', overflow: 'hidden' }}>
               <div className="hero-gradient-scene" aria-hidden="true"></div>
               <div className="hero-wave-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
@@ -125,20 +130,18 @@ export default function Home() {
                 </p>
 
                 <div className="hact hero-element-4" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
-                  <Link href="/services" className="btn-p" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
+                  <a href="/services" className="btn-p" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
                     Explore Our Services →
-                  </Link>
-                  <Link href="/work" className="btn-o" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
+                  </a>
+                  <a href="/work" className="btn-o" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
                     View Our Work
-                  </Link>
+                  </a>
                 </div>
               </div>
           </section>
 
-          {/* LOGO BAND */}
           <LogoBand />
 
-          {/* TESTIMONIALS */}
           <section className="sec reveal" style={{ width: '100%' }}>
             <div className="lbl">Client Testimonials</div>
             <h2 className="title" style={{ wordBreak: 'break-word' }}>Voices of Trust</h2>
@@ -157,8 +160,8 @@ export default function Home() {
                   <div className="tcard reveal">
                     <p className="tquote">
                       "Overall great, smooth, professional & interesting experience.
-                       I enjoyed the whole process. It&apos;s a pleasure to work with IBC Studio. I am looking forward to
-                       working with you on your upcoming projects. Thank you IBC Studio."
+                      I enjoyed the whole process. It&apos;s a pleasure to work with IBC Studio. I am looking forward to
+                      working with you on your upcoming projects. Thank you IBC Studio."
                     </p>
                     <div className="tauthor">
                       <div className="tav">DS</div>
@@ -171,7 +174,7 @@ export default function Home() {
                   <div className="tcard reveal">
                     <p className="tquote">
                       "Worked with them in 2 projects so far and I really appreciate their professionalism and honesty.
-                       Looking forward to the new projects we will work on together!" 
+                      Looking forward to the new projects we will work on together!" 
                     </p><br/>
                     <div className="tauthor">
                       <div className="tav">LA</div>
@@ -184,7 +187,7 @@ export default function Home() {
                   <div className="tcard reveal">
                     <p className="tquote">
                       "I recently had the pleasure of working 
-                       with IBC Studio on a timelapse video project, and I couldn't be more impressed! 
+                      with IBC Studio on a timelapse video project, and I couldn't be more impressed! 
                       The team demonstrated exceptional professionalism and creativity from start to finish."
                     </p>
                     <div className="tauthor">
@@ -201,7 +204,6 @@ export default function Home() {
 
           <div className="divl"></div>
 
-          {/* ABOUT SPLIT SECTION */}
           <section className="sec reveal" style={{ width: '100%' }}>
             <div className="split-grid" style={{ width: '100%' }}>
               <div>
@@ -209,7 +211,7 @@ export default function Home() {
                 <h2 className="title" style={{ wordBreak: 'break-word' }}>The UAE’s Destination for Creative Media & Digital Production</h2>
                 <p style={{ fontSize: '16.5px', color: 'var(--mid)', lineHeight: '1.75', marginBottom: '14px', wordBreak: 'break-word' }}>IBC Studio is a Dubai-based media production and digital solutions company with over 19 years of industry experience.</p>
                 <p style={{ fontSize: '16.5px', color: 'var(--mid)', lineHeight: '1.75', marginBottom: '26px', wordBreak: 'break-word' }}>We specialize in audio, video, photography, IVR, OHM, event coverage, AI-powered content, and digital media solutions, helping businesses create professional, engaging, and impactful content tailored for modern audiences across the UAE and Middle East.</p>
-                <Link href="/about#pg-about" className="btn-o">Learn Our Story →</Link>
+                <a href="/about#pg-about" className="btn-o">Learn Our Story →</a>
               </div>
               <div className="mini-stat-grid" style={{ width: '100%' }}>
                 <div className="sitem"><span className="snum">19<span className="a">+</span></span><span className="slbl">Years Experience</span></div>
@@ -222,50 +224,48 @@ export default function Home() {
 
           <div className="divl"></div>
 
-          {/* SERVICES GRID */}
           <section className="sec reveal" style={{ width: '100%' }}>
             <div className="lbl">What We Do</div>
             <h2 className="title" style={{ wordBreak: 'break-word' }}>Our Core Services</h2>
             <p className="desc" style={{ width: '100%', wordBreak: 'break-word' }}>Complete media solutions designed to help businesses create professional, impactful, and meaningful content across every platform.</p>
             <div className="srv-grid" style={{ width: '100%' }}>
-              <Link href="/services#audio" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
+              <a href="/services#audio" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="srv-ic"><svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" strokeWidth="1.8"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
                 <h3>Audio Production</h3><p style={{ wordBreak: 'break-word' }}>IVR, on-hold messaging, multilingual voice-overs, jingles, dubbing and localization services.</p>
                 <div className="srv-arr">Explore Service →</div>
-              </Link>
-              <Link href="/services#video" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
+              </a>
+              <a href="/services#video" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="srv-ic"><svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" strokeWidth="1.8"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg></div>
                 <h3>Video Production</h3><p style={{ wordBreak: 'break-word' }}>Corporate films, commercials, drone, 360°/VR/AR, editing, and color grading.</p>
                 <div className="srv-arr">Explore Service →</div>
-              </Link>
-              <Link href="/services#photo" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
+              </a>
+              <a href="/services#photo" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="srv-ic"><svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" strokeWidth="1.8"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
                 <h3>Photography</h3><p style={{ wordBreak: 'break-word' }}>Product, real estate, industrial, corporate and event photography.</p>
                 <div className="srv-arr">Explore Service →</div>
-              </Link>
-              <Link href="/services#ai" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
+              </a>
+              <a href="/services#ai" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="srv-ic"><svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" strokeWidth="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg></div>
                 <h3>AI Production</h3><p style={{ wordBreak: 'break-word' }}>AI video, AI photography, synthetic media, creative direction, and workflow-aware production systems.</p>
                 <div className="srv-arr">Explore Service →</div>
-              </Link>
-              <Link href="/services#digital" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
+              </a>
+              <a href="/services#digital" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
                 <div className="srv-ic"><svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" strokeWidth="1.8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
                 <h3>Digital & Development</h3><p style={{ wordBreak: 'break-word' }}>Web design, e-learning platforms, interactive media and custom digital tools.</p>
                 <div className="srv-arr">Explore Service →</div>
-              </Link>
-              <Link href="/ibc-intelligence#pg-intel" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
+              </a>
+              <a href="/ibc-intelligence#pg-intel" className="srv-card" style={{ textDecoration: 'none', display: 'block' }}>
                 <div> <div className="srv-ic">
                   <div className="logo" style={{ cursor: 'default' }} >
-                    <img src="/assets/images/logo/intel2.webp" alt="IBC Studio Logo" style={{ height: '50px', width: 'auto', objectFit: 'contain', display: 'block' }} />
+                    <Image src="/assets/images/logo/intel2.webp" alt="IBC Studio Logo" width={120} height={50} style={{ height: '50px', width: 'auto', objectFit: 'contain', display: 'block' }} />
                   </div></div>
                 </div>
                 <h3>IBC Intelligence</h3><p style={{ wordBreak: 'break-word' }}>Operator-led AI advisory helping teams find and build practical workflow systems that improve productivity, speed, and decision support.</p>
                 <div className="srv-arr">Explore Service →</div>
-              </Link>
+              </a>
             </div>
           </section>
 
-          {/* INTEL STRIP BANNER */}
           <section className="sec-sm reveal" style={{ width: '100%' }}>
             <div className="intel-strip" style={{ width: '100%' }}>
               <div>
@@ -273,16 +273,18 @@ export default function Home() {
                 <h2 style={{ wordBreak: 'break-word' }}>Business-first AI advisory for real workflows.</h2>
                 <p style={{ wordBreak: 'break-word' }}>IBC Intelligence helps businesses identify where AI creates measurable operational leverage...</p>
                 <div style={{ marginTop: '22px' }}>
-                  <Link href="/ibc-intelligence#pg-intel" className="btn-p">
+                  <a href="/ibc-intelligence#pg-intel" className="btn-p">
                     Book a Consultancy →
-                  </Link>
+                  </a>
                 </div>
               </div>
               <div className="logo-container">
                 <div className="logo" style={{ cursor: 'default' }}>
-                  <img 
+                  <Image 
                     src="/assets/images/logo/intel3.webp" 
                     alt="IBC Studio Logo" 
+                    width={200}
+                    height={200}
                     style={{ 
                       width: 'clamp(110px, 15vw, 200px)', 
                       height: 'clamp(110px, 15vw, 200px)', 
@@ -297,7 +299,6 @@ export default function Home() {
 
           <div className="divl"></div>
 
-          {/* PROCESS TIMELINE */}
           <section className="sec reveal" style={{ background: 'var(--bg2)', width: '100%' }}>
             <div style={{ textAlign: 'center', width: '100%' }}>
               <div className="lbl lbl-c" style={{ justifyContent: 'center' }}>How We Work</div>
@@ -319,17 +320,16 @@ export default function Home() {
 
           <div className="divl"></div>
 
-          {/* BLOG FEEDS */}
           <section className="sec reveal" style={{ width: '100%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '14px', width: '100%' }}>
               <div>
                 <div className="lbl">Latest Insights</div>
                 <h2 className="title" style={{ marginBottom: 0, wordBreak: 'break-word' }}>From Our Blog</h2>
               </div>
-              <Link href="/blogs" className="btn-o">View All Articles →</Link>
+              <a href="/blogs" className="btn-o">View All Articles →</a>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" style={{ width: '100%', paddingTop: '30px' }}>
-              <Link href="/blogs/ai-video-storytelling-2026" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <a href="/blogs/ai-video-storytelling-2026" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
@@ -339,9 +339,9 @@ export default function Home() {
                   </div>
                   <div className="bmeta"><span className="bdate">August 2026 </span><span className="brm">Read More →</span></div>
                 </div>
-              </Link>
+              </a>
 
-              <Link href="/blogs/the-power-of-cinematic-corporate-films" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <a href="/blogs/the-power-of-cinematic-corporate-films" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
@@ -351,9 +351,9 @@ export default function Home() {
                   </div>
                   <div className="bmeta"><span className="bdate">August 2026</span><span className="brm">Read More →</span></div>
                 </div>
-              </Link>
+              </a>
 
-              <Link href="/blogs/why-your-ivr-voice-matters-more-than-you-think" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <a href="/blogs/why-your-ivr-voice-matters-more-than-you-think" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
@@ -363,11 +363,10 @@ export default function Home() {
                   </div>
                   <div className="bmeta"><span className="bdate">August 2026</span><span className="brm">Read More →</span></div>
                 </div>
-              </Link>
+              </a>
             </div>
           </section>
 
-          {/* FREQUENTLY ASKED QUESTIONS */}
           <FaqSection faqs={faqs} />
 
         </div>

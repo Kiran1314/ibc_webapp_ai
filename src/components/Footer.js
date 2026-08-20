@@ -34,25 +34,25 @@ export default function Footer() {
         
         <div className="ft-col">
           <h4>Pages</h4>
-          <Link href="/#pg-home">Home</Link>
-          <Link href="/about/#pg-about">About Us</Link>
-          <Link href="/clients/#pg-clients">Our Clients</Link>
-          <Link href="/services/#pg-services">Our Services</Link>
-          <Link href="/work/#pg-work">Work Samples</Link>
-          <Link href="/ibc-intelligence#pg-intel">IBC Intelligence</Link>
-          <Link href="/blogs#pg-blogs">Blogs</Link>
-          <Link href="/contact#pg-contact">Contact Us</Link>
+          <a href="/#pg-home">Home</a>
+          <a href="/about/#pg-about">About Us</a>
+          <a href="/clients/#pg-clients">Our Clients</a>
+          <a href="/services/#pg-services">Our Services</a>
+          <a href="/work/#pg-work">Work Samples</a>
+          <a href="/ibc-intelligence#pg-intel">IBC Intelligence</a>
+          <a href="/blogs#pg-blogs">Blogs</a>
+          <a href="/contact#pg-contact">Contact Us</a>
         </div>
         
        <div className="ft-col">
           <h4>Services</h4>
-          <Link href="/services#audio" scroll={false}>Audio Production</Link>
-          <Link href="/services#video" scroll={false}>Video Production</Link>
-          <Link href="/services#photo" scroll={false}>Photography</Link>
-          <Link href="/services#ai" scroll={false}>AI Production</Link>
-          <Link href="/services#digital" scroll={false}>Digital & Dev</Link>
-          <Link href="/services#motion" scroll={false}>Motion & VR/AR</Link>
-          <Link href="/ibc-intelligence#pg-intel" scroll={false}>IBC Intelligence</Link>
+          <a href="/services#audio" >Audio Production</a>
+          <a href="/services#video" >Video Production</a>
+          <a href="/services#photo" >Photography</a>
+          <a href="/services#ai" >AI Production</a>
+          <a href="/services#digital" >Digital & Dev</a>
+          <a href="/services#motion" >Motion & VR/AR</a>
+          <a href="/ibc-intelligence#pg-intel" >IBC Intelligence</a>
         </div>
         
         <div className="ft-col">
@@ -62,7 +62,7 @@ export default function Footer() {
           <div className="ft-citem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg><span>+971 55 995 8905</span></div>
           <div className="ft-citem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span>info@ibcstudio.com</span></div>
           <div style={{ marginTop: '14px', display: 'flex' }}>
-            <Link 
+            <a 
               href="/contact#pg-contact" 
               className="btn-p" 
               style={{ 
@@ -73,7 +73,7 @@ export default function Footer() {
               }}
             >
               Get In Touch →
-            </Link>
+            </a>
           </div>
         </div>
       </div>

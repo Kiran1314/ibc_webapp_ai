@@ -77,7 +77,7 @@ export default function Header() {
   return (
     <header id="hdr" className={`${isOpen ? 'menu-open' : ''} ${isScrolled ? 'scrolled' : ''}`}>
       {/* HIGH-RES & SHARP LOGO LINK PANEL */}
-      <Link href="/" className="logo" onClick={closeMenu}>
+      <a href="/" className="logo" onClick={closeMenu}>
        <Image 
               src="/assets/images/logo/main-logo.svg" 
               alt="IBC Studio Logo" 
@@ -94,7 +94,7 @@ export default function Header() {
                 display: 'block'   
               }}
             />
-      </Link>
+      </a>
       
       {/* RESPONSIVE MOBILE ACCORDION HAMBURGER TOGGLE */}
       <button className="menu-toggle" onClick={toggleMenu} aria-label="Open navigation menu">
@@ -103,14 +103,14 @@ export default function Header() {
       
       {/* NAVIGATION SELECTIONS LAYOUT PANEL */}
       <nav className={isOpen ? 'nav-open' : ''}>
-        <Link href="/#pg-home" onClick={closeMenu} className={isActive('/')} id="n-home">Home</Link>
-        <Link href="/about#pg-about" onClick={closeMenu} className={isActive('/about')} id="n-about">About Us</Link>
-        <Link href="/clients#pg-clients" onClick={closeMenu} className={isActive('/clients')} id="n-clients">Our Clients</Link>
-        <Link href="/services#pg-services" onClick={closeMenu} className={isActive('/services')} id="n-services">Our Services</Link>
-        <Link href="/work#pg-work" onClick={closeMenu} className={isActive('/work')} id="n-work">Work Samples</Link>
-        <Link href="/ibc-intelligence#pg-intel" onClick={closeMenu} className={isActive('/ibc-intelligence')} id="n-intel">IBC Intelligence</Link>
-        <Link href="/blogs#pg-blogs" onClick={closeMenu} className={isActive('/blogs')} id="n-blogs">Blogs</Link>
-        <Link href="/contact#pg-contact" onClick={closeMenu} className={`nav-cta ${isActive('/contact')}`} id="n-contact">Contact Us</Link>
+        <a href="/#pg-home" onClick={closeMenu} className={isActive('/')} id="n-home">Home</a>
+        <a href="/about#pg-about" onClick={closeMenu} className={isActive('/about')} id="n-about">About Us</a>
+        <a href="/clients#pg-clients" onClick={closeMenu} className={isActive('/clients')} id="n-clients">Our Clients</a>
+        <a href="/services#pg-services" onClick={closeMenu} className={isActive('/services')} id="n-services">Our Services</a>
+        <a href="/work#pg-work" onClick={closeMenu} className={isActive('/work')} id="n-work">Work Samples</a>
+        <a href="/ibc-intelligence#pg-intel" onClick={closeMenu} className={isActive('/ibc-intelligence')} id="n-intel">IBC Intelligence</a>
+        <a href="/blogs#pg-blogs" onClick={closeMenu} className={isActive('/blogs')} id="n-blogs">Blogs</a>
+        <a href="/contact#pg-contact" onClick={closeMenu} className={`nav-cta ${isActive('/contact')}`} id="n-contact">Contact Us</a>
       </nav>
       <div className="nav-overlay" onClick={closeMenu}></div>
     </header>

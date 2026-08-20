@@ -97,7 +97,7 @@ export default function BlogPost({ params }) {
                 </p> 
                  
                 <div className="article-meta" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '28px', color: 'var(--dim)', fontSize: '14px' }}> 
-                  <span>May 2026</span> 
+                  <span>August 2026</span> 
                   <span>8 min read</span> 
                   <span>IBC Studio Editorial</span> 
                 </div> 

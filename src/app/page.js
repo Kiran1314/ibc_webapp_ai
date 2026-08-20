@@ -329,7 +329,7 @@ export default function Home() {
               <Link href="/blogs" className="btn-o">View All Articles →</Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" style={{ width: '100%', paddingTop: '30px' }}>
-              <Link href="/blogs/ai-video-storytelling-2025" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <Link href="/blogs/ai-video-storytelling-2026" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
@@ -337,11 +337,11 @@ export default function Home() {
                     <h3 style={{ wordBreak: 'break-word' }}>How AI Video is Redefining Brand Storytelling in 2025</h3>
                     <p style={{ wordBreak: 'break-word' }}>How UAE brands are leveraging AI-generated video to scale content without sacrificing quality.</p>
                   </div>
-                  <div className="bmeta"><span className="bdate">May 2025</span><span className="brm">Read More →</span></div>
+                  <div className="bmeta"><span className="bdate">August 2026 </span><span className="brm">Read More →</span></div>
                 </div>
               </Link>
 
-              <Link href="/blogs/power-of-cinematic-corporate-films" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <Link href="/blogs/the-power-of-cinematic-corporate-films" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
@@ -349,11 +349,11 @@ export default function Home() {
                     <h3 style={{ wordBreak: 'break-word' }}>The Power of Cinematic Corporate Films: Why They Work</h3>
                     <p style={{ wordBreak: 'break-word' }}>How a well-crafted corporate film builds credibility, trust and emotional connection.</p>
                   </div>
-                  <div className="bmeta"><span className="bdate">Apr 2025</span><span className="brm">Read More →</span></div>
+                  <div className="bmeta"><span className="bdate">August 2026</span><span className="brm">Read More →</span></div>
                 </div>
               </Link>
 
-              <Link href="/blogs/why-your-ivr-voice-matters" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <Link href="/blogs/why-your-ivr-voice-matters-more-than-you-think" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
                 <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
@@ -361,7 +361,7 @@ export default function Home() {
                     <h3 style={{ wordBreak: 'break-word' }}>Why Your IVR Voice Matters More Than You Think</h3>
                     <p style={{ wordBreak: 'break-word' }}>The first voice a customer hears shapes their entire experience with your brand.</p>
                   </div>
-                  <div className="bmeta"><span className="bdate">Mar 2025</span><span className="brm">Read More →</span></div>
+                  <div className="bmeta"><span className="bdate">August 2026</span><span className="brm">Read More →</span></div>
                 </div>
               </Link>
             </div>

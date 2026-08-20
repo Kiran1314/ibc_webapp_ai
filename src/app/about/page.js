@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 export default function About() {
   const [isMounted, setIsMounted] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(1200);
   const containerRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -13,12 +14,22 @@ export default function About() {
     setIsMounted(true);
   }, []);
 
+  // Track window dimensions for mobile responsiveness
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   // Force-trigger video play programmatically on mount for strict browser policies (Safari/iOS)
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.muted = true; // Required for autoplay on Safari
       videoRef.current.play().then(() => {
-        // Once playback successfully starts, you can smoothly adjust volume if desired
         videoRef.current.volume = 0.6;
       }).catch((error) => {
         console.log("Autoplay prevented by browser policy:", error);
@@ -34,14 +45,21 @@ export default function About() {
       document.body.classList.remove('home-hero-top');
     }
 
+    let ticking = false;
     const handleScrollMetrics = () => {
-      if (window.scrollY > 10) {
-        document.body.classList.remove('home-hero-top');
-      } else {
-        document.body.classList.add('home-hero-top');
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 10) {
+            document.body.classList.remove('home-hero-top');
+          } else {
+            document.body.classList.add('home-hero-top');
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
-    window.addEventListener('scroll', handleScrollMetrics);
+    window.addEventListener('scroll', handleScrollMetrics, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', handleScrollMetrics);
@@ -76,6 +94,8 @@ export default function About() {
     };
   }, []);
 
+  const isMobile = windowWidth < 768;
+
   return (
     <>
       <title>About Us | IBC Studio </title>
@@ -93,6 +113,9 @@ export default function About() {
           className="pw" 
           style={{ 
             width: '100%',
+            paddingLeft: isMobile ? '0px' : 'clamp(38px, 6vw, 80px)',
+            paddingRight: isMobile ? '0px' : 'clamp(38px, 6vw, 80px)',
+            paddingBottom: '80px',
             opacity: isMounted ? 1 : 0,
             transform: isMounted ? 'translateY(0)' : 'translateY(12px)',
             transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1)'
@@ -104,31 +127,47 @@ export default function About() {
             className="ahwrap reveal in-view" 
             style={{ 
               width: '100%', 
-              paddingTop: 'clamp(120px, 12vh, 160px)', 
-              paddingBottom: '0px'
+              paddingTop: 'clamp(110px, 12vh, 150px)', 
+              paddingBottom: '0px',
+              paddingLeft: isMobile ? '20px' : '0px',
+              paddingRight: isMobile ? '20px' : '0px'
             }}
           >
             {/* Padded Content Block for Text and Buttons */}
-            <div style={{ paddingLeft: 'clamp(22px, 6vw, 80px)', paddingRight: 'clamp(22px, 6vw, 80px)', marginBottom: '40px' }}>
+            <div style={{ width: '100%', marginBottom: '40px' }}>
               <div className="lbl">Our Story</div>
-              <h1 style={{ wordBreak: 'break-word', fontSize: 'clamp(36px, 4.8vw, 58px)', lineHeight: '1.1' }}>
+              <h1 style={{ wordBreak: 'break-word', fontSize: 'clamp(32px, 4.8vw, 58px)', lineHeight: '1.1' }}>
                 More Than a Studio.<br />A Creative Force.
               </h1>
               <p style={{ marginTop: '18px', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                 Founded in Dubai, IBC Studio began with a vision to combine creativity, technology, and storytelling under one roof. With over 19 years of industry experience, we have grown into a trusted media production company delivering high-quality audiovisual and digital solutions for brands and businesses across the region.
               </p>
-              <div style={{ display: 'flex', gap: '14px', marginTop: '28px', flexWrap: 'wrap' }}>
-                <Link href="/contact" className="btn-p" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', gap: '14px', marginTop: '28px', flexDirection: isMobile ? 'column' : 'row', flexWrap: 'wrap' }}>
+                <Link href="/contact" className="btn-p" style={{ display: 'inline-flex', width: isMobile ? '100%' : 'auto', minWidth: '160px', justifyContent: 'center' }}>
                   Work With Us →
                 </Link>
-                <Link href="/work" className="btn-o" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
+                <Link href="/work" className="btn-o" style={{ display: 'inline-flex', width: isMobile ? '100%' : 'auto', minWidth: '160px', justifyContent: 'center' }}>
                   See Our Work
                 </Link>
               </div>
             </div>
             
-            {/* Rounded Video Wrapper */}
-            <div className="avwrap" style={{ width: '100%', marginTop: '30px', marginBottom: '30px', overflow: 'hidden', position: 'relative', aspectRatio: '16/9', background: '#000', borderRadius: '16px' }}>
+            {/* Rounded End-to-End Video Wrapper */}
+            <div 
+              className="avwrap" 
+              style={{ 
+                width: isMobile ? 'calc(100% + 40px)' : '100%', 
+                marginLeft: isMobile ? '-20px' : '0px',
+                marginRight: isMobile ? '-20px' : '0px',
+                marginTop: '30px', 
+                marginBottom: '30px', 
+                overflow: 'hidden', 
+                position: 'relative', 
+                aspectRatio: '16/9', 
+                background: '#000', 
+                borderRadius: isMobile ? '0px' : '16px' 
+              }}
+            >
               <video 
                 ref={videoRef}
                 src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FAUSpage_main%2FIBC%202026%20Services%20video%2010th%20august_1.webm?alt=media&token=73d07e33-1c41-4d9d-9c72-51460dd1ca98" 
@@ -146,7 +185,7 @@ export default function About() {
           <div className="divl"></div>
 
           {/* STATS COUNTER BAR */}
-          <section className="sec reveal" style={{ width: '100%' }}>
+          <section className="sec reveal" style={{ width: '100%', paddingLeft: isMobile ? '20px' : '0px', paddingRight: isMobile ? '20px' : '0px' }}>
             <div className="stats-bar" style={{ width: '100%' }}>
               <div className="sitem reveal">
                 <span className="snum">19<span className="a">+</span></span>
@@ -170,7 +209,7 @@ export default function About() {
           <div className="divl"></div>
 
           {/* CORE CAPABILITIES SECTION */}
-          <section className="sec reveal" style={{ width: '100%' }}>
+          <section className="sec reveal" style={{ width: '100%', paddingLeft: isMobile ? '20px' : '0px', paddingRight: isMobile ? '20px' : '0px' }}>
             <div className="split-grid" style={{ width: '100%' }}>
               <div className="reveal">
                 <div className="lbl">What We Do</div>
@@ -240,7 +279,7 @@ export default function About() {
           <div className="divl"></div>
 
           {/* FOUNDER & LEADERSHIP MESSAGE */}
-          <section className="sec reveal" style={{ background: 'var(--bg2)', width: '100%' }}>
+          <section className="sec reveal" style={{ background: 'var(--bg2)', width: '100%', paddingLeft: isMobile ? '20px' : '0px', paddingRight: isMobile ? '20px' : '0px' }}>
             <div className="lbl">Leadership</div>
             <h2 className="title" style={{ wordBreak: 'break-word' }}>From the Founder's Desk</h2>
             <div className="fwrap" style={{ width: '100%' }}>

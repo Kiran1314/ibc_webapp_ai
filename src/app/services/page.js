@@ -10,23 +10,44 @@ export default function Services() {
   const trackRef = useRef(null);
   const panelsContainerRef = useRef(null);
 
-  // Initialize active tab from URL hash on client mount
-  useEffect(() => {
-    setIsMounted(true);
+  // Helper function to extract and validate tab from hash
+  const getTabFromHash = () => {
+    if (typeof window === 'undefined') return null;
     const hash = window.location.hash.replace('#', '');
     const validTabs = ['audio', 'video', 'photo', 'ai', 'digital', 'motion'];
-    if (validTabs.includes(hash)) {
-      setActiveTab(hash);
+    return validTabs.includes(hash) ? hash : null;
+  };
+
+  // Initialize active tab from URL hash on client mount & handle footer deep-links
+  useEffect(() => {
+    setIsMounted(true);
+    const tabFromHash = getTabFromHash();
+    if (tabFromHash) {
+      setActiveTab(tabFromHash);
+      // Scroll down to panels container if arriving via footer anchor link
+      setTimeout(() => {
+        if (panelsContainerRef.current) {
+          const yOffset = -130;
+          const y = panelsContainerRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 50);
     }
   }, []);
 
-  // Handle browser back/forward history hash changes
+  // Handle browser back/forward history hash changes & footer clicks while already on /services
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '');
-      const validTabs = ['audio', 'video', 'photo', 'ai', 'digital', 'motion'];
-      if (validTabs.includes(hash)) {
-        setActiveTab(hash);
+      const tabFromHash = getTabFromHash();
+      if (tabFromHash) {
+        setActiveTab(tabFromHash);
+        requestAnimationFrame(() => {
+          if (panelsContainerRef.current) {
+            const yOffset = -130;
+            const y = panelsContainerRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        });
       }
     };
 
@@ -34,7 +55,7 @@ export default function Services() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // High-Performance Intersection Observer Engine (Triggers once when scrolling down)
+  // High-Performance Intersection Observer Engine for Scroll Fades
   useEffect(() => {
     const revealElements = containerRef.current?.querySelectorAll('.reveal');
     if (!revealElements || revealElements.length === 0) return;
@@ -49,7 +70,7 @@ export default function Services() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add('in-view');
-          observer.unobserve(entry.target); // Stay permanently visible after scrolling down into view
+          observer.unobserve(entry.target);
         }
       });
     }, observerOptions);
@@ -69,18 +90,15 @@ export default function Services() {
     }
     
     setActiveTab(tabId);
-    
-    // Cleanly update URL hash without triggering page jumps
     window.history.replaceState(null, '', '#' + tabId);
 
-    // Smoothly scroll to the top of the content panels container
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       if (panelsContainerRef.current) {
         const yOffset = -130; // Accounts for main header + sticky tab bar height
         const y = panelsContainerRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
-    }, 20);
+    });
   };
 
   const tabs = [

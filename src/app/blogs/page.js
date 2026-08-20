@@ -296,7 +296,7 @@ export default function Blogs() {
             }}
           >
 
-            <Link
+            <a
               href="/blogs/ai-video-storytelling-2025"
               className="bfcard reveal"
               style={{
@@ -360,7 +360,7 @@ export default function Blogs() {
                 </div>
 
               </div>
-            </Link>
+            </a>
 
             <div
               style={{
@@ -371,7 +371,7 @@ export default function Blogs() {
               }}
             >
 
-              <Link
+              <a
                 href="/blogs/the-power-of-cinematic-corporate-films"
                 className="bfcard secondary-feat reveal"
                 style={{
@@ -423,9 +423,9 @@ export default function Blogs() {
                     </span>
                   </div>
                 </div>
-              </Link>
+              </a>
 
-              <Link
+              <a
                 href="/blogs/why-your-ivr-voice-matters-more-than-you-think"
                 className="bfcard secondary-feat reveal"
                 style={{
@@ -478,7 +478,7 @@ export default function Blogs() {
                     </span>
                   </div>
                 </div>
-              </Link>
+              </a>
 
             </div>
           </div>
@@ -525,7 +525,7 @@ export default function Blogs() {
             }}
           >
             {latestBlogs.map((post) => (
-              <Link
+              <a
                 href={`/blogs/${post.slug}`}
                 key={post.slug}
                 className="bcard reveal"
@@ -582,7 +582,7 @@ export default function Blogs() {
                   </div>
 
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
 
@@ -631,7 +631,7 @@ export default function Blogs() {
           >
 
             {currentBlogs.map((post) => (
-              <Link
+              <a
                 href={`/blogs/${post.slug}`}
                 key={post.slug}
                 className="bcard reveal"
@@ -688,7 +688,7 @@ export default function Blogs() {
                   </div>
 
                 </div>
-              </Link>
+              </a>
             ))}
 
           </div>

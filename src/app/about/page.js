@@ -25,14 +25,10 @@ export default function About() {
     };
   }, []);
 
-  // Force-trigger video play programmatically on mount with max volume
+  // Set default audio level cleanly on mount without forcing auto-play conflicts
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.muted = false; 
       videoRef.current.volume = 1.0;
-      videoRef.current.play().catch((error) => {
-        console.log("Autoplay with sound prevented by browser policy:", error);
-      });
     }
   }, []);
 
@@ -170,10 +166,20 @@ export default function About() {
               <video 
                 ref={videoRef}
                 src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FAUSpage_main%2FIBC%202026%20Services%20video%2010th%20august_1.webm?alt=media&token=73d07e33-1c41-4d9d-9c72-51460dd1ca98" 
-                autoPlay 
-                loop  
+                controls 
                 playsInline
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', borderRadius: 'inherit' }}
+                preload="metadata"
+                controlsList="nodownload"
+                disablePictureInPicture
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'cover', 
+                  display: 'block', 
+                  borderRadius: 'inherit',
+                  transform: 'translateZ(0)',
+                  willChange: 'transform'
+                }}
               />
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Blogs() {
   const [isMounted, setIsMounted] = useState(false);
@@ -88,7 +89,8 @@ export default function Blogs() {
       tag: 'Photography',
       title: 'What Makes a Great Product Photograph',
       desc: 'The technical and creative decisions that separate average shots from ones that actually sell.',
-      date: 'Feb 2025',
+      date: 'Aug 2026',
+      image: 'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FWhat%20Makes%20a%20Great%20Product%20Photograph.webp?alt=media&token=4a22068a-f2f9-4b3d-b690-3a0ceef846a2',
     },
 
     {
@@ -96,7 +98,8 @@ export default function Blogs() {
       tag: 'Localization',
       title: 'Multilingual Media: Why Arabic First Matters in the UAE',
       desc: 'The cultural and commercial case for leading with Arabic in your media production strategy.',
-      date: 'Jan 2025',
+      date: 'Aug 2026',
+      image: 'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FMultilingual%20Media%20Why%20Arabic%20First%20Matters%20in%20the%20UAE.webp?alt=media&token=5b257d61-e35e-4972-83fb-c6002df284e3',
     },
 
     {
@@ -104,7 +107,8 @@ export default function Blogs() {
       tag: 'IBC Intelligence',
       title: 'Brand Listening: How AI is Changing Market Research',
       desc: 'How real-time AI social listening is transforming how brands understand their audience.',
-      date: 'Dec 2024',
+      date: 'Aug 2026',
+      image: 'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FBrand%20Listening%20How%20AI%20is%20Changing%20Market%20Research.webp?alt=media&token=d4fc52c9-9b50-4537-ae26-d5678260a2c2',
     },
 
     {
@@ -112,15 +116,17 @@ export default function Blogs() {
       tag: 'Drone',
       title: 'The Rise of Aerial Cinematography in the Gulf',
       desc: 'How drone technology is reshaping real estate, events, and infrastructure storytelling in the UAE.',
-      date: 'Nov 2024',
+      date: 'Aug 2026',
+      image: 'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FThe%20Rise%20of%20Aerial%20Cinematography%20in%20the%20Gulf-clean.webp?alt=media&token=9afb33e6-4a3b-40bf-8b89-385bb00108ca',
     },
 
     {
-      slug: 'e-learning-2025-platforms-that-work',
+      slug: 'e-learning-2026-platforms-that-work',
       tag: 'Digital',
-      title: 'E-Learning in 2025: Platforms That Actually Work',
+      title: 'E-Learning in 2026: Platforms That Actually Work',
       desc: 'Design principles behind e-learning platforms that employees actually use and enjoy.',
-      date: 'Oct 2024',
+      date: 'Aug 2026',
+      image: 'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FE-Learning%20in%202026%20Platforms%20That%20Actually%20Work-clean.webp?alt=media&token=8c918a22-0dee-493c-b894-707dbcd72e2d',
     },
 
     {
@@ -128,7 +134,8 @@ export default function Blogs() {
       tag: 'Audio',
       title: 'Jingles Are Back — Why Brands Are Investing Again',
       desc: 'The surprising resurgence of brand audio identity and what it means for your marketing.',
-      date: 'Sep 2024',
+      date: 'Aug 2026',
+      image: 'https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FJingles%20Are%20Back%20%E2%80%94%20Why%20Brands%20Are%20Investing%20Again.webp?alt=media&token=279e5fcf-f00a-4e4c-8e6c-3c52c252e6ee',
     },
   ];
 
@@ -297,7 +304,7 @@ export default function Blogs() {
           >
 
             <a
-              href="/blogs/ai-video-storytelling-2025"
+              href="/blogs/ai-video-storytelling-2026"
               className="bfcard reveal"
               style={{
                 textDecoration: 'none',
@@ -308,10 +315,21 @@ export default function Blogs() {
               <div
                 className="bfthumb"
                 style={{
+                  position: 'relative',
+                  overflow: 'hidden',
                   background:
                     'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)',
                 }}
-              />
+              >
+                <Image
+                  src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FHow%20AI%20Video%20is%20Redefining%20Brand%20Storytelling%20in%202025.webp?alt=media&token=9985875d-48d0-4ffa-9b21-b89dbe3a62e3"
+                  alt="How AI Video is Redefining Brand Storytelling in 2026"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: 'cover' }}
+                  priority
+                />
+              </div>
 
               <div className="bfbody">
 
@@ -327,7 +345,7 @@ export default function Blogs() {
                   }}
                 >
                   How AI Video is Redefining Brand Storytelling
-                  in 2025
+                  in 2026
                 </h2>
 
                 <p
@@ -351,7 +369,7 @@ export default function Blogs() {
                   }}
                 >
                   <span className="bdate">
-                    May 2025 · 8 min read
+                    Aug 2026 · 8 min read
                   </span>
 
                   <span className="brm">
@@ -383,10 +401,20 @@ export default function Blogs() {
                 <div
                   className="bthumb secondary-thumb"
                   style={{
+                    position: 'relative',
+                    overflow: 'hidden',
                     background:
                       'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)',
                   }}
-                />
+                >
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FThe%20Power%20of%20Cinematic%20Corporate%20Films.webp?alt=media&token=a1db3cf8-cc01-4807-a3e1-d27f40cf0204"
+                    alt="The Power of Cinematic Corporate Films"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
 
                 <div
                   className="bc"
@@ -415,7 +443,7 @@ export default function Blogs() {
                     }}
                   >
                     <span className="bdate">
-                      Apr 2025
+                       Aug 2026
                     </span>
 
                     <span className="brm">
@@ -437,10 +465,20 @@ export default function Blogs() {
                 <div
                   className="bthumb secondary-thumb"
                   style={{
+                    position: 'relative',
+                    overflow: 'hidden',
                     background:
                       'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)',
                   }}
-                />
+                >
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FWhy%20Your%20IVR%20Voice%20Matters%20More%20Than%20You%20Think.webp?alt=media&token=58b89f68-304a-48bd-8221-cfbdcb4091e3"
+                    alt="Why Your IVR Voice Matters More Than You Think"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
 
                 <div
                   className="bc"
@@ -470,7 +508,7 @@ export default function Blogs() {
                     }}
                   >
                     <span className="bdate">
-                      Mar 2025
+                      Aug 2026
                     </span>
 
                     <span className="brm">
@@ -539,10 +577,20 @@ export default function Blogs() {
                 <div
                   className="bthumb"
                   style={{
+                    position: 'relative',
+                    overflow: 'hidden',
                     background:
                       'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)',
                   }}
-                />
+                >
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
 
                 <div className="bc">
 
@@ -645,10 +693,20 @@ export default function Blogs() {
                 <div
                   className="bthumb"
                   style={{
+                    position: 'relative',
+                    overflow: 'hidden',
                     background:
                       'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)',
                   }}
-                />
+                >
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
 
                 <div className="bc">
 

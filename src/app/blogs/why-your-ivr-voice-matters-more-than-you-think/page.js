@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BlogPost({ params }) {
   const containerRef = useRef(null);
@@ -101,7 +102,27 @@ export default function BlogPost({ params }) {
                   <span>IBC Studio Editorial</span> 
                 </div> 
                  
-                <div className="article-cover" style={{ width: '100%', marginTop: '42px' }}></div> 
+                <div 
+                  className="article-cover" 
+                  style={{ 
+                    position: 'relative', 
+                    width: '100%', 
+                    aspectRatio: '16 / 9', 
+                    overflow: 'hidden', 
+                    borderRadius: '12px', 
+                    marginTop: '42px',
+                    background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)'
+                  }} 
+                >
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FWhy%20Your%20IVR%20Voice%20Matters%20More%20Than%20You%20Think.webp?alt=media&token=58b89f68-304a-48bd-8221-cfbdcb4091e3"
+                    alt="Why Your IVR Voice Matters More Than You Think"
+                    fill
+                    sizes="(max-width: 900px) 100vw, 880px"
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                </div> 
               </div> 
             </div> 
 

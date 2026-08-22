@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BlogPost({ params }) {
   const containerRef = useRef(null);
@@ -118,7 +119,16 @@ export default function BlogPost({ params }) {
                   <span>IBC Studio Editorial</span>
                 </div>
 
-                <div className="article-cover" style={coverStyle} />
+                <div className="article-cover" style={coverStyle}>
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FBrand%20Listening%20How%20AI%20is%20Changing%20Market%20Research.webp?alt=media&token=d4fc52c9-9b50-4537-ae26-d5678260a2c2"
+                    alt="Brand Listening: How AI is Changing Market Research"
+                    fill
+                    sizes="(max-width: 900px) 100vw, 880px"
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                </div>
               </div>
             </div>
 
@@ -293,6 +303,10 @@ const metaStyle = {
 const coverStyle = {
   width: '100%',
   marginTop: '42px',
+  position: 'relative',
+  overflow: 'hidden',
+  aspectRatio: '16/9',
+  borderRadius: '12px',
 };
 
 const bodyStyle = {

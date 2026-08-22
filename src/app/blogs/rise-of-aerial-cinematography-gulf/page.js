@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BlogPost({ params }) {
   const containerRef = useRef(null);
@@ -118,7 +119,23 @@ export default function BlogPost({ params }) {
                   <span>IBC Studio Editorial</span>
                 </div>
 
-                <div className="article-cover" style={coverStyle} />
+                <div 
+                  className="article-cover" 
+                  style={{ 
+                    ...coverStyle, 
+                    position: 'relative', 
+                    overflow: 'hidden' 
+                  }}
+                >
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FThe%20Rise%20of%20Aerial%20Cinematography%20in%20the%20Gulf-clean.webp?alt=media&token=9afb33e6-4a3b-40bf-8b89-385bb00108ca"
+                    alt="The Rise of Aerial Cinematography in the Gulf"
+                    fill
+                    sizes="(max-width: 880px) 100vw, 880px"
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                </div>
               </div>
             </div>
 
@@ -276,6 +293,7 @@ const metaStyle = {
 const coverStyle = {
   width: '100%',
   marginTop: '42px',
+  aspectRatio: '16 / 9',
 };
 
 const bodyStyle = {

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BlogPost({ params }) {
   const containerRef = useRef(null);
@@ -101,7 +102,27 @@ export default function BlogPost({ params }) {
                   <span>IBC Studio Editorial</span> 
                 </div> 
                  
-                <div className="article-cover" style={{ width: '100%', marginTop: '42px' }}></div> 
+                <div 
+                  className="article-cover" 
+                  style={{ 
+                    position: 'relative', 
+                    width: '100%', 
+                    aspectRatio: '16 / 9', 
+                    overflow: 'hidden', 
+                    borderRadius: '12px', 
+                    marginTop: '42px',
+                    background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)'
+                  }} 
+                >
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FThe%20Power%20of%20Cinematic%20Corporate%20Films.webp?alt=media&token=a1db3cf8-cc01-4807-a3e1-d27f40cf0204"
+                    alt="The Power of Cinematic Corporate Films"
+                    fill
+                    sizes="(max-width: 900px) 100vw, 880px"
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                </div> 
               </div> 
             </div> 
 

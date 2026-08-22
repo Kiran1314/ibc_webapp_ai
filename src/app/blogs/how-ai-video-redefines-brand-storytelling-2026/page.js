@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BlogPost({ params }) {
   const containerRef = useRef(null);
@@ -102,7 +103,27 @@ export default function BlogPost({ params }) {
                   <span>IBC Studio Editorial</span> 
                 </div> 
                  
-                <div className="article-cover" style={{ width: '100%', marginTop: '42px' }}></div> 
+                <div 
+                  className="article-cover" 
+                  style={{ 
+                    position: 'relative',
+                    width: '100%', 
+                    aspectRatio: '16/9',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    marginTop: '42px',
+                    background: 'linear-gradient(135deg,#0d1117,#1a1a2e 55%,#16213e)'
+                  }}
+                >
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FHow%20AI%20Video%20is%20Redefining%20Brand%20Storytelling%20in%202025.webp?alt=media&token=9985875d-48d0-4ffa-9b21-b89dbe3a62e3"
+                    alt="How AI Video is Redefining Brand Storytelling in 2026"
+                    fill
+                    sizes="(max-width: 900px) 100vw, 880px"
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                </div> 
               </div> 
             </div> 
 

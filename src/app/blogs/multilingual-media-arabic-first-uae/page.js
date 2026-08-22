@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function BlogPost({ params }) {
   const containerRef = useRef(null);
@@ -123,7 +124,23 @@ export default function BlogPost({ params }) {
                   <span>IBC Studio Editorial</span>
                 </div>
 
-                <div className="article-cover" style={coverStyle} />
+                <div
+                  className="article-cover"
+                  style={{
+                    ...coverStyle,
+                    position: 'relative',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Image
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FMultilingual%20Media%20Why%20Arabic%20First%20Matters%20in%20the%20UAE.webp?alt=media&token=5b257d61-e35e-4972-83fb-c6002df284e3"
+                    alt="Multilingual Media: Why Arabic First Matters in the UAE"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 880px"
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                </div>
               </div>
             </div>
 

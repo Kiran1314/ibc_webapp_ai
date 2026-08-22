@@ -6,7 +6,6 @@ import Image from 'next/image';
 export default function About() {
   const [isMounted, setIsMounted] = useState(false);
   const [windowWidth, setWindowWidth] = useState(1200);
-  const [isMuted, setIsMuted] = useState(false);
   const containerRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -26,22 +25,16 @@ export default function About() {
     };
   }, []);
 
-  // Force-trigger video play programmatically on mount
+  // Force-trigger video play programmatically on mount with max volume
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.volume = 0.6;
+      videoRef.current.muted = false; 
+      videoRef.current.volume = 1.0;
       videoRef.current.play().catch((error) => {
-        console.log("Autoplay prevented by browser policy:", error);
+        console.log("Autoplay with sound prevented by browser policy:", error);
       });
     }
   }, []);
-
-  const toggleAudio = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      setIsMuted(videoRef.current.muted);
-    }
-  };
 
   // Synchronize dynamic header top transparency style metrics with body attributes
   useEffect(() => {
@@ -180,38 +173,8 @@ export default function About() {
                 autoPlay 
                 loop  
                 playsInline
-                controls
-                controlsList="nodownload"
-                disablePictureInPicture
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', borderRadius: 'inherit' }}
               />
-
-              {/* Custom Sound Toggle Overlay Button */}
-              <button
-                type="button"
-                onClick={toggleAudio}
-                style={{
-                  position: 'absolute',
-                  bottom: '16px',
-                  right: '16px',
-                  zIndex: 10,
-                  background: 'rgba(0, 0, 0, 0.75)',
-                  color: '#ffffff',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '30px',
-                  padding: '8px 16px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  backdropFilter: 'blur(4px)',
-                  transition: 'background 0.2s ease',
-                }}
-              >
-                {isMuted ? '🔇 Unmute Video' : '🔊 Sound On'}
-              </button>
             </div>
           </div>
 

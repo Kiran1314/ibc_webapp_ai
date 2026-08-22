@@ -6,6 +6,7 @@ import Image from 'next/image';
 export default function About() {
   const [isMounted, setIsMounted] = useState(false);
   const [windowWidth, setWindowWidth] = useState(1200);
+  const [isMuted, setIsMuted] = useState(true);
   const containerRef = useRef(null);
   const videoRef = useRef(null);
 
@@ -23,13 +24,6 @@ export default function About() {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
-
-  // Set default audio level cleanly on mount without forcing auto-play conflicts
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.volume = 1.0;
-    }
   }, []);
 
   // Synchronize dynamic header top transparency style metrics with body attributes
@@ -89,6 +83,15 @@ export default function About() {
     };
   }, []);
 
+  // Toggle sound on/off cleanly at max volume
+  const toggleSound = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      videoRef.current.volume = 1.0;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
   const isMobile = windowWidth < 768;
 
   return (
@@ -147,7 +150,7 @@ export default function About() {
               </div>
             </div>
             
-            {/* Rounded End-to-End Video Wrapper */}
+            {/* Rounded End-to-End Video Wrapper with Custom Sound Control Button */}
             <div 
               className="avwrap" 
               style={{ 
@@ -166,11 +169,11 @@ export default function About() {
               <video 
                 ref={videoRef}
                 src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FAUSpage_main%2FIBC%202026%20Services%20video%2010th%20august_1.webm?alt=media&token=73d07e33-1c41-4d9d-9c72-51460dd1ca98" 
-                controls 
+                autoPlay 
+                muted 
+                loop  
                 playsInline
-                preload="metadata"
-                controlsList="nodownload"
-                disablePictureInPicture
+                preload="auto"
                 style={{ 
                   width: '100%', 
                   height: '100%', 
@@ -181,6 +184,44 @@ export default function About() {
                   willChange: 'transform'
                 }}
               />
+
+              {/* Sound Toggle Button Overlay */}
+              <button
+                type="button"
+                onClick={toggleSound}
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
+                style={{
+                  position: 'absolute',
+                  bottom: '20px',
+                  right: '20px',
+                  background: 'rgba(0, 0, 0, 0.75)',
+                  color: '#fff',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  borderRadius: '30px',
+                  padding: '10px 18px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  backdropFilter: 'blur(6px)',
+                  transition: 'background 0.25s ease',
+                  zIndex: 10
+                }}
+              >
+                {isMuted ? (
+                  <>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                    <span>Sound Off (Click to Play Audio)</span>
+                  </>
+                ) : (
+                  <>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                    <span>Sound On (Max)</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
 

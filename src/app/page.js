@@ -330,7 +330,15 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" style={{ width: '100%', paddingTop: '30px' }}>
               <a href="/blogs/ai-video-storytelling-2026" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
+                <div className="bthumb" style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}>
+                  <Image 
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FHow%20AI%20Video%20is%20Redefining%20Brand%20Storytelling%20in%202025.webp?alt=media&token=9985875d-48d0-4ffa-9b21-b89dbe3a62e3" 
+                    alt="How AI Video is Redefining Brand Storytelling in 2025" 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: 'cover' }} 
+                  />
+                </div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
                     <span className="btag">AI Production</span>
@@ -342,7 +350,15 @@ export default function Home() {
               </a>
 
               <a href="/blogs/the-power-of-cinematic-corporate-films" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
+                <div className="bthumb" style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}>
+                  <Image 
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FThe%20Power%20of%20Cinematic%20Corporate%20Films.webp?alt=media&token=a1db3cf8-cc01-4807-a3e1-d27f40cf0204" 
+                    alt="The Power of Cinematic Corporate Films: Why They Work" 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: 'cover' }} 
+                  />
+                </div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
                     <span className="btag">Video Production</span>
@@ -354,7 +370,15 @@ export default function Home() {
               </a>
 
               <a href="/blogs/why-your-ivr-voice-matters-more-than-you-think" className="bcard" style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                <div className="bthumb" style={{ background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}></div>
+                <div className="bthumb" style={{ position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg,#111,#1a1a2e 55%,#161e2e)' }}>
+                  <Image 
+                    src="https://firebasestorage.googleapis.com/v0/b/ibc-studio.appspot.com/o/Images%2FBlogpost_thumb%2FWhy%20Your%20IVR%20Voice%20Matters%20More%20Than%20You%20Think.webp?alt=media&token=58b89f68-304a-48bd-8221-cfbdcb4091e3" 
+                    alt="Why Your IVR Voice Matters More Than You Think" 
+                    fill 
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: 'cover' }} 
+                  />
+                </div>
                 <div className="bc" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
                   <div>
                     <span className="btag">Audio</span>

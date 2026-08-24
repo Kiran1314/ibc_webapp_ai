@@ -45,52 +45,41 @@ export default function RootLayout({ children }) {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const viewportRef = useRef(null);
 
-  // Handle Mouse Wheel Zoom (Ctrl + Wheel) / Touch Pinch Zoom simulation
+  // Handle Mouse Wheel Zoom (Ctrl + Wheel)
   useEffect(() => {
-    const el = viewportRef.current;
-    if (!el) return;
-
     const handleWheel = (e) => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
         setScale((prevScale) => {
           const newScale = prevScale - e.deltaY * 0.005;
-          return Math.min(Math.max(newScale, 1), 3); // Zoom limit between 1x and 3x
+          return Math.min(Math.max(newScale, 1), 3); // Zoom between 1x and 3x
         });
       }
     };
 
-    el.addEventListener('wheel', handleWheel, { passive: false });
-    return () => el.removeEventListener('wheel', handleWheel);
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
   }, []);
 
   // Handle Click-and-Drag Panning (Hand Cursor) when Zoomed In
   const handleMouseDown = (e) => {
     if (scale <= 1) return;
-    // Prevent dragging if clicking directly on interactive elements like buttons/links/header
-    if (e.target.closest('header') || e.target.closest('button') || e.target.closest('a')) return;
-    
+    if (e.target.closest('button, a, input, select, textarea')) return;
     setIsDragging(true);
-    setStartX(e.pageX - viewportRef.current.offsetLeft);
-    setScrollLeft(viewportRef.current.scrollLeft);
+    setStartX(e.pageX - window.scrollX);
+    setScrollLeft(window.scrollX);
   };
 
-  const handleMouseLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+  const handleMouseLeave = () => setIsDragging(false);
+  const handleMouseUp = () => setIsDragging(false);
 
   const handleMouseMove = (e) => {
     if (!isDragging || scale <= 1) return;
     e.preventDefault();
-    const x = e.pageX - viewportRef.current.offsetLeft;
+    const x = e.pageX;
     const walk = (x - startX) * 1.5;
-    viewportRef.current.scrollLeft = scrollLeft - walk;
+    window.scrollTo({ left: scrollLeft - walk, behavior: 'instant' });
   };
 
   return (
@@ -99,63 +88,60 @@ export default function RootLayout({ children }) {
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         <link rel="stylesheet" href="/assets/css/style.css" />
         <style>{`
-          .zoom-viewport {
-            width: 100%;
-            min-height: 100vh;
-            overflow-x: auto;
-            overflow-y: auto;
+          body {
             cursor: ${scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'};
-            position: relative;
+            overflow-x: ${scale > 1 ? 'auto' : 'hidden'};
           }
-          .zoom-content {
-            transform: scale(${scale});
-            transform-origin: top left;
-            transition: transform 0.1s ease-out;
+          .zoom-scaled-wrapper {
             width: 100%;
+            transform: scale(${scale});
+            transform-origin: top center;
+            transition: transform 0.1s ease-out;
           }
-          /* Custom horizontal scrollbar when zoomed */
-          .zoom-viewport::-webkit-scrollbar {
+          /* Custom horizontal scrollbar appearance on body when scaled */
+          body::-webkit-scrollbar {
             height: 8px;
+            width: 8px;
           }
-          .zoom-viewport::-webkit-scrollbar-track {
+          body::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.05);
           }
-          .zoom-viewport::-webkit-scrollbar-thumb {
+          body::-webkit-scrollbar-thumb {
             background: rgba(0, 0, 0, 0.25);
             border-radius: 4px;
           }
-          .zoom-viewport::-webkit-scrollbar-thumb:hover {
+          body::-webkit-scrollbar-thumb:hover {
             background: rgba(0, 0, 0, 0.4);
           }
         `}</style>
       </head>
-      <body>
-        <Header />
-        <div 
-          ref={viewportRef}
-          className="zoom-viewport"
-          onMouseDown={handleMouseDown}
-          onMouseLeave={handleMouseLeave}
-          onMouseUp={handleMouseUp}
-          onMouseMove={handleMouseMove}
+      <body
+        onMouseDown={handleMouseDown}
+        onMouseLeave={handleMouseLeave}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+      >
+        {/* Super-fast scroll configuration: Higher wheelMultiplier for distance, higher lerp for instant snappy response */}
+        <ReactLenis 
+          root 
+          options={{ 
+            lerp: 0.60,          // Snappier and faster follow-through (higher = faster response)
+            wheelMultiplier: 9,  // ~5x multiplier for intense scroll distance per movement tick
+            smoothWheel: true, 
+            syncTouch: false 
+          }}
         >
-          <div className="zoom-content">
-            {/* Super-fast scroll configuration: Higher wheelMultiplier for distance, higher lerp for instant snappy response */}
-            <ReactLenis 
-              root 
-              options={{ 
-                lerp: 0.60,       
-                wheelMultiplier: 9,  
-                smoothWheel: true, 
-                syncTouch: false 
-              }}
-            >
-              <main>{children}</main>
-              <Footer />
-              <ChatWidget />
-            </ReactLenis>
+          {/* Header remains outside the zoom-scaled container so it stays cleanly anchored and sticky to the viewport */}
+          <Header />
+
+          {/* Scaled container wrapping page content and footer */}
+          <div className="zoom-scaled-wrapper">
+            <main>{children}</main>
+            <Footer />
           </div>
-        </div>
+
+          <ChatWidget />
+        </ReactLenis>
       </body>
     </html>
   );

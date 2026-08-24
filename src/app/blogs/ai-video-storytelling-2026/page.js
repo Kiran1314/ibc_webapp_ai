@@ -75,9 +75,9 @@ export default function BlogPost({ params }) {
               }} 
             > 
               <div className="article-wrap" style={{ width: '100%', maxWidth: '880px', margin: '0 auto' }}> 
-                <Link href="/blogs" className="article-back" style={{ textDecoration: 'none' }}> 
+                <a href="/blogs" className="article-back" style={{ textDecoration: 'none' }}> 
                   &larr; Back to Blogs 
-                </Link> 
+                </a> 
                 <div className="article-kicker" style={{ marginTop: '18px' }}>AI Production &middot; Featured Article</div> 
                  
                 <h1 

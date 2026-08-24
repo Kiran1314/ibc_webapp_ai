@@ -141,12 +141,12 @@ export default function About() {
                 Founded in Dubai, IBC Studio began with a vision to combine creativity, technology, and storytelling under one roof. With over 19 years of industry experience, we have grown into a trusted media production company delivering high-quality audiovisual and digital solutions for brands and businesses across the region.
               </p>
               <div style={{ display: 'flex', gap: '14px', marginTop: '28px', flexDirection: isMobile ? 'column' : 'row', flexWrap: 'wrap' }}>
-                <Link href="/contact" className="btn-p" style={{ display: 'inline-flex', width: isMobile ? '100%' : 'auto', minWidth: '160px', justifyContent: 'center' }}>
+                <a href="/contact" className="btn-p" style={{ display: 'inline-flex', width: isMobile ? '100%' : 'auto', minWidth: '160px', justifyContent: 'center' }}>
                   Work With Us →
-                </Link>
-                <Link href="/work" className="btn-o" style={{ display: 'inline-flex', width: isMobile ? '100%' : 'auto', minWidth: '160px', justifyContent: 'center' }}>
+                </a>
+                <a href="/work" className="btn-o" style={{ display: 'inline-flex', width: isMobile ? '100%' : 'auto', minWidth: '160px', justifyContent: 'center' }}>
                   See Our Work
-                </Link>
+                </a>
               </div>
             </div>
             

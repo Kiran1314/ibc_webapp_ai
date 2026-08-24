@@ -137,9 +137,9 @@ export default function IBCIntelligence() {
                 </p>
                 
                 <div style={{ display: 'flex', gap: '11px', flexWrap: 'wrap', marginTop: '18px' }}>
-                  <Link href="/contact" className="ibb" style={{ display: 'inline-flex', padding: '12px 20px', fontSize: '13px', textDecoration: 'none', justifyContent: 'center', alignItems: 'center' }}>
+                  <a href="/contact" className="ibb" style={{ display: 'inline-flex', padding: '12px 20px', fontSize: '13px', textDecoration: 'none', justifyContent: 'center', alignItems: 'center' }}>
                     Book a Consultancy &rarr;
-                  </Link>
+                  </a>
                   <button 
                     style={{ 
                       padding: '12px 20px', 
@@ -325,9 +325,9 @@ export default function IBCIntelligence() {
               </div>
             </div>
             <div style={{ marginTop: '34px' }}>
-              <Link href="/contact" className="ibb" style={{ display: 'inline-flex', padding: '13px 22px', fontSize: '13px', textDecoration: 'none', justifyContent: 'center' }}>
+              <a href="/contact" className="ibb" style={{ display: 'inline-flex', padding: '13px 22px', fontSize: '13px', textDecoration: 'none', justifyContent: 'center' }}>
                 Schedule a Consultation &rarr;
-              </Link>
+              </a>
             </div>
           </div>
 

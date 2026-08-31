@@ -197,16 +197,16 @@ export default function Blogs() {
 
   return (
     <>
-      <title>Blogs | IBC Studio</title>
+      <title>Insights & Trends: Pro Tech, AI & Video Media Hub</title>
 
       <meta
         name="description"
-        content="Explore fresh industry perspectives covering premium corporate video production, commercial photography strategies, native multilingual audio setups, and practical AI workflow advisory out of Dubai, UAE."
+        content="Stay ahead of the curve with deep-dives on industry trends: local AI video automation, Abu Dhabi media markets, and premium audio recording studio setups."
       />
 
       <meta
         name="keywords"
-        content="video production company UAE, AI video generation Dubai, commercial photographer Dubai, industrial photography Dubai, corporate video Dubai, post production studio Dubai, multi language media localization UAE"
+        content="video production companies in abu dhabi, corporate video in dubai, ai video production uae, media production trends abu dhabi, audio recording studios dubai, corporate video production uae, ai video automation dubai, media production insights uae"
       />
 
       <meta property="og:type" content="website" />
@@ -218,12 +218,12 @@ export default function Blogs() {
 
       <meta
         property="og:title"
-        content="The IBC Studio Blog | Insights on Media, Production & AI in Dubai"
+        content="Insights & Trends: Pro Tech, AI & Video Media Hub"
       />
 
       <meta
         property="og:description"
-        content="Perspectives on media, production, AI, and the future of brand storytelling across the UAE and GCC region."
+        content="Stay ahead of the curve with deep-dives on industry trends: local AI video automation, Abu Dhabi media markets, and premium audio recording studio setups."
       />
 
       <meta property="og:site_name" content="IBC Studio" />

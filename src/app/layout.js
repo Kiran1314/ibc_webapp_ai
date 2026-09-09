@@ -43,20 +43,21 @@ const workSans = Work_Sans({
 export default function RootLayout({ children }) {
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
-  const [startTranslate, setStartTranslate] = useState({ x: 0, y: 0 });
+  const isDragging = useRef(false);
+  const startPos = useRef({ x: 0, y: 0 });
+  const startTranslate = useRef({ x: 0, y: 0 });
+  
+  const initialPinchDistance = useRef(null);
+  const initialScale = useRef(1);
 
-  // Handle Mouse Wheel Zoom (Ctrl + Wheel)
+  // Handle Desktop Mouse Wheel Zoom (Ctrl + Wheel) only. Normal scroll works completely unrestricted.
   useEffect(() => {
     const handleWheel = (e) => {
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
         setScale((prevScale) => {
           const newScale = prevScale - e.deltaY * 0.005;
-          const clampedScale = Math.min(Math.max(newScale, 1), 3);
-          if (clampedScale === 1) setTranslate({ x: 0, y: 0 });
-          return clampedScale;
+          return Math.min(Math.max(newScale, 1), 4); // Zoom range between 1x and 4x
         });
       }
     };
@@ -65,34 +66,134 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener('wheel', handleWheel);
   }, []);
 
-  // Handle Multi-directional Click-and-Drag Panning (Hand Cursor) when Zoomed In
-  const handleMouseDown = (e) => {
-    if (scale <= 1) return;
-    if (e.target.closest('button, a, input, select, textarea')) return;
-    setIsDragging(true);
-    setStartPos({ x: e.clientX, y: e.clientY });
-    setStartTranslate({ x: translate.x, y: translate.y });
-  };
+  // Handle Pinch Zoom for Touch Devices (Mobile / Tablets)
+  useEffect(() => {
+    const handleTouchStart = (e) => {
+      if (e.touches.length === 2) {
+        initialPinchDistance.current = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        initialScale.current = scale;
+      }
+    };
 
-  const handleMouseLeave = () => setIsDragging(false);
-  const handleMouseUp = () => setIsDragging(false);
+    const handleTouchMove = (e) => {
+      if (e.touches.length === 2 && initialPinchDistance.current !== null) {
+        e.preventDefault();
+        const currentDistance = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const factor = currentDistance / initialPinchDistance.current;
+        const newScale = Math.min(Math.max(initialScale.current * factor, 1), 4);
+        setScale(newScale);
+      }
+    };
 
-  const handleMouseMove = (e) => {
-    if (!isDragging || scale <= 1) return;
-    e.preventDefault();
-    
-    const dx = e.clientX - startPos.x;
-    const dy = e.clientY - startPos.y;
+    const handleTouchEnd = (e) => {
+      if (e.touches.length < 2) {
+        initialPinchDistance.current = null;
+      }
+    };
 
-    // Calculate maximum boundary limits based on current scale factor
-    const maxTranslateX = (window.innerWidth * (scale - 1)) / (2 * scale);
-    const maxTranslateY = (window.innerHeight * (scale - 1)) / (2 * scale);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
 
-    setTranslate({
-      x: Math.min(Math.max(startTranslate.x + dx, -maxTranslateX * 1.5), maxTranslateX * 1.5),
-      y: Math.min(Math.max(startTranslate.y + dy, -maxTranslateY * 1.5), maxTranslateY * 1.5)
-    });
-  };
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [scale]);
+
+  // Reset offset translation automatically if scaled back down to 1x
+  useEffect(() => {
+    if (scale === 1) {
+      setTranslate({ x: 0, y: 0 });
+    }
+  }, [scale]);
+
+  // High-performance direct translation drag listeners when zoomed in
+  useEffect(() => {
+    const handleMouseDown = (e) => {
+      if (scale <= 1) return;
+      if (e.target.closest('button, a, input, select, textarea')) return;
+      isDragging.current = true;
+      startPos.current = { x: e.clientX, y: e.clientY };
+      startTranslate.current = { ...translate };
+    };
+
+    const handleMouseMove = (e) => {
+      if (!isDragging.current || scale <= 1) return;
+      e.preventDefault();
+      const dx = e.clientX - startPos.current.x;
+      const dy = e.clientY - startPos.current.y;
+      setTranslate({
+        x: startTranslate.current.x + dx,
+        y: startTranslate.current.y + dy
+      });
+    };
+
+    const handleMouseUp = () => {
+      isDragging.current = false;
+    };
+
+    const handleTouchStart = (e) => {
+      if (scale <= 1 || e.touches.length !== 1) return;
+      if (e.target.closest('button, a, input, select, textarea')) return;
+      isDragging.current = true;
+      startPos.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      startTranslate.current = { ...translate };
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isDragging.current || scale <= 1 || e.touches.length !== 1) return;
+      e.preventDefault();
+      const dx = e.touches[0].clientX - startPos.current.x;
+      const dy = e.touches[0].clientY - startPos.current.y;
+      setTranslate({
+        x: startTranslate.current.x + dx,
+        y: startTranslate.current.y + dy
+      });
+    };
+
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleMouseUp);
+    };
+  }, [scale, translate]);
+
+  const content = (
+    <>
+      <Header />
+      <div className="zoom-scaled-wrapper" style={{
+        transform: `translate3d(${translate.x}px, ${translate.y}px, 0) scale(${scale})`,
+        transformOrigin: 'top left',
+        willChange: 'transform',
+        backfaceVisibility: 'hidden',
+        transition: isDragging.current ? 'none' : 'transform 0.1s cubic-bezier(0.25, 1, 0.5, 1)',
+        width: '100%',
+        minHeight: '100vh'
+      }}>
+        <main>{children}</main>
+        <Footer />
+      </div>
+      <ChatWidget />
+    </>
+  );
 
   return (
     <html lang="en" className={`${redHat.variable} ${workSans.variable}`}>
@@ -100,31 +201,35 @@ export default function RootLayout({ children }) {
         <meta name="referrer" content="strict-origin-when-cross-origin" />
         <link rel="stylesheet" href="/assets/css/style.css" />
         <style>{`
-          body {
-            cursor: ${scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'};
-            overflow: hidden; /* Lock native scrolling when scaled via transform panning */
+          html, body {
+            overflow-x: auto !important;
+            overflow-y: auto !important;
+            height: auto !important;
+            min-height: 100%;
           }
-          .zoom-scaled-wrapper {
-            width: 100%;
-            min-height: 100vh;
-            transform: translate(${translate.x}px, ${translate.y}px) scale(${scale});
-            transform-origin: center center;
-            will-change: transform;
-            backface-visibility: hidden;
+          body {
+            cursor: ${scale > 1 ? (isDragging.current ? 'grabbing' : 'grab') : 'default'};
+            user-select: ${scale > 1 ? 'none' : 'auto'};
           }
           body::-webkit-scrollbar {
-            display: none; /* Hide scrollbars during custom 2D transform dragging */
+            height: 8px;
+            width: 8px;
+          }
+          body::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+          }
+          body::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 4px;
+          }
+          body::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.4);
           }
         `}</style>
       </head>
-      <body
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
-      >
+      <body>
         <ReactLenis 
-          root 
+          root={scale === 1}
           options={{ 
             lerp: 0.12, 
             wheelMultiplier: 1.2, 
@@ -132,14 +237,7 @@ export default function RootLayout({ children }) {
             syncTouch: false 
           }}
         >
-          <Header />
-
-          <div className="zoom-scaled-wrapper">
-            <main>{children}</main>
-            <Footer />
-          </div>
-
-          <ChatWidget />
+          {content}
         </ReactLenis>
       </body>
     </html>

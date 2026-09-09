@@ -42,9 +42,10 @@ const workSans = Work_Sans({
 
 export default function RootLayout({ children }) {
   const [scale, setScale] = useState(1);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
+  const [startTranslate, setStartTranslate] = useState({ x: 0, y: 0 });
 
   // Handle Mouse Wheel Zoom (Ctrl + Wheel)
   useEffect(() => {
@@ -53,7 +54,9 @@ export default function RootLayout({ children }) {
         e.preventDefault();
         setScale((prevScale) => {
           const newScale = prevScale - e.deltaY * 0.005;
-          return Math.min(Math.max(newScale, 1), 3); // Zoom between 1x and 3x
+          const clampedScale = Math.min(Math.max(newScale, 1), 3);
+          if (clampedScale === 1) setTranslate({ x: 0, y: 0 });
+          return clampedScale;
         });
       }
     };
@@ -62,13 +65,13 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener('wheel', handleWheel);
   }, []);
 
-  // Handle Click-and-Drag Panning (Hand Cursor) when Zoomed In
+  // Handle Multi-directional Click-and-Drag Panning (Hand Cursor) when Zoomed In
   const handleMouseDown = (e) => {
     if (scale <= 1) return;
     if (e.target.closest('button, a, input, select, textarea')) return;
     setIsDragging(true);
-    setStartX(e.pageX - window.scrollX);
-    setScrollLeft(window.scrollX);
+    setStartPos({ x: e.clientX, y: e.clientY });
+    setStartTranslate({ x: translate.x, y: translate.y });
   };
 
   const handleMouseLeave = () => setIsDragging(false);
@@ -77,9 +80,18 @@ export default function RootLayout({ children }) {
   const handleMouseMove = (e) => {
     if (!isDragging || scale <= 1) return;
     e.preventDefault();
-    const x = e.pageX;
-    const walk = (x - startX) * 1.5;
-    window.scrollTo({ left: scrollLeft - walk, behavior: 'instant' });
+    
+    const dx = e.clientX - startPos.x;
+    const dy = e.clientY - startPos.y;
+
+    // Calculate maximum boundary limits based on current scale factor
+    const maxTranslateX = (window.innerWidth * (scale - 1)) / (2 * scale);
+    const maxTranslateY = (window.innerHeight * (scale - 1)) / (2 * scale);
+
+    setTranslate({
+      x: Math.min(Math.max(startTranslate.x + dx, -maxTranslateX * 1.5), maxTranslateX * 1.5),
+      y: Math.min(Math.max(startTranslate.y + dy, -maxTranslateY * 1.5), maxTranslateY * 1.5)
+    });
   };
 
   return (
@@ -90,28 +102,18 @@ export default function RootLayout({ children }) {
         <style>{`
           body {
             cursor: ${scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'};
-            overflow-x: ${scale > 1 ? 'auto' : 'hidden'};
+            overflow: hidden; /* Lock native scrolling when scaled via transform panning */
           }
           .zoom-scaled-wrapper {
             width: 100%;
-            transform: scale(${scale});
-            transform-origin: top center;
-            transition: transform 0.1s ease-out;
+            min-height: 100vh;
+            transform: translate(${translate.x}px, ${translate.y}px) scale(${scale});
+            transform-origin: center center;
+            will-change: transform;
+            backface-visibility: hidden;
           }
-          /* Custom horizontal scrollbar appearance on body when scaled */
           body::-webkit-scrollbar {
-            height: 8px;
-            width: 8px;
-          }
-          body::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-          }
-          body::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 4px;
-          }
-          body::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 0, 0, 0.4);
+            display: none; /* Hide scrollbars during custom 2D transform dragging */
           }
         `}</style>
       </head>
@@ -121,20 +123,17 @@ export default function RootLayout({ children }) {
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-        {/* Super-fast scroll configuration: Higher wheelMultiplier for distance, higher lerp for instant snappy response */}
         <ReactLenis 
           root 
           options={{ 
-            lerp: 0.60,          // Snappier and faster follow-through (higher = faster response)
-            wheelMultiplier: 9,  // ~5x multiplier for intense scroll distance per movement tick
+            lerp: 0.12, 
+            wheelMultiplier: 1.2, 
             smoothWheel: true, 
             syncTouch: false 
           }}
         >
-          {/* Header remains outside the zoom-scaled container so it stays cleanly anchored and sticky to the viewport */}
           <Header />
 
-          {/* Scaled container wrapping page content and footer */}
           <div className="zoom-scaled-wrapper">
             <main>{children}</main>
             <Footer />

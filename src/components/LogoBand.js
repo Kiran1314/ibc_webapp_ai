@@ -47,7 +47,7 @@ export default function LogoBand() {
             display: 'flex',
             width: 'max-content',
             alignItems: 'stretch',
-            animation: 'smoothMarquee 350s linear infinite',
+            animation: 'smoothMarquee 210s linear infinite',
             willChange: 'transform'
           }}
         >

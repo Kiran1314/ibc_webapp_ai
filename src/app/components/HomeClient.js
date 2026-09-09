@@ -5,6 +5,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import FaqSection from '@/components/FaqSection';
 import Image from 'next/image';
+import styles from '../../../public/assets/css/HomeHero.module.css';
 
 const ImageSlider = dynamic(() => import('@/components/ImageSlider'), { 
   loading: () => <div style={{ height: '300px', width: '100%', background: 'var(--bg2)', borderRadius: '12px' }} /> 
@@ -66,67 +67,39 @@ export default function HomeClient() {
 
   return (
     <>
-      <style>{`
-        @keyframes staggerFadeUp {
-          0% { opacity: 0; transform: translate3d(0, 16px, 0); }
-          100% { opacity: 1; transform: translate3d(0, 0, 0); }
-        }
-
-        .hero-element-1 {
-          opacity: 0;
-          animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
-          will-change: opacity, transform;
-        }
-        .hero-element-2 {
-          opacity: 0;
-          animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
-          will-change: opacity, transform;
-        }
-        .hero-element-3 {
-          opacity: 0;
-          animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
-          will-change: opacity, transform;
-        }
-        .hero-element-4 {
-          opacity: 0;
-          animation: staggerFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
-          will-change: opacity, transform;
-        }
-
-        .hero-gradient-scene, .hero-wave-field, .hero-grain, .hvignette {
-          transform: translate3d(0, 0, 0);
-          will-change: transform;
-          backface-visibility: hidden;
-          pointer-events: none;
-        }
-      `}</style>
-
       <div className="page active" id="pg-home" ref={containerRef}>
         <div className="pw">
           
           <section className="hero in-view" style={{ position: 'relative', overflow: 'hidden' }}>
-              <div className="hero-gradient-scene" aria-hidden="true"></div>
-              <div className="hero-wave-field" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              <div className="hero-grain" aria-hidden="true"></div>
-              <div className="hvignette" aria-hidden="true"></div>
+              <div className={`${styles.heroGradientScene} hero-gradient-scene`} aria-hidden="true"></div>
+              <div className={`${styles.heroWaveField} hero-wave-field`} aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div className={`${styles.heroGrain} hero-grain`} aria-hidden="true"></div>
+              <div className={`${styles.hvignette} hvignette`} aria-hidden="true"></div>
 
               <div className="hcontent" style={{ width: '100%', maxWidth: '800px', margin: '0 auto', position: 'relative', zIndex: 999 }}>
                 
-                <div className="heb hero-element-1">
+                <div className={`heb ${styles.heroElement} ${styles.element1}`}>
                   UAE's Leading Media Production House
                 </div>
 
-                <h1 className="htag hero-element-2" style={{ fontSize: 'clamp(32px, 8vw, 90px)', width: '100%', lineHeight: '1.0' }}>
+                <h1 className={`htag ${styles.heroElement} ${styles.element2}`} style={{ fontSize: 'clamp(32px, 8vw, 90px)', width: '100%', lineHeight: '1.0' }}>
                   <span className="l1" style={{ display: 'block' }}>WHERE IDEAS</span>
                   <span className="l2" style={{ display: 'block' }}>BECOME</span>
                   <span className="l3" style={{ display: 'block', color: 'var(--sage)' }}>UNFORGETTABLE.</span>
                 </h1>
 
-                <p className="hsub hero-element-3" style={{ width: '100%' }}>
+                <p className={`hsub ${styles.heroElement} ${styles.element3}`} style={{ width: '100%' }}>
                   Welcome to IBC Studio. We are a full-service media production and digital solutions company creating powerful visual experiences, meaningful brand stories, and impactful content that leaves a lasting impression.
                 </p>
 
-                <div className="hact hero-element-4" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
+                <div className={`hact ${styles.heroElement} ${styles.element4}`} style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', width: '100%' }}>
                   <a href="/services" className="btn-p" style={{ display: 'inline-flex', minWidth: '160px', justifyContent: 'center' }}>
                     Explore Our Services →
                   </a>
@@ -147,7 +120,6 @@ export default function HomeClient() {
             </p>
                
             <div style={{ width: '100%', paddingTop: '20px' }}>
-              
               <section className="sec" style={{ width: '100%', padding: '60px 0' }}>
                 <ImageSlider />
               </section>

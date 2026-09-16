@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image'; 
+import Lenis from 'lenis'; 
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +13,27 @@ export default function Header() {
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
-  // Handle scroll state for navbar styling
+  // --- Initialize Lenis Smooth Scrolling with Faster/Snappier Settings ---
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 0.8, // Lowered from 1.2 for a faster, more responsive scroll feel
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
+      smoothWheel: true,
+      wheelMultiplier: 1.2, // Increased slightly for quicker feedback
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -39,7 +60,6 @@ export default function Header() {
     };
   }, [pathname]);
 
-  // Handle mobile menu body locking class
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('menu-open');
@@ -49,7 +69,6 @@ export default function Header() {
     return () => document.body.classList.remove('menu-open');
   }, [isOpen]);
 
-  // Close menu automatically on route change
   useEffect(() => {
     closeMenu();
   }, [pathname]);

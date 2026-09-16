@@ -312,7 +312,7 @@ export default function AboutClient() {
         <div className="divl"></div>
 
         {/* FOUNDER & LEADERSHIP MESSAGE */}
-        <section className="sec reveal" style={{ background: 'var(--bg2)', width: '100%', paddingLeft: isMobile ? '20px' : '0px', paddingRight: isMobile ? '20px' : '0px' }}>
+        <section className="sec reveal" style={{  width: '100%', paddingLeft: isMobile ? '20px' : '0px', paddingRight: isMobile ? '20px' : '0px' }}>
           <div className="lbl">Leadership</div>
           <h2 className="title" style={{ wordBreak: 'break-word' }}>From the Founder's Desk</h2>
           <div className="fwrap" style={{ width: '100%' }}>

@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image'; 
-import Lenis from 'lenis'; 
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,26 +12,7 @@ export default function Header() {
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
-  // --- Initialize Global Lenis Smooth Scrolling ---
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
-      smoothWheel: true,
-    });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
-
+  // Handle scroll state for navbar styling
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -59,6 +39,7 @@ export default function Header() {
     };
   }, [pathname]);
 
+  // Handle mobile menu body locking class
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('menu-open');
@@ -68,6 +49,7 @@ export default function Header() {
     return () => document.body.classList.remove('menu-open');
   }, [isOpen]);
 
+  // Close menu automatically on route change
   useEffect(() => {
     closeMenu();
   }, [pathname]);
@@ -77,24 +59,22 @@ export default function Header() {
   return (
     <header id="hdr" className={`${isOpen ? 'menu-open' : ''} ${isScrolled ? 'scrolled' : ''}`}>
       {/* HIGH-RES & SHARP LOGO LINK PANEL */}
-      <a href="/" className="logo" onClick={closeMenu}>
+      <Link href="/" className="logo" onClick={closeMenu}>
        <Image 
-              src="/assets/images/logo/main-logo.svg" 
-              alt="IBC Studio Logo" 
-              width={130}          
-              height={67}         
-              priority={true}      
-              fetchPriority="high" // <-- Add this to explicitly fix the Lighthouse warning
-              loading="eager"      
-              unoptimized          
-              style={{
-                width: '130px',    
-                height: '67px',    
-                maxWidth: '100%',  
-                display: 'block'   
-              }}
-            />
-      </a>
+            src="/assets/images/logo/main-logo.svg" 
+            alt="IBC Studio Logo" 
+            width={130}          
+            height={67}         
+            priority={true}      
+            unoptimized          
+            style={{
+              width: '130px',    
+              height: '67px',    
+              maxWidth: '100%',  
+              display: 'block'   
+            }}
+          />
+      </Link>
       
       {/* RESPONSIVE MOBILE ACCORDION HAMBURGER TOGGLE */}
       <button className="menu-toggle" onClick={toggleMenu} aria-label="Open navigation menu">
@@ -103,14 +83,14 @@ export default function Header() {
       
       {/* NAVIGATION SELECTIONS LAYOUT PANEL */}
       <nav className={isOpen ? 'nav-open' : ''}>
-        <a href="/#pg-home" onClick={closeMenu} className={isActive('/')} id="n-home">Home</a>
-        <a href="/about#pg-about" onClick={closeMenu} className={isActive('/about')} id="n-about">About Us</a>
-        <a href="/clients#pg-clients" onClick={closeMenu} className={isActive('/clients')} id="n-clients">Our Clients</a>
-        <a href="/services#pg-services" onClick={closeMenu} className={isActive('/services')} id="n-services">Our Services</a>
-        <a href="/work#pg-work" onClick={closeMenu} className={isActive('/work')} id="n-work">Work Samples</a>
-        <a href="/ibc-intelligence#pg-intel" onClick={closeMenu} className={isActive('/ibc-intelligence')} id="n-intel">IBC Intelligence</a>
-        <a href="/blogs#pg-blogs" onClick={closeMenu} className={isActive('/blogs')} id="n-blogs">Blogs</a>
-        <a href="/contact#pg-contact" onClick={closeMenu} className={`nav-cta ${isActive('/contact')}`} id="n-contact">Contact Us</a>
+        <Link href="/#pg-home" onClick={closeMenu} className={isActive('/')} id="n-home">Home</Link>
+        <Link href="/about#pg-about" onClick={closeMenu} className={isActive('/about')} id="n-about">About Us</Link>
+        <Link href="/clients#pg-clients" onClick={closeMenu} className={isActive('/clients')} id="n-clients">Our Clients</Link>
+        <Link href="/services#pg-services" onClick={closeMenu} className={isActive('/services')} id="n-services">Our Services</Link>
+        <Link href="/work#pg-work" onClick={closeMenu} className={isActive('/work')} id="n-work">Work Samples</Link>
+        <Link href="/ibc-intelligence#pg-intel" onClick={closeMenu} className={isActive('/ibc-intelligence')} id="n-intel">IBC Intelligence</Link>
+        <Link href="/blogs#pg-blogs" onClick={closeMenu} className={isActive('/blogs')} id="n-blogs">Blogs</Link>
+        <Link href="/contact#pg-contact" onClick={closeMenu} className={`nav-cta ${isActive('/contact')}`} id="n-contact">Contact Us</Link>
       </nav>
       <div className="nav-overlay" onClick={closeMenu}></div>
     </header>
